@@ -7,22 +7,23 @@ class Webcam():
     def __init__(self):
         self.output_frame = None
         self.lock_frame = Lock()
-        self.video_stream = VideoStream(src=0)
+        #self.video_stream = VideoStream(src=0)
+        self.video_stream = cv2.VideoCapture(0)
         self.thread = Thread(target=self.get_image, daemon=True)
 
 
     def start(self):
-        self.video_stream.start()
+        #self.video_stream.start()
         self.thread.start()
 
 
     def stop_stream(self):
-        self.video_stream.stop()
+        self.video_stream.release()
 
 
     def get_image(self):
         while True:
-            frame = self.video_stream.read()  # obtêm frame da Webcam
+            frame = self.video_stream.read()[1]  # obtêm frame da Webcam
             frame = cv2.flip(frame, 1)  # espelha a imagem
             frame = resize(frame, width=520)  # redimensiona
             with self.lock_frame:
