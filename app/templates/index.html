@@ -1,0 +1,22 @@
+{% extends '_layout.html' %}
+{% block content %}
+    <h1> Project SisGARQ - v2.0 </h1>
+    <img id="desenho" draggable="false" src="{{ url_for('play_webcam') }}">
+
+
+
+    <script type="text/javascript">
+        {% include 'rectangle.js' %}
+    </script>
+
+{% endblock%}
+<!--
+    var xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function () {
+        if (xhttp.readyState === XMLHttpRequest.DONE) {
+            document.getElementById("demo").innerHTML = xhttp.responseText;
+        }
+    };
+    xhttp.open("POST", "{{ url_for('drawing') }}", true);
+    xhttp.send();
+-->
