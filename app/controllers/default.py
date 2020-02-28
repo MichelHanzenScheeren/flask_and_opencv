@@ -1,6 +1,7 @@
 from flask import Response, render_template
 from app.models.rectangle import Rectangle
 from app.models.webcam import Webcam
+from app.models.analyze import Analyze
 
 
 def configure(app):
@@ -21,21 +22,17 @@ def configure(app):
 
     @app.route('/get_differentiator', methods=['POST'])
     def get_differentiator():
-        while True:
-            with webcam.lock_frame:
-                frame = webcam.output_frame.copy()
-            if frame is None:
-                continue
-            with rectangle.lock_drawing:
-                media = (frame[rectangle.y_initial:rectangle.y_final, rectangle.x_initial:rectangle.x_final].mean(axis=0).mean(axis=0))
-                return f' R = {media[2]}, G = {media[1]}, B = {media[0]}'
+        return analyze.get_differentiator(webcam, rectangle)
+
 
 
 def stop_stream():
     webcam.stop_stream()
 
 
-rectangle = Rectangle()
+
 webcam = Webcam()
 webcam.start()
+rectangle = Rectangle()
+analyze = Analyze()
 

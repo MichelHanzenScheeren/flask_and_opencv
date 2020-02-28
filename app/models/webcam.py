@@ -25,7 +25,7 @@ class Webcam():
         while True:
             frame = self.video_stream.read()[1]  # obtêm frame da Webcam
             frame = cv2.flip(frame, 1)  # espelha a imagem
-            frame = resize(frame, width=600)  # redimensiona
+            frame = resize(frame, width=500)  # redimensiona
             with self.lock_frame:
                 self.output_frame = frame.copy()
 
