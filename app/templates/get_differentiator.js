@@ -6,6 +6,7 @@ function get_differentiator(){
             document.getElementById("red").innerHTML = "Red: " + colors[0]
             document.getElementById("green").innerHTML = "Green: " + colors[1]
             document.getElementById("blue").innerHTML = "Blue: " + colors[2]
+            document.getElementById("start").disabled = false
         }
     };
     xhttp.open("POST", "{{ url_for('get_differentiator') }}", true);

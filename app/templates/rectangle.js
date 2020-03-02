@@ -16,13 +16,13 @@
 
         function mouseUp() {
           drag = false;
+          draw();
         }
 
         function mouseMove(e) {
           if (drag) {
             rect.w = (e.pageX - this.offsetLeft) - rect.startX;
             rect.h = (e.pageY - this.offsetTop) - rect.startY ;
-            draw();
           }
         }
 

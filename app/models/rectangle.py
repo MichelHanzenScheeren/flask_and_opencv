@@ -26,6 +26,13 @@ class Rectangle():
         return frame
 
 
+    def clear(self):
+        self.y_initial = -1
+        self.x_initial = -1
+        self.x_final = -1
+        self.y_final = -1
+
+
 """
     x_initial __________________
     y_initial                   |
