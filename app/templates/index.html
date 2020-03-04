@@ -21,20 +21,18 @@
                 <form action="start_analysis" method="POST">
                     <div class="form-row">
                         <div class="col form-group my-3">
-                            <label for="tempo" class="control-label">Tempo (seg)</label>
-                            <input id="tempo" class="form-control" type="number" value="5" min="1"/>
+                            <label for="time" class="control-label">Tempo (seg)</label>
+                            <input name="time" class="form-control" type="number" value="5" min="1"/>
                         </div>
                     </div>
                     <div class="form-row">
                         <div class="col form-group my-2">
                             <label for="qtd" class="control-label">Nº de capturas/seg</label>
-                            <input id="qtd" class="form-control" type="number" value="1" min="1"/>
+                            <input name="qtd" class="form-control" type="number" value="1" min="1"/>
                         </div>
                     </div>
                     <div id="div1">
-                        <button disabled id="start" type="submit" onclick="config_analyze()" class="btn btn-lg btn-block btn-success mt-4">
-                            INICIAR
-                        </button>
+                        <input disabled id="start" type="submit" value="INICIAR" onclick="config_analyze()" class="btn btn-lg btn-block btn-success mt-4">
                     </div>
                     <div id="div2" style="display:none">
                         <button type="button" disabled class="btn btn-lg btn-block btn-warning mt-4">

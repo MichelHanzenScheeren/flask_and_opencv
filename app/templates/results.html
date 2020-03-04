@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Resultados</title>
+</head>
+<body>
+    <p> Diferenciador: </p>
+    <p> {{ differentiator }}</p>
+    <hr>
+    <p> Capturas: </p>
+    {% for i in captures %}
+        <p> {{ i }}</p>
+    {% endfor %}
+    <hr>
+    <p> Sinais: </p>
+    <p> {{ signals }}</p>
+</body>
+</html>

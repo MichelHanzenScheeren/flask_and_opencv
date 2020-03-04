@@ -1,4 +1,4 @@
-from flask import Response, render_template, redirect, url_for
+from flask import Response, render_template, redirect, url_for, request
 from time import sleep
 from app.models.rectangle import Rectangle
 from app.models.webcam import Webcam
@@ -31,12 +31,17 @@ def configure(app):
 
     @app.route('/start_analysis', methods=['POST'])
     def start_analysis():
-        sleep(5)
-        return redirect(url_for('teste'))
+        total_time = request.form['time']
+        captures_seg = request.form['qtd']
+        if total_time.isdigit() and captures_seg.isdigit():
+            analyze.start_analyze(int(total_time), int(captures_seg), webcam, rectangle)
+            return redirect(url_for('results'))
+        else:
+            return redirect(url_for('index'))
 
-    @app.route('/teste/')
-    def teste():
-        return 'Deu certo'
+    @app.route('/results/')
+    def results():
+        return render_template("results.html", differentiator=analyze.differentiator, captures=analyze.captures, signals=analyze.signals)
 
 
 webcam = Webcam()
