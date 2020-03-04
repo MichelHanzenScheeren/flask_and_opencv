@@ -1,7 +1,7 @@
 {% extends '_layout.html' %}
 {% block content %}
 
-<div class="row mt-5 align-items-center"> <!--align-items-center-->
+<div class="row mt-4 align-items-center"> <!--align-items-center-->
     <div>
         <img id="desenho" draggable="false" class="img-fluid rounded" src="{{ url_for('play_webcam') }}">
     </div>
@@ -32,7 +32,7 @@
                         </div>
                     </div>
                     <div id="div1">
-                        <button disabled id="start" type="submit" onclick="start_analysis()" class="btn btn-lg btn-block btn-success mt-4">
+                        <button disabled id="start" type="submit" onclick="config_analyze()" class="btn btn-lg btn-block btn-success mt-4">
                             INICIAR
                         </button>
                     </div>
@@ -49,33 +49,16 @@
 </div>
 
 <div class="row mt-1 align-items-center">
+    <div><label>X1:&nbsp</label></div>
+    <div><input id="x1" type="number" style="width:3em;" value="0" min="0"></div>
+    <div><label>&nbsp&nbspY1:&nbsp</label></div>
+    <div><input id="y1" type="number" style="width:3em;" value="0" min="0"></div>
+    <div><label>&nbsp&nbspX2:&nbsp</label></div>
+    <div><input id="x2" type="number" style="width:3em;" value="0" min="0"></div>
+    <div><label>&nbsp&nbspY2:&nbsp&nbsp</label></div>
+    <div><input id="y2" type="number" style="width:3em;" value="0" min="0"></div>
     <div>
-        <label>X1:&nbsp</label>
-    </div>
-    <div>
-        <input type="number" style="width:3em;" value="0" min="0">
-    </div>
-    <div>
-        <label>&nbsp&nbspY1:&nbsp</label>
-    </div>
-    <div>
-        <input type="number" style="width:3em;" value="0" min="0">
-    </div>
-    <div>
-        <label>&nbsp&nbspX2:&nbsp</label>
-    </div>
-    <div>
-        <input type="number" style="width:3em;" value="0" min="0">
-    </div>
-    <div>
-        <label>&nbsp&nbspY2:&nbsp&nbsp</label>
-    </div>
-    <div>
-        <input type="number" style="width:3em;" value="0" min="0">
-    </div>
-    <div>
-        <button type="button" class="ml-2 btn btn-info btn-sm btn-block">Atualizar</button>
-    </div>
+        <button type="button" onclick="refresh_rectangle()" class="ml-2 btn btn-info btn-sm btn-block">Atualizar</button></div>
     <div>
         <button type="button" onclick="clear_rectangle()" class="ml-3 btn btn-warning btn-sm btn-block">Limpar</button>
     </div>
@@ -83,15 +66,11 @@
 
 
     <script type="text/javascript">
-        function start_analysis(){
+        function config_analyze(){
             document.getElementById("div1").style.display = "none"
             document.getElementById("div2").style.display = "block"
         }
-        function clear_rectangle(){
-            var xhttp = new XMLHttpRequest();
-            xhttp.open("POST", "{{ url_for('clear_rectangle') }}", true);
-            xhttp.send();
-        }
+
         {% include 'rectangle.js' %}
         {% include 'get_differentiator.js' %}
     </script>

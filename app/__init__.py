@@ -1,9 +1,9 @@
 from flask import Flask
-from app.controllers import default
+from app.controllers import controller
 
 
 def create_app():
     app = Flask(__name__)
-    default.configure(app)
+    controller.configure(app)
     return app
 
