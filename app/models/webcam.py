@@ -1,6 +1,8 @@
 from threading import Lock, Thread
 from imutils import resize
 import cv2.cv2 as cv2
+from time import sleep
+
 
 class Webcam():
     def __init__(self):
@@ -24,5 +26,5 @@ class Webcam():
 
     def generate(self, rectangle):
         while True:
-            yield (b'--frame\r\n'
-                   b'Content-Type: image/jpeg\r\n\r\n' + self.get_image(rectangle) + b'\r\n\r\n')
+            yield (b'--frame\r\n'b'Content-Type: image/jpeg\r\n\r\n' + self.get_image(rectangle) + b'\r\n\r\n')
+            sleep(0.1)
