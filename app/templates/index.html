@@ -8,8 +8,9 @@
     <div class="col">
         <div class="row">
             <div class="col" style="margin-left:10px;border:1px solid;border-color:gray;">
-                <a class="btn btn-block btn-dark text-white mt-3" onclick="">Carregar Imagem</a>
-                <a class="btn btn-block btn-dark text-white my-3" onclick="get_differentiator()">Obter Diferenciador</a>
+                <input id="inputGetImage" type="file" accept="image/png,image/jpeg" class="d-none"/>
+                <button id="aGetImage" class="btn btn-block btn-dark text-white mt-3">Carregar Imagem</button>
+                <button id="aGetDifferentiator" class="btn btn-block btn-dark text-white my-3">Obter Diferenciador</button>
                 <hr>
                 <label class="my-1">Dados Obtidos:</label>
                 <div id="red" class="alert alert-danger my-2" role="alert">Aguardando...</div>
@@ -64,6 +65,7 @@
 
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 <script type="">
+    {% include 'src/load_image.js' %}
     {% include 'src/analyze.js' %}
     {% include 'src/rectangle.js' %}
 </script>
