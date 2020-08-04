@@ -1,4 +1,4 @@
-from threading import Lock, Thread
+from threading import Lock
 import cv2.cv2 as cv2
 from time import sleep
 from app.models.rectangle import Rectangle
