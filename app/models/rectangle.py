@@ -31,15 +31,3 @@ class Rectangle():
         self.x_initial = 0
         self.x_final = 0
         self.y_final = 0
-
-
-"""
-    x_initial __________________
-    y_initial                   |
-     |                          |
-     |                          |
-     |                          |
-     |                          |
-     |_________________________  x_final
-                                 y_final      
-"""

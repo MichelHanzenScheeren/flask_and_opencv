@@ -8,7 +8,7 @@ class Webcam():
     def __init__(self):
         self.output_frame = None
         self.lock_frame = Lock()
-        self.video_stream = cv2.VideoCapture(0) # openCV-python version
+        self.video_stream = cv2.VideoCapture(0)
 
 
     def __del__(self):
@@ -16,13 +16,12 @@ class Webcam():
 
 
     def get_image(self, rectangle):
-        _, frame = self.video_stream.read() # openCV-python version
-        #frame = cv2.flip(frame, 1)  # espelha a imagem
-        #frame = resize(frame, 500)  # redimensiona
+        _, frame = self.video_stream.read()
         with self.lock_frame:
             self.output_frame = frame.copy()
         _, jpeg = cv2.imencode('.jpg', rectangle.draw_rectangle(frame))
         return jpeg.tobytes()
+
 
     def generate(self, rectangle):
         while True:
