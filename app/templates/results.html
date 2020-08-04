@@ -2,9 +2,9 @@
 {% block content %}
 
 <div id=results_content>
-    <div id="differentiator_table" class="mt-3">
+    <div id="differentiator_table" class="mt-4">
         <div class="panel-heading">
-            <h4>Diferenciador</h4>
+            <h3 class="pl-3">Diferenciador</h3>
         </div>
         <div class="panel-body">
             <table class="table table-hover table-bordered">
@@ -25,9 +25,9 @@
             </table> 
         </div>
     </div>
-    <div id="sinais_table" class="mt-3">
+    <div id="sinais_table" class="mt-4">
         <div class="panel-heading">
-            <h4> Capturas </h4>
+            <h3 class="pl-3"> Capturas </h3>
         </div>
         <div class="panel-body">
             <table class="table table-hover table-bordered">
@@ -52,7 +52,20 @@
             </table> 
         </div>
     </div>
-    <div class="mt-5"></div>
+    <div class="mt-4">
+        <div class="panel-heading">
+            <h3 class="pl-3">Gráfico dos Sinais</h3>
+        </div>
+        <div id="line_chart"></div>
+    </div>
+    <div style="height: 50px;"></div>
 </div>
+
+
+<script src="https://www.gstatic.com/charts/loader.js"></script>
+<script type="">
+    var signals = {{ signals|tojson }};
+    {% include 'src/signals_chart.js' %}
+</script>
 
 {% endblock%}
