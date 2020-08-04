@@ -7,13 +7,11 @@ class Analyze():
         self.total_time = 0
         self.captures_seg = 0
 
-    def get_differentiator(self, webcam, rectangle):
-        with webcam.lock_frame and rectangle.lock_drawing:
-            frame = webcam.output_frame.copy()
-            self.differentiator = (frame[rectangle.y_initial:rectangle.y_final, rectangle.x_initial:rectangle.x_final].mean(axis=0).mean(axis=0))
-            return f'[{self.differentiator[2]:.3f}, {self.differentiator[1]:.3f}, {self.differentiator[0]:.3f}]'
+    def get_differentiator(self, webcam):
+        self.differentiator = (webcam.selected_rectangle_image().mean(axis=0).mean(axis=0))
+        return f'[{self.differentiator[2]:.3f}, {self.differentiator[1]:.3f}, {self.differentiator[0]:.3f}]'
 
-    def start_analyze(self, total_time, captures_seg, webcam, rectangle):
+    def start_analyze(self, total_time, captures_seg, webcam):
         self.captures = []
         self.signals = []
         self.total_time = total_time
@@ -21,9 +19,7 @@ class Analyze():
         repetitions = int(total_time * captures_seg)
         interval = 1 / captures_seg
         for _ in range(0, repetitions):
-            with webcam.lock_frame and rectangle.lock_drawing:
-                frame = webcam.output_frame.copy()
-                self.captures.append((frame[rectangle.y_initial:rectangle.y_final, rectangle.x_initial:rectangle.x_final].mean(axis=0).mean(axis=0)))
+            self.captures.append(webcam.selected_rectangle_image().mean(axis=0).mean(axis=0))
             sleep(interval)
         self.calculate_signal()
 
