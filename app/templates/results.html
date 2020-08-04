@@ -1,19 +1,58 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Resultados</title>
-</head>
-<body>
-    <p> Diferenciador: </p>
-    <p> {{ differentiator }}</p>
-    <hr>
-    <p> Capturas: </p>
-    {% for i in captures %}
-        <p> {{ i }}</p>
-    {% endfor %}
-    <hr>
-    <p> Sinais: </p>
-    <p> {{ signals }}</p>
-</body>
-</html>
+{% extends '_layout.html' %}
+{% block content %}
+
+<div id=results_content>
+    <div id="differentiator_table" class="mt-3">
+        <div class="panel-heading">
+            <h4>Diferenciador</h4>
+        </div>
+        <div class="panel-body">
+            <table class="table table-hover table-bordered">
+                <thead class="table-dark"> 
+                    <tr>
+                        <th scope="col"> Vermelho </th>
+                        <th scope="col"> Verde </th>
+                        <th scope="col"> Azul </th> 
+                    </tr>
+                </thead> 
+                <tbody>
+                    <tr>
+                        <td class="text-danger"> {{ differentiator[2] }}</td>
+                        <td class="text-success"> {{ differentiator[1] }}</td>
+                        <td class="text-info"> {{ differentiator[0] }}</td>
+                    </tr>
+                </tbody>
+            </table> 
+        </div>
+    </div>
+    <div id="sinais_table" class="mt-3">
+        <div class="panel-heading">
+            <h4> Capturas </h4>
+        </div>
+        <div class="panel-body">
+            <table class="table table-hover table-bordered">
+                <thead class="table-dark"> 
+                    <tr>
+                        <th scope="col"> Vermelho </th>
+                        <th scope="col"> Verde </th>
+                        <th scope="col"> Azul </th>
+                        <th scope="col"> Sinal </th>
+                    </tr>
+                </thead> 
+                <tbody>
+                    {% for index in range(captures|length) %}
+                        <tr>
+                            <td class="text-danger"> {{ captures[index][2] }}</td>
+                            <td class="text-success"> {{ captures[index][1] }}</td>
+                            <td class="text-info"> {{ captures[index][0] }}</td>
+                            <td class="text-black"> {{ signals[index] }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table> 
+        </div>
+    </div>
+    <div class="mt-5"></div>
+</div>
+
+{% endblock%}

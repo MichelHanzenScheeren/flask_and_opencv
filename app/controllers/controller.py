@@ -1,3 +1,4 @@
+# pylint: disable=unused-variable
 from flask import Response, render_template, redirect, url_for, request
 from time import sleep
 from app.models.rectangle import Rectangle

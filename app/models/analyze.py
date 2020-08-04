@@ -20,7 +20,7 @@ class Analyze():
         self.captures_seg = captures_seg
         repetitions = int(total_time * captures_seg)
         interval = 1 / captures_seg
-        for i in range(0, repetitions):
+        for _ in range(0, repetitions):
             with webcam.lock_frame and rectangle.lock_drawing:
                 frame = webcam.output_frame.copy()
                 self.captures.append((frame[rectangle.y_initial:rectangle.y_final, rectangle.x_initial:rectangle.x_final].mean(axis=0).mean(axis=0)))

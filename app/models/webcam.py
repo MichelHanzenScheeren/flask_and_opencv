@@ -16,12 +16,12 @@ class Webcam():
 
 
     def get_image(self, rectangle):
-        success, frame = self.video_stream.read() # openCV-python version
+        _, frame = self.video_stream.read() # openCV-python version
         #frame = cv2.flip(frame, 1)  # espelha a imagem
         #frame = resize(frame, 500)  # redimensiona
         with self.lock_frame:
             self.output_frame = frame.copy()
-        success, jpeg = cv2.imencode('.jpg', rectangle.draw_rectangle(frame))
+        _, jpeg = cv2.imencode('.jpg', rectangle.draw_rectangle(frame))
         return jpeg.tobytes()
 
     def generate(self, rectangle):
