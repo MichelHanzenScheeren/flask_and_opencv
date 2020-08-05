@@ -8,7 +8,7 @@ from app.models.analyze import Analyze
 def configure(app):
     @app.route('/')
     def index():
-        return render_template("index.html")
+        return render_template("index.html", page="index")
 
     @app.route("/play_webcam")
     def play_webcam():
@@ -41,7 +41,7 @@ def configure(app):
 
     @app.route('/results/')
     def results():
-        return render_template("results.html", results = analyze.results)
+        return render_template("results.html", results = analyze.results, page="results")
 
 
 webcam = Webcam()
