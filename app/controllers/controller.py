@@ -41,7 +41,7 @@ def configure(app):
 
     @app.route('/results/')
     def results():
-        return render_template("results.html", differentiator=analyze.differentiator, captures=analyze.captures, signals=analyze.signals)
+        return render_template("results.html", results = analyze.results)
 
 
 webcam = Webcam()

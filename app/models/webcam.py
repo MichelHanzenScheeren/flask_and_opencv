@@ -26,7 +26,7 @@ class Webcam():
 
     def draw_rectangle_on_image(self, frame):
         if (self.rectangle.is_valid_rectangle()):
-            cv2.rectangle(img = frame, color = (255, 255, 255), thickness = 1,
+            cv2.rectangle(img = frame, color = (0, 0, 255), thickness = 1,
                 pt1 = self.rectangle.initial_xy(), pt2 = self.rectangle.final_xy())
         return frame
 

@@ -17,9 +17,9 @@
                 </thead> 
                 <tbody>
                     <tr>
-                        <td class="text-danger"> {{ differentiator[2] }}</td>
-                        <td class="text-success"> {{ differentiator[1] }}</td>
-                        <td class="text-info"> {{ differentiator[0] }}</td>
+                        <td class="text-danger"> {{ results.differentiator[2]|round(3) }}</td>
+                        <td class="text-success"> {{ results.differentiator[1]|round(3) }}</td>
+                        <td class="text-info"> {{ results.differentiator[0]|round(3) }}</td>
                     </tr>
                 </tbody>
             </table> 
@@ -29,10 +29,11 @@
         <div class="panel-heading">
             <h3 class="pl-3"> Capturas </h3>
         </div>
-        <div class="panel-body">
+        <div class="table-responsive">
             <table class="table table-hover table-bordered">
                 <thead class="table-dark"> 
                     <tr>
+                        <th scope="col"> Tempo (seg) </th>
                         <th scope="col"> Vermelho </th>
                         <th scope="col"> Verde </th>
                         <th scope="col"> Azul </th>
@@ -40,12 +41,13 @@
                     </tr>
                 </thead> 
                 <tbody>
-                    {% for index in range(captures|length) %}
+                    {% for index in range(results.captures|length) %}
                         <tr>
-                            <td class="text-danger"> {{ captures[index][2] }}</td>
-                            <td class="text-success"> {{ captures[index][1] }}</td>
-                            <td class="text-info"> {{ captures[index][0] }}</td>
-                            <td class="text-black"> {{ signals[index] }}</td>
+                            <td class="text-black"> {{  (index * results.interval)|round(2) }}</td>
+                            <td class="text-danger"> {{ results.captures[index][2]|round(3) }}</td>
+                            <td class="text-success"> {{ results.captures[index][1]|round(3) }}</td>
+                            <td class="text-info"> {{ results.captures[index][0]|round(3) }}</td>
+                            <td class="text-black"> {{ results.signals[index]|round(3) }}</td>
                         </tr>
                     {% endfor %}
                 </tbody>
@@ -64,7 +66,8 @@
 
 <script src="https://www.gstatic.com/charts/loader.js"></script>
 <script type="">
-    var signals = {{ signals|tojson }};
+    var signals = {{ results.signals|tojson }};
+    var interval = {{ results.interval|round(2) }};
     {% include 'src/signals_chart.js' %}
 </script>
 
