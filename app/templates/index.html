@@ -8,8 +8,10 @@
     <div class="col">
         <div class="row">
             <div class="col" style="margin-left:10px;border:1px solid;border-color:gray;">
-                <input id="inputGetImage" type="file" accept="image/png,image/jpeg" class="d-none"/>
-                <button id="aGetImage" class="btn btn-block btn-dark text-white mt-3">Carregar Imagem</button>
+                <form enctype="multipart/form-data">
+                    <input id="inputUploadImage" name="inputUploadImage" type="file" accept="image/png,image/jpeg" class="d-none"/>
+                </form>
+                <button id="buttonUploadImage" class="btn btn-block btn-dark text-white mt-3">Carregar Imagem</button>
                 <button id="aGetDifferentiator" class="btn btn-block btn-dark text-white my-3">Obter Diferenciador</button>
                 <hr>
                 <label class="my-1">Dados Obtidos:</label>
@@ -62,12 +64,16 @@
         <button id="clear_button" type="button" onclick="clear_rectangle()" class="ml-3 btn btn-warning btn-sm btn-block">Limpar</button>
     </div>
 </div>
+<div>
+    <img id="myimageloaded" height="200">
+</div>
 
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 <script type="">
     {% include 'src/load_image.js' %}
     {% include 'src/analyze.js' %}
     {% include 'src/rectangle.js' %}
+    {% include 'src/load_image.js' %}
 </script>
 
 {% endblock%}

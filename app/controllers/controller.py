@@ -14,6 +14,14 @@ def configure(app):
     def play_webcam():
         return Response(webcam.generate(), mimetype='multipart/x-mixed-replace; boundary=frame')
 
+    @app.route("/upload_image", methods = ['POST'])
+    def upload_image():
+        if request.files:
+            image = request.files["file"]
+            print(image)
+            return ''
+        return ''
+
     @app.route('/get_measures', methods = ['POST'])
     @app.route('/get_measures/<int:x1>/<int:y1>/<int:x2>/<int:y2>', methods = ['POST'])
     def get_measures(x1=None, y1=None, x2=None, y2=None):
