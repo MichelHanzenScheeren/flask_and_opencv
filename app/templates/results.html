@@ -2,9 +2,32 @@
 {% block content %}
 
 <div id=results_content>
+    <div id="sumary" class="mt-4">
+        <h4 class="pl-3 bgc-fff">Informações Gerais</h4>
+        <div class="container">
+            <div class="row"> 
+                <div class="col-md card p-3 bg-white"> 
+                    <h5 class="card-title"> Início da análise </h5> 
+                    <p class="card-text"> {{ results.initial_date }} </p>
+                </div> 
+                <div class="col-md card p-3 bg-white"> 
+                    <h5 class="card-title"> Tempo Total </h5> 
+                    <p class="card-text"> {{ results.total_time }} segundos </p>
+                </div> 
+                <div class="col-md card p-3 bg-white"> 
+                    <h5 class="card-title"> Nº Capturas </h5> 
+                    <p class="card-text"> {{ results.captures_seg }} captura/seg </p>
+                </div>
+                <div class="col-md card p-3 bg-white"> 
+                    <h5 class="card-title"> Total </h5> 
+                    <p class="card-text"> {{ results.signals|length }} captura(s) </p>
+                </div>
+            </div>
+        </div>
+    </div>
     <div id="differentiator_table" class="mt-4">
         <div class="panel-heading">
-            <h3 class="pl-3">Diferenciador</h3>
+            <h4 class="pl-3">Diferenciador</h4>
         </div>
         <div class="panel-body">
             <table class="table table-hover table-bordered">
@@ -15,7 +38,7 @@
                         <th scope="col"> Azul </th> 
                     </tr>
                 </thead> 
-                <tbody>
+                <tbody class="bg-white">
                     <tr>
                         <td class="text-danger"> {{ results.differentiator[2]|round(3) }}</td>
                         <td class="text-success"> {{ results.differentiator[1]|round(3) }}</td>
@@ -27,7 +50,7 @@
     </div>
     <div id="sinais_table" class="mt-4">
         <div class="panel-heading">
-            <h3 class="pl-3"> Capturas </h3>
+            <h4 class="pl-3"> Capturas </h4>
         </div>
         <div class="table-responsive">
             <table class="table table-hover table-bordered">
@@ -40,7 +63,7 @@
                         <th scope="col"> Sinal </th>
                     </tr>
                 </thead> 
-                <tbody>
+                <tbody class="bg-white">
                     {% for index in range(results.captures|length) %}
                         <tr>
                             <td class="text-black"> {{  (index * results.interval)|round(2) }}</td>
@@ -56,7 +79,7 @@
     </div>
     <div class="mt-4">
         <div class="panel-heading">
-            <h3 class="pl-3">Gráfico dos Sinais</h3>
+            <h4 class="pl-3">Gráfico dos Sinais</h4>
         </div>
         <div id="line_chart"></div>
     </div>

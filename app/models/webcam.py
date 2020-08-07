@@ -1,7 +1,7 @@
 from threading import Lock
 import cv2.cv2 as cv2
 import numpy
-from time import sleep
+import time
 from app.models.rectangle import Rectangle
 
 
@@ -65,6 +65,7 @@ class Webcam():
                 return copy[self.rectangle.y_initial:self.rectangle.y_final,self.rectangle.x_initial:self.rectangle.x_final]
         return self.selected_rectangle_image()
 
+
     def selected_rectangle_image(self):
         with self.lock_frame and self.rectangle.lock_drawing:
             return self.output_frame[self.rectangle.y_initial:self.rectangle.y_final,self.rectangle.x_initial:self.rectangle.x_final]
@@ -73,7 +74,7 @@ class Webcam():
     def generate(self):
         while True:
             yield (b'--frame\r\n'b'Content-Type: image/jpeg\r\n\r\n' + self.get_image() + b'\r\n\r\n')
-            sleep(0.1)
+            time.sleep(0.1)
 
     
     def save_uploaded_image(self, image):

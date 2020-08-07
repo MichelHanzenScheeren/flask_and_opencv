@@ -14,7 +14,7 @@ function drawChart() {
         hAxis: {title: 'Tempo(seg)', textStyle: style, titleTextStyle: style},
         vAxis: {title: 'Sinal', textStyle: style, titleTextStyle: style},
         legend: { position: 'none' },
-        backgroundColor: "#e7e7e8",
+        backgroundColor: "#FFFFFF",
         colors: ['#343a40'],
         pointsVisible: true,
     };
