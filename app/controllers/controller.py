@@ -8,6 +8,7 @@ from app.models.analyze import Analyze
 def configure(app):
     @app.route('/')
     def index():
+        webcam.clear_points_of_rectangle()
         return render_template("index.html", page="index")
 
     @app.route("/play_webcam")
@@ -16,12 +17,9 @@ def configure(app):
 
     @app.route("/upload_image", methods = ['POST'])
     def upload_image():
-        if request.files:
-            image = request.files["file"]
-            print(image)
-            return ''
+        webcam.save_uploaded_image(request.files["file"])
         return ''
-
+        
     @app.route('/get_measures', methods = ['POST'])
     @app.route('/get_measures/<int:x1>/<int:y1>/<int:x2>/<int:y2>', methods = ['POST'])
     def get_measures(x1=None, y1=None, x2=None, y2=None):

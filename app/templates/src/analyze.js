@@ -1,8 +1,8 @@
-document.getElementById("aGetDifferentiator").setAttribute("onclick", "get_differentiator()");
+document.getElementById("buttonGetDifferentiator").setAttribute("onclick", "get_differentiator()");
 
 function config_analyze() {
-  document.getElementById("aGetImage").setAttribute("disabled", "true");
-  document.getElementById("aGetDifferentiator").disabled = true;
+  document.getElementById("buttonUploadImage").setAttribute("disabled", "true");
+  document.getElementById("buttonGetDifferentiator").disabled = true;
   document.getElementById("refresh_button").disabled = true;
   document.getElementById("clear_button").disabled = true;
   document.getElementById("div1").style.display = "none";

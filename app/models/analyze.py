@@ -8,7 +8,7 @@ class Analyze():
         self.results = Results()
 
     def get_differentiator(self, webcam):
-        self.differentiator = (webcam.selected_rectangle_image().mean(axis=0).mean(axis=0))
+        self.differentiator = (webcam.get_differentiator_image().mean(axis=0).mean(axis=0))
         return f'[{self.differentiator[2]:.3f}, {self.differentiator[1]:.3f}, {self.differentiator[0]:.3f}]'
 
     def start_analyze(self, total_time, captures_seg, webcam):

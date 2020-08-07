@@ -16,4 +16,5 @@ function onFileSelected(event) {
     var formData = new FormData();
     formData.append('file', uploadedFile);
     axios.post("{{url_for('upload_image')}}", formData);
+    document.getElementById("start").disabled = true;
 }
