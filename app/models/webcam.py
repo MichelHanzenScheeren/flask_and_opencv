@@ -75,6 +75,17 @@ class Webcam():
         while True:
             yield (b'--frame\r\n'b'Content-Type: image/jpeg\r\n\r\n' + self.get_image() + b'\r\n\r\n')
             time.sleep(0.1)
+    
+
+    # def generate(self):
+    #     FRAME_RATE = 0.1
+    #     previous = 0
+    #     while True:
+    #         image = self.get_image()
+    #         time_elapsed = time.time()
+    #         if (time_elapsed - previous) > (FRAME_RATE):
+    #             previous = time_elapsed
+    #             yield (b'--frame\r\n'b'Content-Type: image/jpeg\r\n\r\n' + image + b'\r\n\r\n')
 
     
     def save_uploaded_image(self, image):
