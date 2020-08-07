@@ -4,51 +4,41 @@ from app.models.results import Results
 
 class Analyze():
     def __init__(self):
-        self.differentiator = []
         self.results = Results()
+        
 
     def get_differentiator(self, webcam):
-        self.differentiator = (webcam.get_differentiator_image().mean(axis=0).mean(axis=0))
-        return f'[{self.differentiator[2]:.3f}, {self.differentiator[1]:.3f}, {self.differentiator[0]:.3f}]'
-
-    def start_analyze(self, total_time, captures_seg, webcam):
-        self.initialize_parameters(total_time, captures_seg)
-        self.do_analyze(webcam)
-        self.calculate_signal()
-        self.save_results()
+        image = webcam.get_differentiator_image()
+        result = self.calculate_averege(image)
+        self.results.differentiator = result
+        return f'[{result[2]:.3f}, {result[1]:.3f}, {result[0]:.3f}]'
     
 
-    def initialize_parameters(self, total_time, captures_seg):
-        self.captures = []
-        self.signals = []
-        self.total_time = total_time
-        self.captures_seg = captures_seg
-        self.interval = (1 / self.captures_seg)
+    def calculate_averege(self, image):
+        return image.mean(axis=0).mean(axis=0)
+
+
+    def start_analyze(self, total_time, captures_seg, webcam):
+        self.results.initialize_parameters(total_time, captures_seg)
+        self.do_analyze(webcam)
+        self.calculate_signal()
+        self.results.save_final_date()
     
 
     def do_analyze(self, webcam):
-        repetitions = int(self.total_time * self.captures_seg)
+        repetitions = int(self.results.total_time * self.results.captures_seg)
         for _ in range(0, repetitions + 1):
-            self.captures.append(webcam.selected_rectangle_image().mean(axis=0).mean(axis=0))
-            sleep(self.interval)
+            capture = self.calculate_averege(webcam.selected_rectangle_image())
+            self.results.captures.append(capture)
+            sleep(self.results.interval)
 
 
     def calculate_signal(self):
-        for capture in self.captures:
+        differentiator = self.results.differentiator
+        for capture in self.results.captures:
             signal = sqrt(
-                pow(capture[0] - self.differentiator[0], 2) +
-                pow(capture[1] - self.differentiator[1], 2) +
-                pow(capture[2] - self.differentiator[2], 2)
+                pow(capture[0] - differentiator[0], 2) +
+                pow(capture[1] - differentiator[1], 2) +
+                pow(capture[2] - differentiator[2], 2)
             )
-            self.signals.append(signal)
-    
-
-    def save_results(self):
-        self.results.save_results(
-            differentiator = self.differentiator,
-            captures = self.captures,
-            signals = self.signals,
-            total_time = self.total_time,
-            captures_seg = self.captures_seg,
-            interval = self.interval
-        )
+            self.results.signals.append(signal)

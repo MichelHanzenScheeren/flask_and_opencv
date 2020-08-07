@@ -21,7 +21,7 @@ class Webcam():
 
     def get_image(self):
         with self.lock_uploaded_image:
-            if  isinstance(self.uploaded_image, numpy.ndarray):
+            if isinstance(self.uploaded_image, numpy.ndarray):
                 return self.get_uploaded_image()
         return self.get_webcam_image()
     
