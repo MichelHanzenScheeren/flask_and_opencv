@@ -20,6 +20,12 @@ class Webcam():
         with self.lock_frame:
             if self.video_stream is None:
                 self.video_stream = cv2.VideoCapture(self.webcam_port)
+    
+
+    def get_frame_shape(self):
+        with self.lock_frame:
+            (height, width, _) = self.video_stream.read()[1].shape or (0, 0, 0)
+            return f"style=height:{height}px;min-height:{height}px;width:{width}px;min-width:{width}px;"
 
 
     def __del__(self):
@@ -47,12 +53,12 @@ class Webcam():
         
     
     def get_webcam_image(self):
-        _, frame = self.video_stream.read() if self.video_stream is not None else (None, None)
         with self.lock_frame:
-            if frame is None:
-                frame = self.output_frame.copy()
-            else:
+            if self.video_stream:
+                _, frame = self.video_stream.read()
                 self.output_frame = frame.copy()
+            else:
+                frame = self.output_frame.copy()
         _, jpeg = cv2.imencode('.jpg', self.draw_rectangle_on_image(frame))
         return jpeg.tobytes()
     
