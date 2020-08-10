@@ -8,7 +8,7 @@ from app.models.analyze import Analyze
 def configure(app):
     @app.route('/')
     def index():
-        webcam.clear_points_of_rectangle()
+        webcam.init_webcam()
         return render_template("index.html", page="index")
 
     @app.route("/play_webcam")
@@ -28,7 +28,7 @@ def configure(app):
 
     @app.route('/clear_rectangle/', methods=['POST'])
     def clear_rectangle():
-        webcam.clear_points_of_rectangle()
+        webcam.clear_rectangle_and_uploaded_image()
         return ''
 
     @app.route('/get_differentiator/', methods=['POST'])
@@ -47,7 +47,11 @@ def configure(app):
 
     @app.route('/results/')
     def results():
-        return render_template("results.html", results = analyze.results, page="results")
+        if analyze.is_valid():
+            webcam.clear()
+            return render_template("results.html", results = analyze.results, page="results")
+        return redirect(url_for('index'))
+        
 
 
 webcam = Webcam()

@@ -41,3 +41,12 @@ class Analyze():
                 pow(capture[2] - differentiator[2], 2)
             )
             self.results.signals.append(signal)
+    
+
+    def is_valid(self): 
+        return len(self.results.differentiator) > 0 and len(self.results.captures) > 0
+    
+
+
+    
+

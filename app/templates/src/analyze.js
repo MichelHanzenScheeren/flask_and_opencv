@@ -1,5 +1,11 @@
 document.getElementById("buttonGetDifferentiator").setAttribute("onclick", "get_differentiator()");
 
+window.addEventListener("pageshow", function(_) {
+  if(performance.navigation.type == 2) {
+    location.reload(true);
+  }
+});
+
 function config_analyze() {
   document.getElementById("buttonUploadImage").setAttribute("disabled", "true");
   document.getElementById("buttonGetDifferentiator").disabled = true;

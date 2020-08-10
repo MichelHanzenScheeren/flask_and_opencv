@@ -11,12 +11,26 @@ class Webcam():
         self.lock_frame = Lock()
         self.uploaded_image = None
         self.lock_uploaded_image = Lock()
-        self.video_stream = cv2.VideoCapture(0)
+        self.video_stream = None
+        self.webcam_port = 0
         self.rectangle = Rectangle()
+    
+
+    def init_webcam(self):
+        with self.lock_frame:
+            if self.video_stream is None:
+                self.video_stream = cv2.VideoCapture(self.webcam_port)
 
 
     def __del__(self):
-        self.video_stream.release()
+        self.turn_off_webcam()
+    
+
+    def turn_off_webcam(self):
+        with self.lock_frame:
+            if self.video_stream is not None:
+                self.video_stream.release()
+                self.video_stream = None
 
 
     def get_image(self):
@@ -33,9 +47,12 @@ class Webcam():
         
     
     def get_webcam_image(self):
-        _, frame = self.video_stream.read()
+        _, frame = self.video_stream.read() if self.video_stream is not None else (None, None)
         with self.lock_frame:
-            self.output_frame = frame.copy()
+            if frame is None:
+                frame = self.output_frame.copy()
+            else:
+                self.output_frame = frame.copy()
         _, jpeg = cv2.imencode('.jpg', self.draw_rectangle_on_image(frame))
         return jpeg.tobytes()
     
@@ -51,10 +68,15 @@ class Webcam():
         self.rectangle.define_points_of_rectangle(x1, y1, x2, y2)
     
 
-    def clear_points_of_rectangle(self):
+    def clear_rectangle_and_uploaded_image(self):
         with self.lock_uploaded_image:
             self.uploaded_image = None
         self.rectangle.clear_points_of_rectangle()
+    
+
+    def clear(self):
+        self.clear_rectangle_and_uploaded_image()
+        self.turn_off_webcam()
         
 
     def get_differentiator_image(self):
@@ -62,18 +84,19 @@ class Webcam():
             if isinstance(self.uploaded_image, numpy.ndarray):
                 copy = self.uploaded_image.copy()
                 self.uploaded_image = None
-                return copy[self.rectangle.y_initial:self.rectangle.y_final,self.rectangle.x_initial:self.rectangle.x_final]
+                return self.rectangle.crop_image(copy)
         return self.selected_rectangle_image()
 
 
     def selected_rectangle_image(self):
         with self.lock_frame and self.rectangle.lock_drawing:
-            return self.output_frame[self.rectangle.y_initial:self.rectangle.y_final,self.rectangle.x_initial:self.rectangle.x_final]
+            return self.rectangle.crop_image(self.output_frame)
 
 
     def generate(self):
         while True:
-            yield (b'--frame\r\n'b'Content-Type: image/jpeg\r\n\r\n' + self.get_image() + b'\r\n\r\n')
+            init_response = b'--frame\r\nContent-Type:image/jpeg\r\n\r\n'
+            yield(init_response + self.get_image() + b'\r\n\r\n')
             time.sleep(0.1)
     
 

@@ -40,3 +40,7 @@ class Rectangle():
     def final_xy(self):
         with self.lock_drawing:
             return (self.x_final, self.y_final)
+
+
+    def crop_image(self, image):
+        return image[self.y_initial:self.y_final, self.x_initial:self.x_final]
