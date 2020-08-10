@@ -9,17 +9,19 @@ class Analyze():
 
     def get_differentiator(self, webcam):
         image = webcam.get_differentiator_image()
-        result = self.calculate_averege(image)
+        result = self.calculate_average(image)
         self.results.differentiator = result
         return f'[{result[2]:.3f}, {result[1]:.3f}, {result[0]:.3f}]'
     
 
-    def calculate_averege(self, image):
+    def calculate_average(self, image):
         return image.mean(axis=0).mean(axis=0)
 
 
     def start_analyze(self, total_time, captures_seg, webcam):
-        self.results.initialize_parameters(total_time, captures_seg)
+        if not (total_time.isdigit() and captures_seg.isdigit()):
+            return
+        self.results.initialize_parameters(int(total_time), int(captures_seg))
         self.do_analyze(webcam)
         self.calculate_signal()
     
@@ -27,7 +29,7 @@ class Analyze():
     def do_analyze(self, webcam):
         repetitions = int(self.results.total_time * self.results.captures_seg)
         for _ in range(0, repetitions + 1):
-            capture = self.calculate_averege(webcam.selected_rectangle_image())
+            capture = self.calculate_average(webcam.selected_rectangle_image())
             self.results.captures.append(capture)
             sleep(self.results.interval)
 

@@ -3,10 +3,6 @@ from datetime import datetime
 class Results():
     def __init__(self):
         self.differentiator = []
-        self.captures = []
-        self.signals = []
-        self.total_time = 0 
-        self.captures_seg = 1
     
 
     def initialize_parameters(self, total_time, captures_seg):

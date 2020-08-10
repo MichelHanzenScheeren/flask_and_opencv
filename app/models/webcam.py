@@ -7,12 +7,12 @@ from app.models.rectangle import Rectangle
 
 class Webcam():
     def __init__(self):
-        self.output_frame = None
-        self.lock_frame = Lock()
-        self.uploaded_image = None
-        self.lock_uploaded_image = Lock()
-        self.video_stream = None
         self.webcam_port = 0
+        self.video_stream = None
+        self.output_frame = None
+        self.uploaded_image = None
+        self.lock_frame = Lock()
+        self.lock_uploaded_image = Lock()
         self.rectangle = Rectangle()
     
 
@@ -66,17 +66,17 @@ class Webcam():
 
     def define_points_of_rectangle(self, x1, y1, x2, y2):
         self.rectangle.define_points_of_rectangle(x1, y1, x2, y2)
+        
+    
+    def clear(self):
+        self.turn_off_webcam()
+        self.clear_rectangle_and_uploaded_image()
     
 
     def clear_rectangle_and_uploaded_image(self):
+        self.rectangle.initial_points_of_rectangle()
         with self.lock_uploaded_image:
             self.uploaded_image = None
-        self.rectangle.clear_points_of_rectangle()
-    
-
-    def clear(self):
-        self.clear_rectangle_and_uploaded_image()
-        self.turn_off_webcam()
         
 
     def get_differentiator_image(self):
@@ -108,13 +108,13 @@ class Webcam():
     #         time_elapsed = time.time()
     #         if (time_elapsed - previous) > (FRAME_RATE):
     #             previous = time_elapsed
-    #             yield (b'--frame\r\n'b'Content-Type: image/jpeg\r\n\r\n' + image + b'\r\n\r\n')
+    #             init_response = b'--frame\r\nContent-Type:image/jpeg\r\n\r\n'
+    #             yield(init_response + image + b'\r\n\r\n')
 
     
     def save_uploaded_image(self, image):
         if image:
-            filestring = image.read()
-            numpy_img = numpy.fromstring(filestring, numpy.uint8)
+            numpy_img = numpy.fromstring(image.read(), numpy.uint8)
             cv2_image = cv2.imdecode(numpy_img, cv2.IMREAD_COLOR)
             cv2_image = self.resize_image(cv2_image)
             with self.lock_uploaded_image:
@@ -125,4 +125,5 @@ class Webcam():
         with self.lock_frame:
             size = self.output_frame.shape
             return cv2.resize(image, (size[1], size[0]))
+
 
