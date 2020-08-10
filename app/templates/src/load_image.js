@@ -17,4 +17,10 @@ function onFileSelected(event) {
     formData.append('file', uploadedFile);
     axios.post("{{url_for('upload_image')}}", formData);
     document.getElementById("start").disabled = true;
+    clear_files();
+}
+
+function clear_files() {
+    document.getElementById("inputUploadImage").value = ""
+    console.log(document.getElementById("inputUploadImage").files)
 }
