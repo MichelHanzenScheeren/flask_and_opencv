@@ -45,7 +45,7 @@ def configure(app):
 
     @app.route('/start_analysis', methods=['POST'])
     def start_analysis():
-        analyze.start_analyze(request.form['time'], request.form['qtd'], webcam)
+        analyze.start_analyze(request.form['time'], request.form['qtd'], request.form["description"], webcam)
         return redirect(url_for('results'))
 
 

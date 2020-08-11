@@ -18,10 +18,10 @@ class Analyze():
         return image.mean(axis=0).mean(axis=0)
 
 
-    def start_analyze(self, total_time, captures_seg, webcam):
+    def start_analyze(self, total_time, captures_seg, description, webcam):
         if not (total_time.isdigit() and captures_seg.isdigit()):
             return
-        self.results.initialize_parameters(int(total_time), int(captures_seg))
+        self.results.initialize_parameters(int(total_time), int(captures_seg), description)
         self.do_analyze(webcam)
         self.calculate_signal()
     
