@@ -24,7 +24,8 @@ class Webcam():
 
     def get_frame_shape(self):
         with self.lock_frame:
-            (height, width, _) = self.video_stream.read()[1].shape or (0, 0, 0)
+            _, frame = self.video_stream.read()
+            height, width, _ = frame.shape if frame is not None else (480, 640, 0)
             return f"style=height:{height}px;min-height:{height}px;width:{width}px;min-width:{width}px;"
 
 
