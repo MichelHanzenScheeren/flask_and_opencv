@@ -24,9 +24,9 @@
                 <input id="y2" type="number" style="width:3em;" value="0" min="0">
             </div>
             <div class="col">
-                <button id="refresh_button" type="button" onclick="refresh_rectangle()" class="btn btn-info btn-sm btn-block">Atualizar</button></div>
+                <button id="refresh_button" type="button" onclick="refresh_rectangle()" class="btn btn-outline-dark btn-sm btn-block">Atualizar</button></div>
             <div class="col">
-                <button id="clear_button" type="button" onclick="clear_rectangle()" class="btn btn-warning btn-sm btn-block">Limpar</button>
+                <button id="clear_button" type="button" onclick="clear_rectangle()" class="btn btn-outline-dark btn-sm btn-block">Limpar</button>
             </div>
         </div>
     </div>
@@ -34,14 +34,16 @@
         <div class="row h-100 align-items-top">
             <div class="col-md h-100 mx-2 border border-dark rounded p-3">
                 <form enctype="multipart/form-data">
-                    <input id="inputUploadImage" name="inputUploadImage" type="file" accept="image/png,image/jpeg" class="d-none"/>
+                    <div class="custom-file">
+                        <label class="custom-file-label" id="labelUploadImage" for="inputUploadImage">Escolher imagem local</label>
+                        <input type="file" id="inputUploadImage" class="custom-file-input"accept="image/png,image/jpeg" multiple="false">
+                    </div>
                 </form>
-                <button id="buttonUploadImage" class="btn btn-md btn-block btn-dark text-white my-0">Enviar imagem salva</button>
                 <button id="buttonGetDifferentiator" class="btn btn-md btn-block btn-dark text-white mt-2 mb-1">Obter diferenciador</button>
                 <label class="mt-2 mb-1 my-text">Dados obtidos:</label>
                 <div id="red" class="alert alert-danger alert-lg mb-2" role="alert">Aguardando...</div>
                 <div id="green" class="alert alert-success mb-2" role="alert">Aguardando...</div>
-                <div id="blue" class="alert alert-info mb-1" role="alert"> Aguardando... </div>
+                <div id="blue" class="alert alert-primary mb-1" role="alert"> Aguardando... </div>
                 <label class="mt-2 mb-1 my-text">Diferenciador:</label><br>
                 <div id="differentiator_image" class="mx-1 row align-items-center justify-content-center"><img src="{{ url_for('static', filename='files/loading.jpg') }}" height="150px" width="auto"></div>
             </div>
@@ -50,23 +52,29 @@
                 <form action="start_analysis" method="POST">
                     <div class="form-row">
                         <div class="col form-group my-3">
-                            <label for="time" class="control-label">Tempo (seg)</label>
+                            <label for="time" class="control-label my-text">Tempo (seg)</label>
                             <input name="time" class="form-control" type="number" value="5" min="1"/>
                         </div>
                     </div>
                     <div class="form-row">
                         <div class="col form-group my-2">
-                            <label for="qtd" class="control-label">Nº de capturas/seg</label>
+                            <label for="qtd" class="control-label my-text">Nº de capturas/seg</label>
                             <input name="qtd" class="form-control" type="number" value="1" min="1"/>
                         </div>
                     </div>
+                    <div class="form-row">
+                        <div class="col form-group my-2">
+                            <label for="description" class="control-label">Descrição (opcional)</label>
+                            <textarea name="description" class="form-control my-textarea mb-3" rows="5"></textarea>
+                        </div>
+                    </div>
                     <div id="div1">
-                        <input disabled id="start" type="submit" value="INICIAR" onclick="config_analyze()" class="btn btn-lg btn-block btn-success mt-4">
+                        <input disabled id="start" type="submit" value="INICIAR" onclick="config_analyze()" class="btn btn-lg btn-block btn-success">
                     </div>
                     <div id="div2" style="display:none">
-                        <button type="button" disabled class="btn btn-lg btn-block btn-warning mt-4">
-                            <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-                            &nbsp ANALISANDO...
+                        <button type="button" disabled class="btn btn-lg btn-block btn-warning">
+                            <span class="spinner-border spinner-border-lg" role="status" aria-hidden="true"></span>
+                            &nbsp; ANALISANDO...
                         </button>
                     </div>
                 </form>

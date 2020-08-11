@@ -50,6 +50,7 @@ function clear_rectangle(){
 	htmlXY.x2.value = 0;
 	htmlXY.y1.value = 0;
 	htmlXY.y2.value = 0;
+	document.getElementById("labelUploadImage") = "Escolher imagem local"
 }
 
 function refresh_rectangle(){

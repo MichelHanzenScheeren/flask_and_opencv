@@ -7,7 +7,6 @@ window.addEventListener("pageshow", function(_) {
 });
 
 function config_analyze() {
-  document.getElementById("buttonUploadImage").setAttribute("disabled", "true");
   document.getElementById("buttonGetDifferentiator").disabled = true;
   document.getElementById("refresh_button").disabled = true;
   document.getElementById("clear_button").disabled = true;

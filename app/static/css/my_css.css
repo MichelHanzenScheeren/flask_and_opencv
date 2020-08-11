@@ -4,3 +4,6 @@ html, body{
 label.my-text {
     font-size: 18px;
 }
+textarea.my-textarea {
+    resize: none;
+}

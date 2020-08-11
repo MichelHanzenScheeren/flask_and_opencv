@@ -1,9 +1,4 @@
-document.getElementById("buttonUploadImage").setAttribute("onclick", "configureButtonToInputClick()");
 document.getElementById("inputUploadImage").setAttribute("onchange", "onFileSelected(event)");
-
-function configureButtonToInputClick() { 
-    document.getElementById("inputUploadImage").click();
-}
 
 function onFileSelected(event) {
     if(event.target.files.length === 0) return;
@@ -17,10 +12,10 @@ function onFileSelected(event) {
     formData.append('file', uploadedFile);
     axios.post("{{url_for('upload_image')}}", formData);
     document.getElementById("start").disabled = true;
-    clear_files();
+    config_input_file(uploadedFile.name);
 }
 
-function clear_files() {
-    document.getElementById("inputUploadImage").value = ""
-    console.log(document.getElementById("inputUploadImage").files)
+function config_input_file(name) {
+    document.getElementById("inputUploadImage").value = "";
+    document.getElementById("labelUploadImage").textContent = name;
 }
