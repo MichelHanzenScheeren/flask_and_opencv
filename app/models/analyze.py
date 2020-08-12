@@ -1,6 +1,6 @@
 from time import sleep
 from math import sqrt, pow
-import io
+import base64
 from app.models.results import Results
 
 class Analyze():
@@ -10,14 +10,16 @@ class Analyze():
 
     def get_differentiator(self, webcam):
         image = webcam.get_differentiator_image()
-        self.results.differentiator_image = webcam.convert_to_bytes(image)
+        self.results.differentiator_image = image
         result = self.calculate_average(image)
         self.results.differentiator = result
         return f'[{result[2]:.3f}, {result[1]:.3f}, {result[0]:.3f}]'
     
 
-    def get_differentiator_image(self):
-        return io.BytesIO(self.results.differentiator_image)
+    def get_differentiator_image(self, webcam):
+        jpg_image = webcam.encode_to_jpg(self.results.differentiator_image)
+        my_encoded_img = base64.b64encode(jpg_image)
+        return my_encoded_img
     
 
     def calculate_average(self, image):

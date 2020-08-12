@@ -63,9 +63,12 @@ class Webcam():
     
 
     def convert_to_bytes(self, image):
-        _, jpeg = cv2.imencode(".jpg", image)
-        return jpeg.tobytes()
+        return self.encode_to_jpg(image).tobytes()
     
+
+    def encode_to_jpg(self, image):
+        return cv2.imencode(".jpg", image)[1]
+
 
     def draw_rectangle_on_image(self, frame):
         if self.rectangle.is_valid_rectangle():

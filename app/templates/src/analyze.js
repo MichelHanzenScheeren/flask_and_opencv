@@ -25,11 +25,9 @@ async function get_differentiator(){
   get_differentiator_image()
 }
 
-function get_differentiator_image() {
+async function get_differentiator_image() {
   let response = await axios.post("{{ url_for('get_differentiator_image') }}");
   if(response.data != "") {
-    console.log("entrei");
-    document.getElementById("differentiator_image").setAttribute("src", "data:image/jpg;base64," + response.data);
-    console.log("sai");
+    document.getElementById("differentiator_image").setAttribute("src", "data:image/jpeg;base64," + response.data);
   }
 }

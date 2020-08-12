@@ -7,3 +7,9 @@ label.my-text {
 textarea.my-textarea {
     resize: none;
 }
+img.my-img {
+    max-height:145px;
+    max-width:260px;
+    height:auto;
+    width:auto;
+}
