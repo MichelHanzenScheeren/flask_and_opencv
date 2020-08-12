@@ -1,6 +1,18 @@
 {% extends '_layout.html' %}
 {% block content %}
 
+<div data-autohide="false" class="toast my-toast" role="alert" aria-live="assertive" aria-atomic="true" data-delay="2000">
+  <div class="toast-header">
+    <strong class="mr-auto">Bootstrap</strong>
+    <button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="toast-body">
+    Hello, world! This is a toast message.
+ </div>
+</div>
+
 <div class="row h-100 py-4 px-4 align-items-center justify-content-center">
     <div class="px-4 mb-2">
         <div class="row justify-content-between align-items-center mb-2">
@@ -55,19 +67,19 @@
                 <form action="start_analysis" method="POST">
                     <div class="form-row">
                         <div class="col form-group my-3">
-                            <label for="time" class="control-label my-text">Tempo (seg)</label>
+                            <label for="time" class="control-label my-text-secondary">Tempo (seg)</label>
                             <input name="time" class="form-control" type="number" value="5" min="1"/>
                         </div>
                     </div>
                     <div class="form-row">
                         <div class="col form-group my-2">
-                            <label for="qtd" class="control-label my-text">Nº capturas/seg</label>
+                            <label for="qtd" class="control-label my-text-secondary">Nº capturas/seg</label>
                             <input name="qtd" class="form-control" type="number" value="1" min="1"/>
                         </div>
                     </div>
                     <div class="form-row">
                         <div class="col form-group my-2">
-                            <label for="description" class="control-label  my-text">Descrição (opcional)</label>
+                            <label for="description" class="control-label  my-text-secondary">Descrição (opcional)</label>
                             <textarea name="description" class="form-control my-textarea mb-3" maxlength="500" rows="5"></textarea>
                         </div>
                     </div>

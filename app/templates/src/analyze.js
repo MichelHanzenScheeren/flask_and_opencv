@@ -32,6 +32,4 @@ async function get_differentiator_image() {
   }
 }
 
-$(document).ready(function(){
-  $("#myToast").toast('show');
-});
+$('.toast').toast('show')

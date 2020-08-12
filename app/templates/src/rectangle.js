@@ -39,7 +39,9 @@ function mouseMove(e) {
 }
 
 function draw() {
-	if(rect.startX == undefined || rect.w == NaN) return;
+	if(rect.startX == undefined || rect.startX == NaN || rect.h == NaN || rect.h == undefined) {
+		return;
+	}
 	axios.post(`{{url_for("get_measures")}}/${rect.startX}/${rect.startY}/
 	${(rect.startX + rect.w)}/${(rect.startY + rect.h)}`);
 }

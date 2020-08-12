@@ -14,22 +14,23 @@ class Webcam():
         self.lock_frame = Lock()
         self.lock_uploaded_image = Lock()
         self.rectangle = Rectangle()
-        self.empty_image = None
+        self.trying_get_webcam_image = True
     
 
     def init_webcam(self):
         with self.lock_frame:
-            if self.video_stream is None:
+            if self.video_stream is None or not self.video_stream.isOpened() or not self.trying_get_webcam_image:
                 self.video_stream = cv2.VideoCapture(self.webcam_port) #, cv2.CAP_DSHOW
-    
+                self.trying_get_webcam_image = True
+
 
     def get_frame_shape(self):
         with self.lock_frame:
-            if not self.video_stream.isOpened():
+            if not self.video_stream or not self.video_stream.isOpened():
                 height, width = (480, 640)
             else: 
-                _, frame = self.video_stream.read()
-                height, width, _ = frame.shape if frame is not None else (480, 640, 0)
+                sucess, frame = self.video_stream.read()
+                height, width, _ = frame.shape if sucess else (480, 640, 0)
             return f"style=height:{height}px;min-height:{height}px;width:{width}px;min-width:{width}px;"
 
 
@@ -67,8 +68,15 @@ class Webcam():
     
 
     def get_new_frame(self):
-        sucess, frame = self.video_stream.read()
-        return frame if sucess else self.black_image()
+        if self.trying_get_webcam_image:
+            sucess, frame = self.video_stream.read()
+            if sucess:
+                return frame
+            else:
+                self.trying_get_webcam_image = False
+                return self.black_image()
+        else:
+            return self.black_image()
     
 
     def black_image(self):

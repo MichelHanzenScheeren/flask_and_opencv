@@ -7,6 +7,9 @@ html, body{
 label.my-text {
     font-size: 18px;
 }
+label.my-text-secondary {
+    font-size: 16px;
+}
 textarea.my-textarea {
     resize: none;
 }
@@ -15,4 +18,10 @@ img.my-img {
     max-width:260px;
     height:auto;
     width:auto;
+}
+div.my-toast {
+    position: absolute; 
+    top: 4rem; 
+    right: 1rem;
+    z-index:2;
 }
