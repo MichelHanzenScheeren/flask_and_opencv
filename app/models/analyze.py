@@ -1,5 +1,6 @@
 from time import sleep
 from math import sqrt, pow
+import io
 from app.models.results import Results
 
 class Analyze():
@@ -9,9 +10,14 @@ class Analyze():
 
     def get_differentiator(self, webcam):
         image = webcam.get_differentiator_image()
+        self.results.differentiator_image = webcam.convert_to_bytes(image)
         result = self.calculate_average(image)
         self.results.differentiator = result
         return f'[{result[2]:.3f}, {result[1]:.3f}, {result[0]:.3f}]'
+    
+
+    def get_differentiator_image(self):
+        return io.BytesIO(self.results.differentiator_image)
     
 
     def calculate_average(self, image):

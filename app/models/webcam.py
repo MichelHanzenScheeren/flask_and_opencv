@@ -49,8 +49,7 @@ class Webcam():
 
     def get_uploaded_image(self):
         copy = self.uploaded_image.copy()
-        _, jpeg = cv2.imencode(".jpg", self.draw_rectangle_on_image(copy))
-        return jpeg.tobytes()
+        return self.convert_to_bytes(self.draw_rectangle_on_image(copy))
         
     
     def get_webcam_image(self):
@@ -60,7 +59,11 @@ class Webcam():
                 self.output_frame = frame.copy()
             else:
                 frame = self.output_frame.copy()
-        _, jpeg = cv2.imencode('.jpg', self.draw_rectangle_on_image(frame))
+        return self.convert_to_bytes(self.draw_rectangle_on_image(frame))
+    
+
+    def convert_to_bytes(self, image):
+        _, jpeg = cv2.imencode(".jpg", image)
         return jpeg.tobytes()
     
 

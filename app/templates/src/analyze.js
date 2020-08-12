@@ -21,4 +21,15 @@ async function get_differentiator(){
   document.getElementById("green").innerHTML = "Green: " + response.data[1];
   document.getElementById("blue").innerHTML = "Blue: " + response.data[2];
   document.getElementById("start").disabled = false;
+
+  get_differentiator_image()
+}
+
+function get_differentiator_image() {
+  let response = await axios.post("{{ url_for('get_differentiator_image') }}");
+  if(response.data != "") {
+    console.log("entrei");
+    document.getElementById("differentiator_image").setAttribute("src", "data:image/jpg;base64," + response.data);
+    console.log("sai");
+  }
 }
