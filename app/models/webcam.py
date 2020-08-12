@@ -14,18 +14,22 @@ class Webcam():
         self.lock_frame = Lock()
         self.lock_uploaded_image = Lock()
         self.rectangle = Rectangle()
+        self.empty_image = None
     
 
     def init_webcam(self):
         with self.lock_frame:
             if self.video_stream is None:
-                self.video_stream = cv2.VideoCapture(self.webcam_port)
+                self.video_stream = cv2.VideoCapture(self.webcam_port) #, cv2.CAP_DSHOW
     
 
     def get_frame_shape(self):
         with self.lock_frame:
-            _, frame = self.video_stream.read()
-            height, width, _ = frame.shape if frame is not None else (480, 640, 0)
+            if not self.video_stream.isOpened():
+                height, width = (480, 640)
+            else: 
+                _, frame = self.video_stream.read()
+                height, width, _ = frame.shape if frame is not None else (480, 640, 0)
             return f"style=height:{height}px;min-height:{height}px;width:{width}px;min-width:{width}px;"
 
 
@@ -54,13 +58,22 @@ class Webcam():
     
     def get_webcam_image(self):
         with self.lock_frame:
-            if self.video_stream:
-                _, frame = self.video_stream.read()
-                self.output_frame = frame.copy()
+            if self.video_stream is not None and self.video_stream.isOpened():
+                frame = self.get_new_frame()
             else:
-                frame = self.output_frame.copy()
+                frame = self.black_image()
+        self.output_frame = frame.copy()
         return self.convert_to_bytes(self.draw_rectangle_on_image(frame))
     
+
+    def get_new_frame(self):
+        sucess, frame = self.video_stream.read()
+        return frame if sucess else self.black_image()
+    
+
+    def black_image(self):
+        return numpy.zeros((480, 640, 3), numpy.uint8)
+                
 
     def convert_to_bytes(self, image):
         return self.encode_to_jpg(image).tobytes()
@@ -117,12 +130,10 @@ class Webcam():
     #     FRAME_RATE = 0.1
     #     previous = 0
     #     while True:
-    #         image = self.get_image()
-    #         time_elapsed = time.time()
-    #         if (time_elapsed - previous) > (FRAME_RATE):
-    #             previous = time_elapsed
-    #             init_response = b'--frame\r\nContent-Type:image/jpeg\r\n\r\n'
-    #             yield(init_response + image + b'\r\n\r\n')
+    #         img = self.get_image()
+    #         if (time.time() - previous) > (FRAME_RATE):
+    #             previous = time.time()
+    #             yield(b'--frame\r\nContent-Type:image/jpeg\r\n\r\n' + img + b'\r\n\r\n')
 
     
     def save_uploaded_image(self, image):

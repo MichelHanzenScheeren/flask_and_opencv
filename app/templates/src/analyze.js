@@ -31,3 +31,7 @@ async function get_differentiator_image() {
     document.getElementById("differentiator_image").setAttribute("src", "data:image/jpeg;base64," + response.data);
   }
 }
+
+$(document).ready(function(){
+  $("#myToast").toast('show');
+});

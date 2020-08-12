@@ -85,12 +85,14 @@
         </div>
     </div>
 </div>
-<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+{% endblock%}
+
+{% block scripts %}
 <script type="">
     {% include 'src/load_image.js' %}
     {% include 'src/analyze.js' %}
     {% include 'src/rectangle.js' %}
     {% include 'src/load_image.js' %}
 </script>
-
 {% endblock%}
+
