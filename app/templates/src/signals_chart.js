@@ -5,7 +5,7 @@ function drawChart() {
     var auxiliarData = [["Tempo", "Sinal"]];
     for (let index = 0; index < signals.length; index++) {
         const element = signals[index];
-        auxiliarData.push([(index * interval).toString(), parseFloat(element)]);
+        auxiliarData.push([((index + 1) * interval).toString(), parseFloat(element)]);
     }
     var data = google.visualization.arrayToDataTable(auxiliarData);
     var style = {color: '#343a40', fontSize: 18, fontName: 'Arial', bold: false};

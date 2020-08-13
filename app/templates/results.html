@@ -66,7 +66,7 @@
                     <tbody class="bg-white">
                         {% for index in range(results.captures|length) %}
                             <tr>
-                                <td class="text-black"> {{  (index * results.interval)|round(2) }}</td>
+                                <td class="text-black"> {{  ((index + 1) * results.interval)|round(2) }}</td>
                                 <td class="text-danger"> {{ results.captures[index][2]|round(3) }}</td>
                                 <td class="text-success"> {{ results.captures[index][1]|round(3) }}</td>
                                 <td class="text-info"> {{ results.captures[index][0]|round(3) }}</td>

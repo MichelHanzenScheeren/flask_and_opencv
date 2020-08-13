@@ -36,7 +36,7 @@ class Analyze():
 
     def do_analyze(self, webcam):
         repetitions = int(self.results.total_time * self.results.captures_seg)
-        for _ in range(0, repetitions + 1):
+        for _ in range(0, repetitions):
             capture = self.calculate_average(webcam.selected_rectangle_image())
             self.results.captures.append(capture)
             sleep(self.results.interval)
