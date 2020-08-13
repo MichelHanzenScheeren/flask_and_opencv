@@ -19,14 +19,17 @@ class Webcam():
 
     def init_webcam(self):
         with self.lock_frame:
-            if self.video_stream is None or not self.video_stream.isOpened() or not self.trying_get_webcam_image:
+            if self.is_invalid_webcam() or not self.trying_get_webcam_image:
                 self.video_stream = cv2.VideoCapture(self.webcam_port) #, cv2.CAP_DSHOW
                 self.trying_get_webcam_image = True
 
 
+    def is_invalid_webcam(self):
+        return self.video_stream is None or not self.video_stream.isOpened()
+    
     def get_frame_shape(self):
         with self.lock_frame:
-            if not self.video_stream or not self.video_stream.isOpened():
+            if self.is_invalid_webcam():
                 height, width, got_image = (480, 640, False)
             else: 
                 sucess, frame = self.video_stream.read()
@@ -63,7 +66,7 @@ class Webcam():
     
     def get_webcam_image(self):
         with self.lock_frame:
-            if self.video_stream is not None and self.video_stream.isOpened():
+            if not self.is_invalid_webcam():
                 frame = self.get_new_frame()
             else:
                 frame = self.black_image()
