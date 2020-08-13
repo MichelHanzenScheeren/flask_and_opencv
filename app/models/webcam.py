@@ -27,11 +27,15 @@ class Webcam():
     def get_frame_shape(self):
         with self.lock_frame:
             if not self.video_stream or not self.video_stream.isOpened():
-                height, width = (480, 640)
+                height, width, got_image = (480, 640, False)
             else: 
                 sucess, frame = self.video_stream.read()
                 height, width, _ = frame.shape if sucess else (480, 640, 0)
-            return f"style=height:{height}px;min-height:{height}px;width:{width}px;min-width:{width}px;"
+                got_image = True if sucess else False
+            return {
+                "style": f"style=height:{height}px;min-height:{height}px;width:{width}px;min-width:{width}px;",
+                "got_image": got_image,
+            }
 
 
     def __del__(self):

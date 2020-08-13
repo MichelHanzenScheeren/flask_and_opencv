@@ -11,7 +11,7 @@ def configure(app):
     @app.route("/index/")
     def index():
         webcam.init_webcam()
-        return render_template("index.html", page="index", frame_shape=webcam.get_frame_shape())
+        return render_template("index.html", page="index", frame_controll=webcam.get_frame_shape())
 
 
     @app.route("/play_webcam")
