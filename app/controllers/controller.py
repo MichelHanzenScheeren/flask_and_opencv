@@ -28,7 +28,7 @@ def configure(app):
     @app.route('/get_measures', methods = ['POST'])
     @app.route('/get_measures/<int:x1>/<int:y1>/<int:x2>/<int:y2>', methods = ['POST'])
     def get_measures(x1=None, y1=None, x2=None, y2=None):
-        webcam.define_points_of_rectangle(x1, y1, x2, y2)
+        webcam.rectangle.define_points_of_rectangle(x1, y1, x2, y2)
         return ''
 
 

@@ -105,10 +105,6 @@ class Webcam():
         return frame
 
 
-    def define_points_of_rectangle(self, x1, y1, x2, y2):
-        self.rectangle.define_points_of_rectangle(x1, y1, x2, y2)
-        
-    
     def clear(self):
         self.turn_off_webcam()
         self.clear_rectangle_and_uploaded_image()

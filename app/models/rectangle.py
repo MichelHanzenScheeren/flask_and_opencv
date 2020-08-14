@@ -16,17 +16,26 @@ class Rectangle():
 
     def define_points_of_rectangle(self, x1, y1, x2, y2):
         with self.lock_drawing:
-            if x1 and y1 and x2 and y2:
+            if self.is_int(x1, y1, x2, y2) and self.is_valid_points(x1, y1, x2, y2):
                 self.x_initial = min(x1, x2)
                 self.y_initial = min(y1, y2)
                 self.x_final = self.x_initial + abs(x1 - x2)
                 self.y_final = self.y_initial + abs(y1 - y2)
+    
+
+    def is_int(self, x1, y1, x2, y2):
+        return (type(x1) is int) and (type(y1) is int) and (type(x2) is int) and (type(y2) is int)
+    
+
+    def is_valid_points(self, x1, y1, x2, y2):
+        greater_than_zero = (x1 >= 0) and (y1 >= 0) and (x2 >= 0) and (y2 >= 0)
+        has_area = ((x1 - x2) != 0) and ((y1 - y2) != 0)
+        return (greater_than_zero and has_area)
 
 
     def is_valid_rectangle(self):
-        with self.lock_drawing:
-            return ((self.x_initial != 0 or self.x_final != 0) 
-            and (self.y_initial != 0 or self.y_final))
+        return ((self.x_initial != 0 or self.x_final != 0) 
+        and (self.y_initial != 0 or self.y_final))
 
 
     def initial_xy(self):
@@ -40,4 +49,6 @@ class Rectangle():
 
 
     def crop_image(self, image):
-        return image[self.y_initial:self.y_final, self.x_initial:self.x_final]
+        if(self.is_valid_rectangle()):
+            return image[self.y_initial:self.y_final, self.x_initial:self.x_final]
+        return image
