@@ -32,20 +32,3 @@ async function get_differentiator_image() {
     let differentiator_image = document.getElementById("differentiator_image")
     differentiator_image.setAttribute("src", "data:image/jpeg;base64," + response.data);
 }
-
-(() => {
-    let got_image = ("{{ frame_controll['got_image'] }}");
-    if(got_image == "False") {
-        $(".toast").toast("show");
-    } else {
-        document.getElementById("my-toast").innerHTML = "" //remove da tela, para que não atrapalhe
-    }
-}) () // Função auto executada
-
-$('.toast').on('hidden.bs.toast', function () {
-    let my_toast = document.getElementById("my-toast");
-    if(my_toast == undefined) return;
-    my_toast.innerHTML = ""  //remove da tela, para que não atrapalhe
-}) 
-
-

@@ -5,8 +5,11 @@ function onFileSelected(event) {
 
     var uploadedFile = event.target.files[0];
     var type = uploadedFile.type;
-    if(type != "image/jpeg" && type != "image/png" && type != "image/bpm") return;
-    if(uploadedFile.name == "") return;
+    if((type != "image/jpeg" && type != "image/png" && type != "image/bpm") || uploadedFile.name == "") {
+        let body = "O arquivo enviado não é valido. Por favor, tente novamente...";
+        show_message("Arquivo inválido!", body, undefined, true);
+        return;
+    }
     
     var formData = new FormData();
     formData.append('file', uploadedFile);
