@@ -130,21 +130,21 @@ class Webcam():
             return self.rectangle.crop_image(self.output_frame)
 
 
-    def generate(self):
-        while True:
-            init_response = b'--frame\r\nContent-Type:image/jpeg\r\n\r\n'
-            yield(init_response + self.get_image() + b'\r\n\r\n')
-            time.sleep(0.1)
+    # def generate(self):
+    #     while True:
+    #         init_response = b'--frame\r\nContent-Type:image/jpeg\r\n\r\n'
+    #         yield(init_response + self.get_image() + b'\r\n\r\n')
+    #         time.sleep(0.1)
     
 
-    # def generate(self):
-    #     FRAME_RATE = 0.1
-    #     previous = 0
-    #     while True:
-    #         img = self.get_image()
-    #         if (time.time() - previous) > (FRAME_RATE):
-    #             previous = time.time()
-    #             yield(b'--frame\r\nContent-Type:image/jpeg\r\n\r\n' + img + b'\r\n\r\n')
+    def generate(self):
+        FRAME_RATE = 0.1
+        previous = 0
+        while True:
+            img = self.get_image()
+            if (time.time() - previous) > (FRAME_RATE):
+                previous = time.time()
+                yield(b'--frame\r\nContent-Type:image/jpeg\r\n\r\n' + img + b'\r\n\r\n')
 
     
     def save_uploaded_image(self, image):
