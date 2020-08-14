@@ -30,7 +30,7 @@
                     </div>
                     <div class="col-md-4 card p-3 bg-white"> 
                         <h5 class="card-title"> Opções </h5> 
-                        <button type="button" class="btn btn-block btn-outline-dark">Baixar imagens</button>
+                        <button id="btn_generate_files" type="button" class="btn btn-block btn-outline-dark">Baixar imagens</button>
                         <button type="button" class="btn btn-block btn-outline-dark">Exportar resultados</button>
                     </div>
                 </div>
@@ -104,5 +104,6 @@
         var signals = {{ results.signals|tojson }};
         var interval = {{ results.interval|round(2) }};
         {% include 'src/signals_chart.js' %}
+        {% include 'src/generate_files.js' %}
     </script>
 {% endblock%}

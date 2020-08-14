@@ -1,7 +1,12 @@
 from time import sleep
 from math import sqrt, pow
 import base64
+import json
 from app.models.results import Results
+
+import zipfile
+import io
+
 
 class Analyze():
     def __init__(self):
@@ -22,6 +27,29 @@ class Analyze():
         return my_encoded_img
     
 
+    # def get_zip_images(self, webcam):
+    #     encoded_images = {}
+    #     for i in range(0, len(self.results.captures_images)):
+    #         image = self.results.captures_images[i]
+    #         encoded_images[f"captura_{i}"] = f"{self.generate_encoded_image(image, webcam)}"
+    #     return json.dumps(encoded_images)
+    
+
+    # def generate_encoded_image(self, image, webcam):
+    #     jpg_image = webcam.encode_to_jpg(image)
+    #     return base64.b64encode(jpg_image)
+
+    def get_zip_images(self, webcam):
+        memory_file = io.BytesIO()
+        with zipfile.ZipFile(memory_file, 'w') as zf:
+            for i in range(0, len(self.results.captures_images)):
+                data = zipfile.ZipInfo(f"captura_{i + 1}.jpg")
+                data.compress_type = zipfile.ZIP_DEFLATED
+                zf.writestr(data, webcam.encode_to_jpg(self.results.captures_images[i]))
+        memory_file.seek(0)
+        return memory_file
+    
+
     def calculate_average(self, image):
         return image.mean(axis=0).mean(axis=0)
 
@@ -37,8 +65,9 @@ class Analyze():
     def do_analyze(self, webcam):
         repetitions = int(self.results.total_time * self.results.captures_seg)
         for _ in range(0, repetitions):
-            capture = self.calculate_average(webcam.selected_rectangle_image())
-            self.results.captures.append(capture)
+            image = webcam.selected_rectangle_image()
+            self.results.captures_images.append(image)
+            self.results.captures.append(self.calculate_average(image))
             sleep(self.results.interval)
 
 

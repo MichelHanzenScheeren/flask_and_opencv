@@ -46,6 +46,12 @@ def configure(app):
     @app.route('/get_differentiator_image/', methods=['POST'])
     def get_differentiator_image():
         return Response(analyze.get_differentiator_image(webcam))
+    
+
+    @app.route('/get_zip_images/', methods=['POST'])
+    def get_zip_images():
+        # return Response(analyze.get_zip_images(webcam))
+        return send_file(analyze.get_zip_images(webcam), mimetype='application/zip')
 
 
     @app.route('/start_analysis', methods=['POST'])
