@@ -15,12 +15,23 @@
                         <p class="card-text"> {{ results.total_time }} segundos </p>
                     </div> 
                     <div class="col-md card p-3 bg-white"> 
-                        <h5 class="card-title"> Nº Capturas </h5> 
+                        <h5 class="card-title"> Capturas </h5> 
                         <p class="card-text"> {{ results.captures_seg }} captura/seg </p>
                     </div>
                     <div class="col-md card p-3 bg-white"> 
                         <h5 class="card-title"> Total </h5> 
                         <p class="card-text"> {{ results.signals|length }} captura(s) </p>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-8 card p-3 bg-white"> 
+                        <h5 class="card-title"> Descrição </h5> 
+                        <p class="card-text"> {{ results.description if results.description != "" else "Não informada." }} </p>
+                    </div>
+                    <div class="col-md-4 card p-3 bg-white"> 
+                        <h5 class="card-title"> Opções </h5> 
+                        <button type="button" class="btn btn-block btn-outline-dark">Baixar imagens</button>
+                        <button type="button" class="btn btn-block btn-outline-dark">Exportar resultados</button>
                     </div>
                 </div>
             </div>
