@@ -1,5 +1,5 @@
 # pylint: disable=unused-variable
-from flask import Response, render_template, redirect, url_for, request, send_file
+from flask import Response, render_template, redirect, url_for, request
 from time import sleep
 from app.models.webcam import Webcam
 from app.models.analyze import Analyze
@@ -45,13 +45,12 @@ def configure(app):
 
     @app.route('/get_differentiator_image/', methods=['POST'])
     def get_differentiator_image():
-        return Response(analyze.get_differentiator_image(webcam))
+        return Response(analyze.results.get_differentiator_image(webcam))
     
 
     @app.route('/get_zip_images/', methods=['POST'])
     def get_zip_images():
-        # return Response(analyze.get_zip_images(webcam))
-        return send_file(analyze.get_zip_images(webcam), mimetype='application/zip')
+        return Response(analyze.results.get_zip_images(webcam))
 
 
     @app.route('/start_analysis', methods=['POST'])

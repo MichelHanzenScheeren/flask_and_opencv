@@ -1,11 +1,6 @@
 from time import sleep
 from math import sqrt, pow
-import base64
-import json
 from app.models.results import Results
-
-import zipfile
-import io
 
 
 class Analyze():
@@ -19,36 +14,7 @@ class Analyze():
         result = self.calculate_average(image)
         self.results.differentiator = result
         return f'[{result[2]:.3f}, {result[1]:.3f}, {result[0]:.3f}]'
-    
 
-    def get_differentiator_image(self, webcam):
-        jpg_image = webcam.encode_to_jpg(self.results.differentiator_image)
-        my_encoded_img = base64.b64encode(jpg_image)
-        return my_encoded_img
-    
-
-    # def get_zip_images(self, webcam):
-    #     encoded_images = {}
-    #     for i in range(0, len(self.results.captures_images)):
-    #         image = self.results.captures_images[i]
-    #         encoded_images[f"captura_{i}"] = f"{self.generate_encoded_image(image, webcam)}"
-    #     return json.dumps(encoded_images)
-    
-
-    # def generate_encoded_image(self, image, webcam):
-    #     jpg_image = webcam.encode_to_jpg(image)
-    #     return base64.b64encode(jpg_image)
-
-    def get_zip_images(self, webcam):
-        memory_file = io.BytesIO()
-        with zipfile.ZipFile(memory_file, 'w') as zf:
-            for i in range(0, len(self.results.captures_images)):
-                data = zipfile.ZipInfo(f"captura_{i + 1}.jpg")
-                data.compress_type = zipfile.ZIP_DEFLATED
-                zf.writestr(data, webcam.encode_to_jpg(self.results.captures_images[i]))
-        memory_file.seek(0)
-        return memory_file
-    
 
     def calculate_average(self, image):
         return image.mean(axis=0).mean(axis=0)
