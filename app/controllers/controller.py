@@ -41,16 +41,6 @@ def configure(app):
     @app.route('/get_differentiator/', methods=['POST'])
     def get_differentiator():
         return analyze.get_differentiator(webcam)
-    
-
-    @app.route('/get_differentiator_image/', methods=['POST'])
-    def get_differentiator_image():
-        return Response(analyze.results.get_differentiator_image(webcam))
-    
-
-    @app.route('/get_zip_images/', methods=['POST'])
-    def get_zip_images():
-        return Response(analyze.results.get_zip_images(webcam))
 
 
     @app.route('/start_analysis', methods=['POST'])
@@ -65,7 +55,25 @@ def configure(app):
             webcam.clear()
             return render_template("results.html", results = analyze.results, page="results")
         return redirect(url_for('index'))
-        
+    
+
+    @app.route('/get_differentiator_image/', methods=['POST'])
+    def get_differentiator_image():
+        return Response(analyze.results.get_differentiator_image(webcam))
+    
+
+    @app.route('/get_zip_images/', methods=['POST'])
+    def get_zip_images():
+        headers = {'content-type': 'application/zip', 'format': 'base64', 'file-name': 'imagens.zip'}
+        return Response(analyze.results.get_zip_images(webcam), headers = headers)
+    
+
+    @app.route('/get_xlsx_results/', methods=['POST'])
+    def get_xlsx_results():
+        content_type = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+        headers = {'content-type': content_type, 'format': 'base64', 'file-name': 'resultados.xlsx'}
+        return Response(analyze.results.get_xlsx_results(), headers = headers)
+    
 
 webcam = Webcam()
 analyze = Analyze()

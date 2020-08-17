@@ -1,15 +1,34 @@
-document.getElementById("btn_generate_files").setAttribute("onclick", "get_zip_images()");
+document.getElementById("btn_get_zip_images").setAttribute("onclick", "get_zip_images()");
+document.getElementById("btn_get_xlsx_results").setAttribute("onclick", "get_xlsx_results()");
 
 async function get_zip_images() {
     let response = await axios.post("{{url_for('get_zip_images')}}");
-    var zip = new JSZip();
-    for (let [key, value] of Object.entries(response.data)) {
-        let img = value.replace("b'", "").replace("'", "");
-        zip.file(key, img, {base64: true});
+    if(response.status != 200) return;
+
+    let headers = response.headers;
+    let imagesZip = await zipImages(response.data, headers["format"]);
+    submitDownload(imagesZip, headers["file-name"], headers["content-type"], headers["format"])
+}
+
+async function zipImages(data, format) {
+    let zip = new JSZip();
+    for (let key of Object.keys(data)) {
+        zip.file(key, data[key].replace("b'", "").replace("'", ""), {base64: true});
     }
-    let zip_file = await zip.generateAsync({type: "base64"});
+    return await zip.generateAsync({type: format});
+}
+
+async function get_xlsx_results() {
+    let response = await axios.post("{{url_for('get_xlsx_results')}}");
+    if(response.status != 200) return;
+
+    let headers = response.headers;
+    submitDownload(response.data, headers['file-name'], headers["content-type"], headers["format"]);
+}
+
+function submitDownload(data, title, contentType, format) {
     let link = document.createElement('a');
-    link.href = "data:application/zip;base64," + zip_file;
-    link.download = "images.zip";
+    link.href = `data:${contentType};${format},${data}`;
+    link.download = title;
     link.click();
 }

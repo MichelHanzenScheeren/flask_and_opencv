@@ -11,7 +11,7 @@
                         <p class="card-text"> {{ results.initial_date }} </p>
                     </div> 
                     <div class="col-md card p-3 bg-white"> 
-                        <h5 class="card-title"> Tempo Total </h5> 
+                        <h5 class="card-title"> Duração </h5> 
                         <p class="card-text"> {{ results.total_time }} segundos </p>
                     </div> 
                     <div class="col-md card p-3 bg-white"> 
@@ -19,7 +19,7 @@
                         <p class="card-text"> {{ results.captures_seg }} captura/seg </p>
                     </div>
                     <div class="col-md card p-3 bg-white"> 
-                        <h5 class="card-title"> Total </h5> 
+                        <h5 class="card-title"> Total de capturas </h5> 
                         <p class="card-text"> {{ results.signals|length }} captura(s) </p>
                     </div>
                 </div>
@@ -30,8 +30,8 @@
                     </div>
                     <div class="col-md-4 card p-3 bg-white"> 
                         <h5 class="card-title"> Opções </h5> 
-                        <button id="btn_generate_files" type="button" class="btn btn-block btn-outline-dark">Baixar imagens</button>
-                        <button type="button" class="btn btn-block btn-outline-dark">Exportar resultados</button>
+                        <button id="btn_get_zip_images" type="button" class="btn btn-block btn-outline-dark">Exportar imagens</button>
+                        <button id="btn_get_xlsx_results" type="button" class="btn btn-block btn-outline-dark">Exportar resultados</button>
                     </div>
                 </div>
             </div>
