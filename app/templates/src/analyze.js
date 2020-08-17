@@ -27,8 +27,20 @@ async function get_differentiator(){
 
 async function get_differentiator_image() {
     let response = await axios.post("{{ url_for('get_differentiator_image') }}");
-    if(response.data == "") return; 
+    if(response.data == "" || response.data != 200) return; 
 
     let differentiator_image = document.getElementById("differentiator_image")
     differentiator_image.setAttribute("src", "data:image/jpeg;base64," + response.data);
 }
+
+(() => {
+    let got_image = ("{{ frame_controll['got_image'] }}");
+    if(got_image == "False") {
+        title = "Problemas para configurar sua webcam &#128533;"
+        body = `Infelizmente, não conseguimos obter imagens da sua webcam. 
+            Por favor, verifique se a mesma está instalada e disponível para uso...`
+        complement = `<button type="button" class="btn btn-lg btn-block btn-dark" onclick="location.reload(true);">
+            Tentar novamente </button>`
+        show_message(title, body, complement);
+    }
+}) () // Função auto executada

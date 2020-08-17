@@ -27,19 +27,23 @@ class Results():
     
 
     def get_differentiator_image(self, webcam):
-        if self.differentiator_image is None:
-            return "" 
-        jpg_image = webcam.encode_to_jpg(self.differentiator_image)
-        return base64.b64encode(jpg_image)
+        try:
+            jpg_image = webcam.encode_to_jpg(self.differentiator_image)
+            return base64.b64encode(jpg_image)
+        except:
+            return ''
 
 
     def get_zip_images(self, webcam):
-        encoded = {}
-        encoded["diferenciador.jpg"] = self.encode_image(self.differentiator_image, webcam)
-        for i in range(0, len(self.captures_images)):
-            image = self.captures_images[i]
-            encoded[f"captura_{i + 1}.jpg"] = self.encode_image(image, webcam)
-        return json.dumps(encoded)
+        try:
+            encoded = {}
+            encoded["diferenciador.jpg"] = self.encode_image(self.differentiator_image, webcam)
+            for i in range(0, len(self.captures_images)):
+                image = self.captures_images[i]
+                encoded[f"captura_{i + 1}.jpg"] = self.encode_image(image, webcam)
+            return json.dumps(encoded)
+        except:
+            return ''
 
 
     def encode_image(self, image, webcam):
@@ -72,10 +76,10 @@ class Results():
 
     def get_general_information(self):
         init = ["Início da análise", self.initial_date]
-        duration = ["Duração", f"{self.total_time}"]
-        captures = ["Capturas", f"{self.captures_seg}"]
-        total = ["Total de capturas", f"{self.total_time * self.captures_seg}"]
-        descript = ["Descrição", f"{self.description}"]
+        duration = ["Duração", f"{self.total_time} segundos"]
+        captures = ["Capturas", f"{self.captures_seg} captura(s)/segundo"]
+        total = ["Total de capturas", f"{self.total_time * self.captures_seg} captura(s)"]
+        descript = ["Descrição", f"{self.description or 'Não informada'}"]
         return [init, duration, captures, total, descript]
         
 

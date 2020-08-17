@@ -3,7 +3,10 @@ document.getElementById("btn_get_xlsx_results").setAttribute("onclick", "get_xls
 
 async function get_zip_images() {
     let response = await axios.post("{{url_for('get_zip_images')}}");
-    if(response.status != 200) return;
+    if(response.data == "") {
+        showError();
+        return;
+    }
 
     let headers = response.headers;
     let imagesZip = await zipImages(response.data, headers["format"]);
@@ -20,7 +23,10 @@ async function zipImages(data, format) {
 
 async function get_xlsx_results() {
     let response = await axios.post("{{url_for('get_xlsx_results')}}");
-    if(response.status != 200) return;
+    if(response.data == "") {
+        showError();
+        return;
+    }
 
     let headers = response.headers;
     submitDownload(response.data, headers['file-name'], headers["content-type"], headers["format"]);
@@ -31,4 +37,11 @@ function submitDownload(data, title, contentType, format) {
     link.href = `data:${contentType};${format},${data}`;
     link.download = title;
     link.click();
+}
+
+function showError() {
+    title = "Falha no download do arquivo &#128533;"
+    body = `Infelizmente, não foi possível fazer o download do arquivo solicitado. 
+        Por favor, tente novamente mais tarde...`
+    show_message(title, body, undefined, true);
 }
