@@ -28,27 +28,30 @@ class Results():
 
     def get_differentiator_image(self, webcam):
         try:
-            jpg_image = webcam.encode_to_jpg(self.differentiator_image)
-            return base64.b64encode(jpg_image)
+            return self.encode_image(self.differentiator_image, webcam)
         except:
             return ''
 
 
-    def get_zip_images(self, webcam):
+    def get_all_images(self, webcam):
         try:
-            encoded = {}
-            encoded["diferenciador.jpg"] = self.encode_image(self.differentiator_image, webcam)
-            for i in range(0, len(self.captures_images)):
-                image = self.captures_images[i]
-                encoded[f"captura_{i + 1}.jpg"] = self.encode_image(image, webcam)
-            return json.dumps(encoded)
+            return self.encode_all_images(webcam)
         except:
             return ''
+    
+
+    def encode_all_images(self, webcam):
+        encoded = {}
+        encoded["diferenciador.jpg"] = f"{self.encode_image(self.differentiator_image, webcam)}"
+        for i in range(0, len(self.captures_images)):
+            image = self.captures_images[i]
+            encoded[f"captura_{i + 1}.jpg"] = f"{self.encode_image(image, webcam)}"
+        return json.dumps(encoded)
 
 
     def encode_image(self, image, webcam):
         jpg_image = webcam.encode_to_jpg(image)
-        return f"{base64.b64encode(jpg_image)}"
+        return base64.b64encode(jpg_image)
     
 
     def get_xlsx_results(self):

@@ -27,8 +27,8 @@ async function get_differentiator(){
 
 async function get_differentiator_image() {
     let response = await axios.post("{{ url_for('get_differentiator_image') }}");
-    if(response.data == "" || response.data != 200) return; 
-
+    if(response.data == "") return; 
+    
     let differentiator_image = document.getElementById("differentiator_image")
     differentiator_image.setAttribute("src", "data:image/jpeg;base64," + response.data);
 }
