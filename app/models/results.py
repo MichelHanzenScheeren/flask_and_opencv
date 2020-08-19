@@ -55,11 +55,7 @@ class Results():
     def get_xlsx_results(self):
         try:
             file = Excel_File(title = "Resultados")
-            return file.generate_spreadsheet(
-                general_information = self.general_info(),
-                differentiator_information = self.differentiator_info(),
-                captures_information = self.captures_info()
-            )
+            return file.build_file(self.general_info(), self.differentiator_info(), self.captures_info())
         except:
             return ''
     
@@ -81,7 +77,7 @@ class Results():
 
     def captures_info(self):
         title = ["Capturas", "", "", "", ""]
-        table_headers = ["Tempo(seg)", "Vermelho", "Verde", "Azul", "Sinal"]
+        table_headers = ["Tempo (segundos)", "Vermelho", "Verde", "Azul", "Sinal"]
         information = [title, table_headers]
         for index, value in enumerate(self.captures):
             new_data = [(index + 1) * self.interval, value[2], value[1], value[0], self.signals[index]]

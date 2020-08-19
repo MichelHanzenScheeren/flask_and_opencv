@@ -1,5 +1,6 @@
 from openpyxl import Workbook
-from openpyxl.styles import Font, Alignment
+from openpyxl.styles import Font, Alignment, PatternFill
+from openpyxl.chart import ScatterChart, Reference, Series
 from io import BytesIO
 import base64
 
@@ -11,12 +12,13 @@ class Excel_File():
         self.to_merge_cells = []
     
 
-    def generate_spreadsheet(self, general_information, differentiator_information, captures_information):
-        row_number = self.generate_table(general_information, 1)
-        row_number = self.generate_table(differentiator_information, row_number)
-        row_number = self.generate_table(captures_information, row_number)
+    def build_file(self, general_info, differentiator_info, captures_info):
+        row_count = self.generate_table(general_info, 1)
+        row_count = self.generate_table(differentiator_info, row_count)
+        row_count = self.generate_table(captures_info, row_count)
         self.configure_columns_width()
         self.merge_cells()
+        self.generate_captures_graph(captures_info, row_count)
         return self.encode_excel(self.excel_file)
     
 
@@ -41,8 +43,24 @@ class Excel_File():
     
 
     def merge_cells(self):
-        for _,value in enumerate(self.to_merge_cells):
+        for value in self.to_merge_cells:
             self.spreadsheet.merge_cells(start_row=value[0], start_column=1, end_row=value[0], end_column=value[1])
+            self.spreadsheet.cell(row=value[0], column=1).fill = PatternFill(fgColor="D3D3D3", fill_type = "solid")
+
+
+    def generate_captures_graph(self, captures_info, row_count):
+        my_chart = ScatterChart()
+        my_chart.title = "Gráfico dos Sinais"
+        my_chart.style = 16
+        my_chart.y_axis.title = 'Sinal'
+        my_chart.x_axis.title = 'Tempo (segundos)'
+        x_values = Reference(self.spreadsheet, min_col=1, min_row=row_count - len(captures_info), max_row=row_count - 3)
+        y_values = Reference(self.spreadsheet, min_col=5, min_row=row_count - len(captures_info) - 1, max_row=row_count - 3)
+        series = Series(y_values, x_values, title_from_data=True)
+        my_chart.series.append(series)
+        my_chart.width = 23
+        my_chart.height = 10
+        self.spreadsheet.add_chart(my_chart, f"A{row_count}")
 
 
     def encode_excel(self, excel_file):
