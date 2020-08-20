@@ -7,11 +7,13 @@ from app.models.analyze import Analyze
 
 def configure(app):
     @app.route("/")
-    @app.route("/home/")
     @app.route("/index/")
     def index():
-        webcam.init_webcam()
-        return render_template("index.html", page="index", frame_controll=webcam.get_frame_shape())
+        try:
+            webcam.init_webcam()
+            return render_template("index.html", page="index", frame_controll=webcam.get_frame_shape())
+        except:
+            return redirect(url_for('error'))
 
 
     @app.route("/play_webcam")
@@ -40,6 +42,7 @@ def configure(app):
 
     @app.route('/get_differentiator/', methods=['POST'])
     def get_differentiator():
+        analyze.clear()
         return analyze.get_differentiator(webcam)
 
 
@@ -51,11 +54,12 @@ def configure(app):
 
     @app.route('/results/')
     def results():
-        if analyze.is_valid():
+        try:
             webcam.clear()
             return render_template("results.html", results = analyze.results, page="results")
-        return redirect(url_for('index'))
-    
+        except:
+            return redirect(url_for('error'))
+            
 
     @app.route('/get_differentiator_image/', methods=['POST'])
     def get_differentiator_image():
@@ -74,6 +78,11 @@ def configure(app):
         headers = {'content-type': content_type, 'format': 'base64', 'file-name': 'resultados.xlsx'}
         return Response(analyze.results.get_xlsx_results(), headers = headers)
     
+
+    @app.route("/error/")
+    def error():
+        return render_template("error.html", page="error")
+
 
 webcam = Webcam()
 analyze = Analyze()

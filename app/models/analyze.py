@@ -48,8 +48,9 @@ class Analyze():
             self.results.signals.append(signal)
     
 
-    def is_valid(self): 
-        return len(self.results.differentiator) > 0 and len(self.results.captures) > 0
+    def clear(self): 
+        if len(self.results.differentiator) != 0:
+            self.results = Results()
     
 
 

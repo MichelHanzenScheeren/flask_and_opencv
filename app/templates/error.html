@@ -1,0 +1,33 @@
+{% extends '_layout.html' %}
+
+{% block content %}
+    <div class="row h-100 py-2 px-4 align-items-center justify-content-center">
+        <div class="col-md-6">
+            <div class="row justify-content-center align-items-center">
+                <img src="{{ url_for('static', filename='files/error.png') }}" alt="error-404" class="img-responsive img-rounded"> 
+            </div>
+            <div class="row align-items-center justify-content-center">
+                <div>Icons made by <a href="https://www.flaticon.com/free-icon/404-error_2091553?term=error&page=2&position=86" title="srip">srip</a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a></div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="row justify-content-center py-4">
+                <h2>Ah não! &#128533;</h1>
+            </div>
+            <div class="row p-2 text-justify">
+                <h3>Algum erro maluco ocorreu e impediu que completássemos sua solicitação...</h3>
+            </div>
+            <div class="row justify-content-center">
+                <button id="redirect_btn" class="btn btn-lg btn-dark text-white mt-2 mb-1">Voltar a página inicial</button>
+            </div>
+        </div>
+    </div>
+{% endblock%}
+
+{% block scripts %}
+    <script>
+        document.getElementById("redirect_btn").onclick = function () {
+            location.href = "{{ url_for('index') }}";
+        };
+    </script>
+{% endblock%}
