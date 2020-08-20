@@ -7,7 +7,6 @@ from app.models.analyze import Analyze
 
 def configure(app):
     @app.route("/")
-    @app.route("/index/")
     def index():
         try:
             webcam.init_webcam()

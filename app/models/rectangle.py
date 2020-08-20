@@ -8,10 +8,11 @@ class Rectangle():
         
     
     def initial_points_of_rectangle(self):
-        self.x_initial = 0
-        self.y_initial = 0
-        self.x_final = 0
-        self.y_final = 0
+        with self.lock_drawing:
+            self.x_initial = 0
+            self.y_initial = 0
+            self.x_final = 0
+            self.y_final = 0
 
 
     def define_points_of_rectangle(self, x1, y1, x2, y2):
@@ -34,8 +35,9 @@ class Rectangle():
 
 
     def is_valid_rectangle(self):
-        return ((self.x_initial != 0 or self.x_final != 0) 
-        and (self.y_initial != 0 or self.y_final))
+        with self.lock_drawing:
+            return ((self.x_initial != 0 or self.x_final != 0) 
+            and (self.y_initial != 0 or self.y_final))
 
 
     def initial_xy(self):
@@ -50,5 +52,6 @@ class Rectangle():
 
     def crop_image(self, image):
         if(self.is_valid_rectangle()):
-            return image[self.y_initial:self.y_final, self.x_initial:self.x_final]
+            with self.lock_drawing:
+                return image[self.y_initial:self.y_final, self.x_initial:self.x_final]
         return image

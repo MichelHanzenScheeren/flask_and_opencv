@@ -34,7 +34,7 @@ async function get_differentiator_image() {
 }
 
 (() => {
-    let got_image = ("{{ frame_controll['got_image'] }}");
+    let got_image = ("{{ frame_controll['success'] }}");
     if(got_image == "False") {
         title = "Problemas para configurar sua webcam &#128533;"
         body = `Infelizmente, não conseguimos obter imagens da sua webcam. 
