@@ -147,7 +147,7 @@ class Webcam():
 
     def save_uploaded_image(self, image):
         if image:
-            self.set_uploaded_image(self.convert_image())
+            self.set_uploaded_image(self.convert_image(image))
     
 
     def convert_image(self, image):

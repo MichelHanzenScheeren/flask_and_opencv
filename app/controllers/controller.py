@@ -54,7 +54,6 @@ def configure(app):
     @app.route('/results/')
     def results():
         try:
-            webcam.clear()
             return render_template("results.html", results = analyze.results, page="results")
         except:
             return redirect(url_for('error'))

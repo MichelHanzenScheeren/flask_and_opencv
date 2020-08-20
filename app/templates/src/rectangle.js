@@ -54,7 +54,7 @@ function draw() {
 
 function clear_rectangle(){
 	axios.post("{{ url_for('clear_rectangle') }}");
-	document.getElementById("labelUploadImage") = "Escolher imagem local"
+	document.getElementById("labelUploadImage").innerHTML = "Escolher imagem local"
     htmlXY.x1.value = 0;
 	htmlXY.x2.value = 0;
 	htmlXY.y1.value = 0;

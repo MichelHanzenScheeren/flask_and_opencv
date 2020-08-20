@@ -26,6 +26,7 @@ class Analyze():
         self.results.initialize_parameters(int(total_time), int(captures_seg), description)
         self.do_analyze(webcam)
         self.calculate_signal()
+        webcam.clear()
     
 
     def do_analyze(self, webcam):
