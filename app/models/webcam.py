@@ -77,12 +77,16 @@ class Webcam():
     
 
     def generate(self):
-        FRAME_RATE, previous = 0.1, 0
-        while True:
-            img = self.get_image()
-            if (time.time() - previous) > (FRAME_RATE):
-                previous = time.time()
-                yield(b'--frame\r\nContent-Type:image/jpeg\r\n\r\n' + img + b'\r\n\r\n')
+        try:
+            FRAME_RATE, previous = 0.1, 0
+            while True:
+                img = self.get_image()
+                if (time.time() - previous) > (FRAME_RATE):
+                    previous = time.time()
+                    yield(b'--frame\r\nContent-Type:image/jpeg\r\n\r\n' + img + b'\r\n\r\n')
+        except:
+            pass
+            
     
 
     def get_image(self):
@@ -155,8 +159,16 @@ class Webcam():
 
 
     def save_uploaded_image(self, image):
+        try:
+            self._save_uploaded_image(image)
+        except:
+            return ''
+    
+
+    def _save_uploaded_image(self, image):
         if image:
-            self.set_uploaded_image(self.convert_image(image))
+            converted_image  = self.convert_image(image)
+            self.set_uploaded_image(converted_image)
     
 
     def convert_image(self, image):
