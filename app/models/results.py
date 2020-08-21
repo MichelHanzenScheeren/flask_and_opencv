@@ -13,7 +13,7 @@ class Results():
         self.differentiator_image = None
     
 
-    def initialize_parameters(self, total_time, captures_seg, description):
+    def initialize(self, total_time, captures_seg, description):
         self.initial_date = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
         self.total_time = total_time
         self.captures_seg = captures_seg

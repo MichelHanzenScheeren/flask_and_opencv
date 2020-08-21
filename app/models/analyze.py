@@ -9,6 +9,13 @@ class Analyze():
     
 
     def get_differentiator(self, webcam):
+        try:
+            return self._get_differentiator(webcam)
+        except:
+            return ''
+    
+
+    def _get_differentiator(self, webcam):
         image = webcam.get_differentiator_image()
         self.results.differentiator_image = image
         result = self.calculate_average(image)
@@ -22,7 +29,7 @@ class Analyze():
 
     def start_analyze(self, total_time, captures_seg, description, webcam):
         if (total_time.isdigit() and captures_seg.isdigit()):
-            self.results.initialize_parameters(int(total_time), int(captures_seg), description)
+            self.results.initialize(int(total_time), int(captures_seg), description)
             self.save_analyze_frames(webcam)
             self.do_analyze()
             self.calculate_signal()

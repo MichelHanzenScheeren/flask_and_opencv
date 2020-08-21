@@ -90,9 +90,12 @@ class Webcam():
     
 
     def get_image(self):
-        if(self.has_uploaded_image()):
-            return self.get_uploaded_image()
-        return self.get_webcam_image()
+        try:
+            if(self.has_uploaded_image()):
+                return self.get_uploaded_image()
+            return self.get_webcam_image()
+        except:
+            return self.convert_to_bytes(self.black_image())
     
 
     def has_uploaded_image(self):
