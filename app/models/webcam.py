@@ -23,8 +23,9 @@ class Webcam():
 
     def init_webcam(self):
         if not self.is_valid_webcam() or not self.is_getting_frames():
-            self.start_video_stream()
             self.set_success_frame(True)
+            self.start_video_stream()
+            self.define_resolution()
     
 
     def is_valid_webcam(self):
@@ -37,19 +38,27 @@ class Webcam():
             return self.success_frame
 
 
-    def start_video_stream(self):
-        with self.lock_video_stream:
-            self.video_stream = cv2.VideoCapture(self.webcam_port) #, cv2.CAP_DSHOW
-
-
     def set_success_frame(self, condition = True):
         with self.lock_frame:
             self.success_frame = condition
     
 
+    def start_video_stream(self):
+        with self.lock_video_stream:
+            self.video_stream = cv2.VideoCapture(self.webcam_port) #, cv2.CAP_DSHOW
+
+
+    def define_resolution(self):
+        with self.lock_video_stream:
+            if(self.video_stream.get(3) != 640 or self.video_stream.get(4) != 480):
+                self.video_stream.set(3, 640)
+                self.video_stream.set(4, 480)
+    
+
     def get_frame_shape(self):
         if not self.is_valid_webcam():
             h, w, success = (480, 640, False)
+            self.set_success_frame(False)
         else:
             h, w, _ = self.new_frame().shape
             success = self.is_getting_frames()
@@ -74,7 +83,7 @@ class Webcam():
             if (time.time() - previous) > (FRAME_RATE):
                 previous = time.time()
                 yield(b'--frame\r\nContent-Type:image/jpeg\r\n\r\n' + img + b'\r\n\r\n')
-
+    
 
     def get_image(self):
         if(self.has_uploaded_image()):
@@ -90,12 +99,12 @@ class Webcam():
     def get_uploaded_image(self):
         with self.lock_uploaded_image:
             copy = self.uploaded_image.copy()
-            return self.convert_to_bytes(self.draw_rectangle_on_image(copy))
+        return self.convert_to_bytes(self.draw_rectangle_on_image(copy))
     
 
     def get_webcam_image(self):
         frame = self.new_frame() if self.can_get_frame() else self.black_image()
-        self.set_output_frame(frame)
+        self.set_output_frame(frame.copy())
         return self.convert_to_bytes(self.draw_rectangle_on_image(frame))
     
 
@@ -105,7 +114,7 @@ class Webcam():
 
     def set_output_frame(self, frame):
         with self.lock_frame:
-            self.output_frame = frame.copy()
+            self.output_frame = frame
     
 
     def draw_rectangle_on_image(self, frame):
@@ -131,7 +140,7 @@ class Webcam():
 
     def crop_uploaded_image(self):
         with self.lock_uploaded_image:
-            copy = self.uploaded_image.copy()
+            copy = self.uploaded_image
             self.uploaded_image = None
         return self.rectangle.crop_image(copy)
 
@@ -172,19 +181,18 @@ class Webcam():
         self.clear_rectangle_and_uploaded_image()
     
 
-    def clear_rectangle_and_uploaded_image(self):
-        self.rectangle.initial_points_of_rectangle()
-        with self.lock_uploaded_image:
-            self.uploaded_image = None
-    
-
-    def __del__(self):
-        self.turn_off_webcam()
-    
-
     def turn_off_webcam(self):
         with self.lock_video_stream:
             if self.video_stream:
                 self.video_stream.release()
                 self.video_stream = None
     
+
+    def clear_rectangle_and_uploaded_image(self):
+        self.rectangle.initial_points_of_rectangle()
+        self.set_uploaded_image(None)
+    
+
+    def __del__(self):
+        self.turn_off_webcam()
+
