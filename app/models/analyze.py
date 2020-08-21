@@ -6,7 +6,7 @@ from app.models.results import Results
 class Analyze():
     def __init__(self):
         self.results = Results()
-        
+    
 
     def get_differentiator(self, webcam):
         image = webcam.get_differentiator_image()
@@ -21,21 +21,26 @@ class Analyze():
 
 
     def start_analyze(self, total_time, captures_seg, description, webcam):
-        if not (total_time.isdigit() and captures_seg.isdigit()):
-            return
-        self.results.initialize_parameters(int(total_time), int(captures_seg), description)
-        self.do_analyze(webcam)
-        self.calculate_signal()
-        webcam.clear()
+        if (total_time.isdigit() and captures_seg.isdigit()):
+            self.results.initialize_parameters(int(total_time), int(captures_seg), description)
+            self.save_analyze_frames(webcam)
+            self.do_analyze()
+            self.calculate_signal()
+            webcam.clear()
     
 
-    def do_analyze(self, webcam):
+    def save_analyze_frames(self, webcam):
         repetitions = int(self.results.total_time * self.results.captures_seg)
         for _ in range(0, repetitions):
             image = webcam.selected_rectangle_image()
             self.results.captures_images.append(image)
-            self.results.captures.append(self.calculate_average(image))
             sleep(self.results.interval)
+
+
+    def do_analyze(self):
+        for image in self.results.captures_images:
+            average = self.calculate_average(image)
+            self.results.captures.append(average)
 
 
     def calculate_signal(self):
@@ -53,7 +58,3 @@ class Analyze():
         if len(self.results.differentiator) != 0:
             self.results = Results()
     
-
-
-    
-
