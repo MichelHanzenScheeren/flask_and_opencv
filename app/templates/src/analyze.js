@@ -16,7 +16,6 @@ function config_analyze() {
 
 async function get_differentiator(){
     let response = await axios.post("{{ url_for('get_differentiator') }}");
-    console.log(response)
     if(response.data == "" || response.data[0] == "[") {
         failed_to_get_differentiator();
         return;
