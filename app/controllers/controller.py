@@ -33,13 +33,19 @@ def configure(app):
         return ''
 
 
-    @app.route('/clear_rectangle/', methods=['POST'])
+    @app.route('/clear_rectangle', methods=['POST'])
     def clear_rectangle():
         webcam.clear_rectangle_and_uploaded_image()
         return ''
+    
+
+    @app.route('/change_current_webcam', methods = ['POST'])
+    @app.route('/change_current_webcam/<int:index_webcam>', methods = ['POST'])
+    def change_current_webcam(index_webcam=None):
+        return webcam.change_current_webcam(index_webcam)
 
 
-    @app.route('/get_differentiator/', methods=['POST'])
+    @app.route('/get_differentiator', methods=['POST'])
     def get_differentiator():
         analyze.clear()
         return analyze.get_differentiator(webcam)
@@ -55,7 +61,7 @@ def configure(app):
             return redirect(url_for('error'))
 
 
-    @app.route('/results/')
+    @app.route('/results')
     def results():
         try:
             return render_template("results.html", results = analyze.results, page="results")
@@ -63,25 +69,25 @@ def configure(app):
             return redirect(url_for('error'))
             
 
-    @app.route('/get_differentiator_image/', methods=['POST'])
+    @app.route('/get_differentiator_image', methods=['POST'])
     def get_differentiator_image():
         return Response(analyze.results.get_differentiator_image(webcam))
     
 
-    @app.route('/get_all_images/', methods=['POST'])
+    @app.route('/get_all_images', methods=['POST'])
     def get_all_images():
         headers = {'content-type': 'application/zip', 'format': 'base64', 'file-name': 'imagens.zip'}
         return Response(analyze.results.get_all_images(webcam), headers = headers)
     
 
-    @app.route('/get_xlsx_results/', methods=['POST'])
+    @app.route('/get_xlsx_results', methods=['POST'])
     def get_xlsx_results():
         content_type = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
         headers = {'content-type': content_type, 'format': 'base64', 'file-name': 'resultados.xlsx'}
         return Response(analyze.results.get_xlsx_results(), headers = headers)
     
 
-    @app.route("/error/")
+    @app.route("/error")
     def error():
         return render_template("error.html", page="error")
 

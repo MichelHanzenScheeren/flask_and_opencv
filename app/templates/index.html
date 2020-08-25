@@ -11,7 +11,7 @@
                     <select id="select-webcam" class="custom-select custom-select-sm" style="min-width:104px;">
                         {% for value in frame_controll["webcans"] %}
                             {% if value == frame_controll["current"] %}
-                                <option  value="{{ value }}"> Webcam {{ value + 1 }} </option>
+                                <option selected value="{{ value }}"> Webcam {{ value + 1 }} </option>
                             {% else %}
                                 <option value="{{ value }}"> Webcam {{ value + 1 }} </option>
                             {% endif %}

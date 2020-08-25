@@ -24,8 +24,9 @@ class Webcam():
     def init_webcam(self):
         if not self.is_valid_webcam() or not self.is_getting_frames():
             self.set_success_frame(True)
-            self.start_video_stream()
-            self.define_resolution()
+            with self.lock_video_stream:
+                self.start_video_stream()
+                self.define_resolution()
     
 
     def is_valid_webcam(self):
@@ -44,15 +45,13 @@ class Webcam():
     
 
     def start_video_stream(self):
-        with self.lock_video_stream:
-            self.video_stream = cv2.VideoCapture(self.webcam_port) #, cv2.CAP_DSHOW
+        self.video_stream = cv2.VideoCapture(self.webcam_port) #, cv2.CAP_DSHOW
 
 
     def define_resolution(self):
-        with self.lock_video_stream:
-            if(self.video_stream.get(3) != 640 or self.video_stream.get(4) != 480):
-                self.video_stream.set(3, 640)
-                self.video_stream.set(4, 480)
+        if(self.video_stream.get(3) != 640 or self.video_stream.get(4) != 480):
+            self.video_stream.set(3, 640)
+            self.video_stream.set(4, 480)
     
 
     def get_frame_shape(self):
@@ -67,15 +66,37 @@ class Webcam():
     
 
     def get_webcans(self):
-        webcans = [self.webcam_port]
-        number = 1
+        webcans, index = [], 0
         while True:
-            video = cv2.VideoCapture(number)
-            if video is None or not video.isOpened():
-                break
-            webcans.append(number)
-            number += 1
+            if index == self.webcam_port:
+                webcans.append(index)
+            else:
+                video = cv2.VideoCapture(index)
+                if video is None or not video.isOpened():
+                    break
+                webcans.append(index)
+            index += 1
         return webcans
+
+
+    def change_current_webcam(self, index_webcam):
+        try:
+            if index_webcam is None or (type(index_webcam) is not int) or index_webcam < 0:
+                return ''
+            return self._change_current_webcam(index_webcam)
+        except:
+            return ''
+    
+
+    def _change_current_webcam(self, index_webcam):
+        with self.lock_video_stream:
+            to_free = self.video_stream
+            self.webcam_port = index_webcam
+            self.start_video_stream()
+            self.define_resolution()
+        self.set_success_frame(True)
+        to_free.release()
+        return self.get_frame_shape()
 
 
     def new_frame(self):
@@ -99,7 +120,6 @@ class Webcam():
                     yield(b'--frame\r\nContent-Type:image/jpeg\r\n\r\n' + img + b'\r\n\r\n')
         except:
             pass
-            
     
 
     def get_image(self):
@@ -204,6 +224,11 @@ class Webcam():
                 self.uploaded_image = image
     
 
+    def clear_rectangle_and_uploaded_image(self):
+        self.rectangle.initial_points_of_rectangle()
+        self.set_uploaded_image(None)
+    
+
     def clear(self):
         self.turn_off_webcam()
         self.clear_rectangle_and_uploaded_image()
@@ -214,11 +239,6 @@ class Webcam():
             if self.video_stream:
                 self.video_stream.release()
                 self.video_stream = None
-    
-
-    def clear_rectangle_and_uploaded_image(self):
-        self.rectangle.initial_points_of_rectangle()
-        self.set_uploaded_image(None)
     
 
     def __del__(self):
