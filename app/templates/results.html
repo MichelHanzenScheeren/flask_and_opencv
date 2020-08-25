@@ -104,7 +104,7 @@
     <script type="">
         var signals = {{ results.signals|tojson }};
         var interval = {{ results.interval|round(2) }};
-        {% include 'src/signals_chart.js' %}
-        {% include 'src/generate_files.js' %}
+        {% include 'src/results/signals_chart.js' %}
+        {% include 'src/results/generate_files.js' %}
     </script>
 {% endblock%}

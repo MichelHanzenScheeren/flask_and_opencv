@@ -62,7 +62,20 @@ class Webcam():
         else:
             h, w, _ = self.new_frame().shape
             success = self.is_getting_frames()
-        return {"style": f"style=height:{h}px;min-height:{h}px;width:{w}px;min-width:{w}px;","success": success}
+        return {"style": f"style=height:{h}px;min-height:{h}px;width:{w}px;min-width:{w}px;",
+            "success": success, "webcans": self.get_webcans(), "current": self.webcam_port}
+    
+
+    def get_webcans(self):
+        webcans = [self.webcam_port]
+        number = 1
+        while True:
+            video = cv2.VideoCapture(number)
+            if video is None or not video.isOpened():
+                break
+            webcans.append(number)
+            number += 1
+        return webcans
 
 
     def new_frame(self):
