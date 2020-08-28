@@ -1,4 +1,4 @@
-function show_message(title = "", body = "", complement = "", autohide = false) {
+function showMessage(title = "", body = "", complement = "", autohide = false) {
     let message = ` <div id="my-toast" data-autohide="${autohide}" data-delay="4000" class="toast my-toast" role="alert" aria-live="assertive" aria-atomic="true">
         <div class="toast-header bg-warning">
         <strong class="mr-auto text-dark"> ${title} </strong>

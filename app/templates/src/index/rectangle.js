@@ -8,13 +8,13 @@ const rect = {};
 let drag = false;
 
 (function initRectangle() {
-	var desenho = document.getElementById('desenho');
+	var desenho = document.getElementById('frameImg');
 	desenho.addEventListener('mousedown', mouseDown, false);
 	desenho.addEventListener('mouseup', mouseUp, false);
 	desenho.addEventListener('mousemove', mouseMove, false);
 	desenho.addEventListener('mouseleave', mouseLeave, false);
-	document.getElementById("refresh_button").setAttribute("onclick", "refresh_rectangle()");
-	document.getElementById("clear_button").setAttribute("onclick", "clear_rectangle()");
+	document.getElementById("refreshRectangleButton").setAttribute("onclick", "refreshRectangle()");
+	document.getElementById("clearRectangleButton").setAttribute("onclick", "clearRectangle()");
 }) ();
 
 function mouseDown(e) {
@@ -38,16 +38,16 @@ function mouseUp() {
 	if(drag) {
 		drag = false;
 		draw();
-		clear_aux_values();
+		clearAuxValues();
 	}
 }
 
 function mouseLeave(e) {
 	drag = false;
-	clear_aux_values();
+	clearAuxValues();
 }
 
-function clear_aux_values() {
+function clearAuxValues() {
 	rect.startX = 0;
 	rect.startY = 0;
 	rect.w = 0;
@@ -62,7 +62,7 @@ function draw() {
 	if(invalid_x || invalid_y || invalid_width || invalid_height) {
 		let title = "Retângulo inválido &#128533;";
 		let body = "Por favor, tente selecionar novamente...";
-		show_message(title, body, undefined, true)
+		showMessage(title, body, undefined, true)
 		return;
 	}
 
@@ -70,16 +70,16 @@ function draw() {
 	${(rect.startX + rect.w)}/${(rect.startY + rect.h)}`);
 }
 
-function clear_rectangle(){
+function clearRectangle(){
 	axios.post("{{ url_for('clear_rectangle') }}");
-	document.getElementById("labelUploadImage").innerHTML = "Escolher imagem local"
+	document.getElementById("uploadImageLabel").innerHTML = "Escolher imagem local"
     htmlXY.x1.value = 0;
 	htmlXY.x2.value = 0;
 	htmlXY.y1.value = 0;
 	htmlXY.y2.value = 0;
 }
 
-function refresh_rectangle(){
+function refreshRectangle(){
 	let x1 = htmlXY.x1.value;
 	let y1 = htmlXY.y1.value;
 	let x2 = htmlXY.x2.value;
@@ -91,13 +91,13 @@ function refresh_rectangle(){
 	if(not_empty_points && is_int && not_empty_area && gretter_than_zero){
 		axios.post(`{{url_for("get_measures")}}/${parseInt(x1)}/${parseInt(y1)}/${parseInt(x2)}/${parseInt(y2)}`);
 	} else {
-		invalid_refresh();
+		invalidRefresh();
 	}
 }
 
-function invalid_refresh() {
+function invalidRefresh() {
 	let title = "Retângulo inválido &#128533;" 
 	let body = "Verifique os valores inseridos e tente novamente..."
-	show_message(title, body, undefined, true)
+	showMessage(title, body, undefined, true)
 }
 

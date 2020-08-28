@@ -45,5 +45,5 @@ function showError() {
     title = "Falha no download do arquivo &#128533;"
     body = `Infelizmente, não foi possível fazer o download do arquivo solicitado. 
         Por favor, tente novamente mais tarde...`
-    show_message(title, body, undefined, true);
+    showMessage(title, body, undefined, true);
 }
