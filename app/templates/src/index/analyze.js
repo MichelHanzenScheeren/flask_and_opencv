@@ -12,24 +12,31 @@ function configAnalyze() {
 }
 
 async function getDifferentiator(){
-    let response = await axios.post("{{ url_for('get_differentiator') }}");
-    if(response.data == "" || response.data[0] == "[") {
-        failedToGetDifferentiator();
-        return;
+    try {
+        let response = await axios.post("{{ url_for('get_differentiator') }}");
+        if(response.data == "" || response.data[0] == "[") {
+            failedToGetDifferentiator();
+        } else {
+            document.getElementById("red").innerHTML = "Red: " + response.data[0];
+            document.getElementById("green").innerHTML = "Green: " + response.data[1];
+            document.getElementById("blue").innerHTML = "Blue: " + response.data[2];
+            document.getElementById("startAnalyzeButton").disabled = false;
+            getDifferentiatorImage()
+        }
+    } catch (error) {
+        showErrorMessage(error);
     }
-    document.getElementById("red").innerHTML = "Red: " + response.data[0];
-    document.getElementById("green").innerHTML = "Green: " + response.data[1];
-    document.getElementById("blue").innerHTML = "Blue: " + response.data[2];
-    document.getElementById("startAnalyzeButton").disabled = false;
-    getDifferentiatorImage()
 }
 
 async function getDifferentiatorImage() {
-    let response = await axios.post("{{ url_for('get_differentiator_image') }}");
-    if(response.data == "") return;
-    
-    let differentiatorImage = document.getElementById("differentiatorImage")
-    differentiatorImage.setAttribute("src", "data:image/jpeg;base64," + response.data);
+    try {
+        let response = await axios.post("{{ url_for('get_differentiator_image') }}");
+        if(response.data == "") return;
+        let differentiatorImage = document.getElementById("differentiatorImage")
+        differentiatorImage.setAttribute("src", "data:image/jpeg;base64," + response.data);
+    } catch (error) {
+        showErrorMessage(error);
+    }
 }
 
 function failedToGetDifferentiator() {

@@ -19,3 +19,10 @@ function showMessage(title = "", body = "", complement = "", autohide = false) {
 $("#my-toast").on("hidden.bs.toast", function () {
     $("#my-toast").remove(); //remove da tela, para que não atrapalhe
 }) 
+
+function showErrorMessage(error) {
+    console.warn(error);
+    let title = "Não foi possível completar a solicitação.";
+    let body = "Um erro desconhecido impediu que sua solicitação fosse completada. Tente novamente.";
+    showMessage(title, body, undefined, true);
+}

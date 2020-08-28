@@ -2,16 +2,21 @@ document.getElementById("getAllImagesButton").setAttribute("onclick", "getAllIma
 document.getElementById("getXlsxResultsButton").setAttribute("onclick", "getXlsxResults()");
 
 async function getAllImages() {
-    document.getElementById("getAllImagesButton").disabled = true;
-    let response = await axios.post("{{url_for('get_all_images')}}");
-    if(response.data == "") {
-        showError();
-    } else {
-        let headers = response.headers;
-        let imagesZip = await zipImages(response.data, headers["format"]);
-        submitDownload(imagesZip, headers["file-name"], headers["content-type"], headers["format"]);
+    try {
+        document.getElementById("getAllImagesButton").disabled = true;
+        let response = await axios.post("{{url_for('get_all_images')}}");
+        if(response.data == "") {
+            showError();
+        } else {
+            let headers = response.headers;
+            let imagesZip = await zipImages(response.data, headers["format"]);
+            submitDownload(imagesZip, headers["file-name"], headers["content-type"], headers["format"]);
+        }
+    } catch (error) {
+        showErrorMessage(error);
+    } finally {
+        document.getElementById("getAllImagesButton").disabled = false;
     }
-    document.getElementById("getAllImagesButton").disabled = false;
 }
 
 async function zipImages(data, format) {
@@ -23,15 +28,20 @@ async function zipImages(data, format) {
 }
 
 async function getXlsxResults() {
-    document.getElementById("getXlsxResultsButton").disabled = true;
-    let response = await axios.post("{{url_for('get_xlsx_results')}}");
-    if(response.data == "") {
-        showError();
-    } else {
-        let headers = response.headers;
-        submitDownload(response.data, headers['file-name'], headers["content-type"], headers["format"]);
+    try {
+        document.getElementById("getXlsxResultsButton").disabled = true;
+        let response = await axios.post("{{url_for('get_xlsx_results')}}");
+        if(response.data == "") {
+            showError();
+        } else {
+            let headers = response.headers;
+            submitDownload(response.data, headers['file-name'], headers["content-type"], headers["format"]);
+        }
+    } catch (error) {
+        showErrorMessage(error);
+    } finally {
+        document.getElementById("getXlsxResultsButton").disabled = false;
     }
-    document.getElementById("getXlsxResultsButton").disabled = false;
 }
 
 function submitDownload(data, title, contentType, format) {

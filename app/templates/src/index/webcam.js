@@ -30,13 +30,17 @@ function addEventToChangeWebcam() {
 }
 
 async function changeCurrentWebcam () {
-    let select = document.getElementById("selectCurrentWebcam");
-    let response = await axios.post(`{{url_for("change_current_webcam")}}/${select.value}`);
-    if(response == '' || response.data["success"] == false) {
-        messageInvalidWebcam()
-    } else {
-        defineImageStyle(response.data["style"])
-        $("#my-toast").remove();
+    try {
+        let select = document.getElementById("selectCurrentWebcam");
+        let response = await axios.post(`{{url_for("change_current_webcam")}}/${select.value}`);
+        if(response == '' || response.data["success"] == false) {
+            messageInvalidWebcam()
+        } else {
+            defineImageStyle(response.data["style"])
+            $("#my-toast").remove();
+        }
+    } catch (error) {
+        showErrorMessage(error);
     }
 }
 
