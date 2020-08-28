@@ -18,7 +18,7 @@ function drawChart() {
         colors: ['#343a40'],
         pointsVisible: true,
     };
-    var chart_div = document.getElementById('line_chart');
+    var chart_div = document.getElementById('lineChartDiv');
     var chart = new google.visualization.LineChart(chart_div);
     chart.draw(data, options);
 }

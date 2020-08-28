@@ -1,8 +1,8 @@
-document.getElementById("btn_get_all_images").setAttribute("onclick", "get_all_images()");
-document.getElementById("btn_get_xlsx_results").setAttribute("onclick", "get_xlsx_results()");
+document.getElementById("getAllImagesButton").setAttribute("onclick", "getAllImages()");
+document.getElementById("getXlsxResultsButton").setAttribute("onclick", "getXlsxResults()");
 
-async function get_all_images() {
-    document.getElementById("btn_get_all_images").disabled = true;
+async function getAllImages() {
+    document.getElementById("getAllImagesButton").disabled = true;
     let response = await axios.post("{{url_for('get_all_images')}}");
     if(response.data == "") {
         showError();
@@ -11,7 +11,7 @@ async function get_all_images() {
         let imagesZip = await zipImages(response.data, headers["format"]);
         submitDownload(imagesZip, headers["file-name"], headers["content-type"], headers["format"]);
     }
-    document.getElementById("btn_get_all_images").disabled = false;
+    document.getElementById("getAllImagesButton").disabled = false;
 }
 
 async function zipImages(data, format) {
@@ -22,8 +22,8 @@ async function zipImages(data, format) {
     return await zip.generateAsync({type: format});
 }
 
-async function get_xlsx_results() {
-    document.getElementById("btn_get_xlsx_results").disabled = true;
+async function getXlsxResults() {
+    document.getElementById("getXlsxResultsButton").disabled = true;
     let response = await axios.post("{{url_for('get_xlsx_results')}}");
     if(response.data == "") {
         showError();
@@ -31,7 +31,7 @@ async function get_xlsx_results() {
         let headers = response.headers;
         submitDownload(response.data, headers['file-name'], headers["content-type"], headers["format"]);
     }
-    document.getElementById("btn_get_xlsx_results").disabled = false;
+    document.getElementById("getXlsxResultsButton").disabled = false;
 }
 
 function submitDownload(data, title, contentType, format) {
