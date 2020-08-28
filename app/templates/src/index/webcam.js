@@ -3,14 +3,18 @@ window.addEventListener("pageshow", function(_) {
     if(performance.navigation.type == 2) {
         location.reload(true);
     }
-});
+}); // Atualizar pagina quando voltar dos resultados (para ativar webcam)
 
-(() => {
-    let got_image = ("{{ frame_controll['success'] }}");
+function defineImageStyle(style) {
+    document.getElementById("desenho").style = style
+}
+
+function validateWebcam() {
+    let got_image = ("{{ frame_status['success'] }}");
     if(got_image == "False") {
         message_invalid_webcam()
     }
-}) () // função auto executada (validação inicial de funcionamento da webcam)
+} // validação inicial de funcionamento da webcam
 
 function message_invalid_webcam() {
     title = "Problemas para configurar sua webcam &#128533;"
@@ -21,13 +25,20 @@ function message_invalid_webcam() {
     show_message(title, body, complement);
 }
 
-let selectWebcam = document.getElementById("select-webcam");
-selectWebcam.setAttribute("onchange", "changeCurrentWebcam()");
+function addEventToChangeWebcam() {
+    document.getElementById("select-webcam").setAttribute("onchange", "changeCurrentWebcam()");
+}
+
 async function changeCurrentWebcam () {
-    let response = await axios.post(`{{url_for("change_current_webcam")}}/${selectWebcam.value}`);
-    if(response.data["success"] == false) {
+    let response = await axios.post(`{{url_for("change_current_webcam")}}/${document.getElementById("select-webcam").value}`);
+    if(response == '' || response.data["success"] == false) {
         message_invalid_webcam()
     } else {
+        defineImageStyle(response.data["style"])
         $("#my-toast").remove();
     }
 }
+
+defineImageStyle("{{ frame_status['style'] }}")
+validateWebcam()
+addEventToChangeWebcam()

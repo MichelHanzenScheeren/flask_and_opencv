@@ -24,9 +24,8 @@ class Webcam():
     def init_webcam(self):
         if not self.is_valid_webcam() or not self.is_getting_frames():
             self.set_success_frame(True)
-            with self.lock_video_stream:
-                self.start_video_stream()
-                self.define_resolution()
+            self.start_video_stream()
+            self.define_resolution()
     
 
     def is_valid_webcam(self):
@@ -45,60 +44,27 @@ class Webcam():
     
 
     def start_video_stream(self):
-        self.video_stream = cv2.VideoCapture(self.webcam_port) #, cv2.CAP_DSHOW
+        with self.lock_video_stream:
+            self.video_stream = cv2.VideoCapture(self.webcam_port) #, cv2.CAP_DSHOW
 
 
     def define_resolution(self):
-        if(self.video_stream.get(3) != 640 or self.video_stream.get(4) != 480):
-            self.video_stream.set(3, 640)
-            self.video_stream.set(4, 480)
+        with self.lock_video_stream:
+            if(self.video_stream.get(3) != 640 or self.video_stream.get(4) != 480):
+                self.video_stream.set(3, 640)
+                self.video_stream.set(4, 480)
     
 
-    def get_frame_shape(self):
+    def frame_status(self):
         if not self.is_valid_webcam():
             h, w, success = (480, 640, False)
             self.set_success_frame(False)
         else:
             h, w, _ = self.new_frame().shape
             success = self.is_getting_frames()
-        return {"style": f"style=height:{h}px;min-height:{h}px;width:{w}px;min-width:{w}px;",
-            "success": success, "webcans": self.get_webcans(), "current": self.webcam_port}
+        return {"style": f"height:{h}px;min-height:{h}px;width:{w}px;min-width:{w}px;",
+            "success": success, "current": self.webcam_port}
     
-
-    def get_webcans(self):
-        webcans, index = [], 0
-        while True:
-            if index == self.webcam_port:
-                webcans.append(index)
-            else:
-                video = cv2.VideoCapture(index)
-                if video is None or not video.isOpened():
-                    break
-                webcans.append(index)
-            index += 1
-        return webcans
-
-
-    def change_current_webcam(self, index_webcam):
-        try:
-            if index_webcam is None or (type(index_webcam) is not int) or index_webcam < 0:
-                return ''
-            return self._change_current_webcam(index_webcam)
-        except:
-            return ''
-    
-
-    def _change_current_webcam(self, index_webcam):
-        with self.lock_video_stream:
-            to_free = self.video_stream
-            self.webcam_port = index_webcam
-            self.start_video_stream()
-            self.define_resolution()
-        self.set_success_frame(True)
-        to_free.release()
-        return self.get_frame_shape()
-
-
     def new_frame(self):
         with self.lock_video_stream:
             success, frame = self.video_stream.read()
@@ -109,6 +75,42 @@ class Webcam():
     def black_image(self):
         return numpy.zeros((480, 640, 3), numpy.uint8)
     
+
+    def webcans_list(self):
+        list_webcans, index = [], 0
+        while True:
+            if index == self.webcam_port:
+                list_webcans.append(index)
+            else:
+                video = cv2.VideoCapture(index)
+                if video is None or not video.isOpened():
+                    break
+                list_webcans.append(index)
+            index += 1
+        list_webcans.append(1)
+        return list_webcans
+
+
+    def change_current_webcam(self, index):
+        try:
+            return '' if self.is_invalid_index(index) else self._change_webcam(index)
+        except:
+            return ''
+    
+
+    def is_invalid_index(self, index):
+        return index is None or (type(index) is not int) or index < 0
+    
+
+    def _change_webcam(self, index_webcam):
+        with self.lock_video_stream:
+            to_free = self.video_stream
+            self.video_stream = None
+            self.webcam_port = index_webcam
+        self.init_webcam()
+        to_free.release()
+        return self.frame_status()
+
 
     def generate(self):
         try:
