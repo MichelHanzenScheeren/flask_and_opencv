@@ -9,22 +9,14 @@ async function getAllImages() {
             showError();
         } else {
             let headers = response.headers;
-            let imagesZip = await zipImages(response.data, headers["format"]);
-            submitDownload(imagesZip, headers["file-name"], headers["content-type"], headers["format"]);
+            let zip = response.data
+            submitDownload(zip, headers["file-name"], headers["content-type"], headers["format"]);
         }
     } catch (error) {
         showErrorMessage(error);
     } finally {
         document.getElementById("getAllImagesButton").disabled = false;
     }
-}
-
-async function zipImages(data, format) {
-    let zip = new JSZip();
-    for (let key of Object.keys(data)) {
-        zip.file(key, data[key].replace("b'", "").replace("'", ""), {base64: true});
-    }
-    return await zip.generateAsync({type: format});
 }
 
 async function getXlsxResults() {

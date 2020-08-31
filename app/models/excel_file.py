@@ -2,7 +2,7 @@ from openpyxl import Workbook
 from openpyxl.styles import Font, Alignment, PatternFill
 from openpyxl.chart import ScatterChart, Reference, Series
 from io import BytesIO
-import base64
+from base64 import b64encode
 
 class Excel_File():
     def __init__(self, title = ""):
@@ -12,7 +12,7 @@ class Excel_File():
         self.to_merge_cells = []
     
 
-    def build_file(self, general_info, differentiator_info, captures_info):
+    def create(self, general_info, differentiator_info, captures_info):
         row_count = self.generate_table(general_info, 1)
         row_count = self.generate_table(differentiator_info, row_count)
         row_count = self.generate_table(captures_info, row_count)
@@ -67,5 +67,5 @@ class Excel_File():
         encoded = BytesIO()
         excel_file.save(encoded)
         encoded.seek(0)
-        base_64 = base64.b64encode(encoded.read())
-        return base_64
+        base_64_result = b64encode(encoded.read())
+        return base_64_result
