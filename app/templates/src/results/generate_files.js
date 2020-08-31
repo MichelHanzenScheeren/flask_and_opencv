@@ -1,5 +1,7 @@
-document.getElementById("getAllImagesButton").setAttribute("onclick", "getAllImages()");
-document.getElementById("getXlsxResultsButton").setAttribute("onclick", "getXlsxResults()");
+(() => {
+    document.getElementById("getAllImagesButton").setAttribute("onclick", "getAllImages()");
+    document.getElementById("getXlsxResultsButton").setAttribute("onclick", "getXlsxResults()");
+}) () //Função auto-executada
 
 async function getAllImages() {
     try {

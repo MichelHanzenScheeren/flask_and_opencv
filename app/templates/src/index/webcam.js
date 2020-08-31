@@ -5,6 +5,12 @@ window.addEventListener("pageshow", function(_) {
     }
 }); // Atualizar pagina quando voltar dos resultados (para ativar webcam)
 
+(() => {
+    defineImageStyle("{{ frame_status['style'] }}");
+    validateWebcam();
+    addEventToChangeWebcam();
+}) () // Função auto-executada
+
 function defineImageStyle(style) {
     document.getElementById("frameImg").style = style;
     leftDivHeigth = document.getElementById("div-items-left").offsetHeight 
@@ -46,8 +52,4 @@ async function changeCurrentWebcam () {
     }
 }
 
-(() => {
-    defineImageStyle("{{ frame_status['style'] }}");
-    validateWebcam();
-    addEventToChangeWebcam();
-}) () // Função auto-executada
+
