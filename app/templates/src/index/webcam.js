@@ -6,7 +6,9 @@ window.addEventListener("pageshow", function(_) {
 }); // Atualizar pagina quando voltar dos resultados (para ativar webcam)
 
 function defineImageStyle(style) {
-    document.getElementById("frameImg").style = style
+    document.getElementById("frameImg").style = style;
+    leftDivHeigth = document.getElementById("div-items-left").offsetHeight 
+    document.getElementById("div-items-rigth").style.minHeight = `${leftDivHeigth}px`;
 }
 
 function validateWebcam() {

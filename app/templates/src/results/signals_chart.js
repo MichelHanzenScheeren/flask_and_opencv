@@ -1,7 +1,10 @@
+(() => {
+    google.charts.load('current', {packages: ['corechart']});
+    google.charts.setOnLoadCallback(drawChart); 
+}) () // Função auto-executada.
+
 function drawChart() {
-    try {
-        google.charts.load('current', {packages: ['corechart']});
-        google.charts.setOnLoadCallback(drawChart);   
+    try {  
         var auxiliarData = [["Tempo", "Sinal"]];
         for (let index = 0; index < signals.length; index++) {
             const element = signals[index];

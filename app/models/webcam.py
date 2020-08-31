@@ -87,7 +87,6 @@ class Webcam():
                     break
                 list_webcans.append(index)
             index += 1
-        list_webcans.append(1)
         return list_webcans
 
 
