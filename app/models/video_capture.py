@@ -48,6 +48,7 @@ class VideoCapture:
             self.set_working_state(False)
         else:
             h, w = self.get_video_dimensions()
+            _ = self.capture_frame() # Necessário para verificação de correto funcionamento
             success = self.is_working()
         return (h, w, success)
     
