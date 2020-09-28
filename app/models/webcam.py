@@ -1,104 +1,45 @@
 from threading import Lock
 import time
 from app.models.rectangle import Rectangle
+from app.models.video_capture import VideoCapture
 from app.models.my_opencv import MyOpencv
 
 
 class Webcam():
     def __init__(self):
-        self.webcam_port = 0
+        self.current_port = 0
         self.rectangle = Rectangle()
+        self.video_capture = VideoCapture()
 
-        self.video_stream = None
-        self.lock_video_stream = Lock()
-
-        self.success_frame = True
         self.output_frame = None
         self.lock_frame = Lock()
-
         self.uploaded_image = None
         self.lock_uploaded_image = Lock()
     
 
     def init_webcam(self):
-        if not self.is_valid_webcam() or not self.is_getting_frames():
-            self.set_success_frame(True)
-            self.start_video_stream()
-            self.define_resolution()
+        self.video_capture.start_video(self.current_port)
     
 
-    def is_valid_webcam(self):
-        with self.lock_video_stream:
-            return self.video_stream and self.video_stream.isOpened()
-    
-
-    def is_getting_frames(self):
-        with self.lock_frame:
-            return self.success_frame
-
-
-    def set_success_frame(self, condition = True):
-        with self.lock_frame:
-            self.success_frame = condition
-    
-
-    def start_video_stream(self):
-        with self.lock_video_stream:
-            self.video_stream = MyOpencv.new_stream(self.webcam_port)
-
-
-    def define_resolution(self):
-        with self.lock_video_stream:
-            if(self.video_stream.get(3) != 640 or self.video_stream.get(4) != 480):
-                self.video_stream.set(3, 640)
-                self.video_stream.set(4, 480)
-    
-
-    def frame_status(self):
-        if not self.is_valid_webcam():
-            h, w, success = (480, 640, False)
-            self.set_success_frame(False)
-        else:
-            h, w, _ = self.get_frame_shape()
-            success = self.is_getting_frames()
+    def video_status(self):
+        h, w, success = self.video_capture.video_status()
         return {"style": f"height:{h}px;min-height:{h}px;width:{w}px;min-width:{w}px;",
-            "success": success, "current": self.webcam_port}
-    
-
-    def get_frame_shape(self):
-        return self.new_frame().shape
-
-
-    def new_frame(self):
-        with self.lock_video_stream:
-            success, frame = self.video_stream.read()
-        self.set_success_frame(success)
-        return frame if success else MyOpencv.black_image()
+            "success": success, "current": self.current_port}
     
 
     def webcans_list(self):
-        return MyOpencv.webcans_list(self.webcam_port)
+        return MyOpencv.webcans_list(self.current_port)
 
 
     def change_current_webcam(self, index):
-        try:
-            return '' if self.is_invalid_index(index) else self._change_webcam(index)
-        except:
+        if self.is_invalid_index(index):
             return ''
+        self.webcam_port = index
+        return self.video_capture.change(index)
     
 
     def is_invalid_index(self, index):
         return index is None or (type(index) is not int) or index < 0
-    
-
-    def _change_webcam(self, index_webcam):
-        with self.lock_video_stream:
-            to_free = self.video_stream
-            self.video_stream = None
-            self.webcam_port = index_webcam
-        self.init_webcam()
-        to_free.release()
-        return self.frame_status()
 
 
     def generate(self):
@@ -135,15 +76,11 @@ class Webcam():
     
 
     def get_webcam_image(self):
-        frame = self.new_frame() if self.can_get_frame() else MyOpencv.black_image()
+        frame = self.video_capture.capture_frame()
         self.set_output_frame(frame.copy())
         drawed_immage = self.rectangle.draw_rectangle(frame)
         return MyOpencv.convert_to_bytes(drawed_immage)
-    
 
-    def can_get_frame(self):
-        return self.is_getting_frames() and self.is_valid_webcam()
-    
 
     def set_output_frame(self, frame):
         with self.lock_frame:
@@ -170,7 +107,7 @@ class Webcam():
     def get_output_frame(self):
         with self.lock_frame:
             return self.output_frame
-
+    
 
     def save_uploaded_image(self, image):
         try:
@@ -201,10 +138,7 @@ class Webcam():
     
 
     def turn_off_webcam(self):
-        with self.lock_video_stream:
-            if self.video_stream:
-                self.video_stream.release()
-                self.video_stream = None
+        self.video_capture.turn_off()
     
 
     def __del__(self):
