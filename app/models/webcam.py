@@ -121,7 +121,7 @@ class Webcam():
                 return self.get_uploaded_image()
             return self.get_webcam_image()
         except:
-            return self.convert_to_bytes(self.black_image())
+            return MyOpencv.convert_to_bytes(self.black_image())
     
 
     def has_uploaded_image(self):
@@ -132,13 +132,15 @@ class Webcam():
     def get_uploaded_image(self):
         with self.lock_uploaded_image:
             copy = self.uploaded_image.copy()
-        return self.convert_to_bytes(self.rectangle.draw_rectangle(copy))
+        drawed_immage = self.rectangle.draw_rectangle(copy)
+        return MyOpencv.convert_to_bytes(drawed_immage)
     
 
     def get_webcam_image(self):
         frame = self.new_frame() if self.can_get_frame() else self.black_image()
         self.set_output_frame(frame.copy())
-        return self.convert_to_bytes(self.rectangle.draw_rectangle(frame))
+        drawed_immage = self.rectangle.draw_rectangle(frame)
+        return MyOpencv.convert_to_bytes(drawed_immage)
     
 
     def can_get_frame(self):
@@ -148,15 +150,7 @@ class Webcam():
     def set_output_frame(self, frame):
         with self.lock_frame:
             self.output_frame = frame
-
-
-    def convert_to_bytes(self, image):
-        return self.encode_to_jpg(image).tobytes()
-
-
-    def encode_to_jpg(self, image):
-        return cv2.imencode(".jpg", image)[1]
-
+    
 
     def get_differentiator_image(self):
         if(self.has_uploaded_image()):

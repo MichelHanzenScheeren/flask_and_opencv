@@ -1,3 +1,4 @@
+from app.models.my_opencv import MyOpencv
 from app.models.excel_file import Excel_File
 from datetime import datetime
 from base64 import b64encode
@@ -24,26 +25,27 @@ class Results():
         self.captures_images.clear()
 
 
-    def get_differentiator_image(self, encode_to_jpg):
+    def get_differentiator_image(self):
         try:
-            return b64encode(encode_to_jpg(self.differentiator_image))
+            jpg_image = MyOpencv.encode_to_jpg(self.differentiator_image)
+            return b64encode(jpg_image)
         except:
             return ''
 
 
-    def get_all_images(self, webcam):
+    def get_all_images(self):
         try:
-            return self.encode_all_images(webcam)
+            return self.encode_all_images()
         except:
             return ''
 
 
-    def encode_all_images(self, encode_to_jpg):
+    def encode_all_images(self):
         encoded = PyZip()
-        encoded["diferenciador.jpg"] = encode_to_jpg(self.differentiator_image).tobytes()
+        encoded["diferenciador.jpg"] = MyOpencv.convert_to_bytes(self.differentiator_image)
         for i in range(0, len(self.captures_images)):
             image = self.captures_images[i]
-            encoded[f"captura_{i + 1}.jpg"] = encode_to_jpg(image).tobytes()
+            encoded[f"captura_{i + 1}.jpg"] = MyOpencv.convert_to_bytes(image)
         return b64encode(encoded.to_bytes())
 
 

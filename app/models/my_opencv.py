@@ -29,3 +29,12 @@ class MyOpencv():
         red_color = (0, 0, 255) # formato bgr (no lugar de rgb)
         cv2.rectangle(frame, initial_xy, final_xy, red_color, thickness = 1)
 
+
+    @staticmethod
+    def convert_to_bytes(image):
+        return MyOpencv.encode_to_jpg(image).tobytes()
+
+
+    @staticmethod
+    def encode_to_jpg(image):
+        return cv2.imencode(".jpg", image)[1]

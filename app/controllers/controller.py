@@ -73,12 +73,12 @@ def configure(app):
 
     @app.route('/get_differentiator_image', methods=['POST'])
     def get_differentiator_image():
-        return Response(analyze.results.get_differentiator_image(webcam.encode_to_jpg))
+        return Response(analyze.results.get_differentiator_image())
     
 
     @app.route('/get_all_images', methods=['POST'])
     def get_all_images():
-        zip_file = analyze.results.get_all_images(webcam.encode_to_jpg)
+        zip_file = analyze.results.get_all_images()
         headers = {'content-type': 'application/zip', 'format': 'base64', 'file-name': 'imagens.zip'}
         return Response(zip_file, headers = headers)
     
