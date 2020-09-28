@@ -1,8 +1,8 @@
-from threading import Lock
 import time
 from app.models.rectangle import Rectangle
 from app.models.video_capture import VideoCapture
 from app.models.my_opencv import MyOpencv
+from app.models.frame import Frame
 
 
 class Webcam():
@@ -10,11 +10,8 @@ class Webcam():
         self.current_port = 0
         self.rectangle = Rectangle()
         self.video_capture = VideoCapture()
-
-        self.output_frame = None
-        self.lock_frame = Lock()
-        self.uploaded_image = None
-        self.lock_uploaded_image = Lock()
+        self.captured_frame = Frame()
+        self.uploaded_frame = Frame()
     
 
     def init_webcam(self):
@@ -56,57 +53,41 @@ class Webcam():
 
     def get_image(self):
         try:
-            if(self.has_uploaded_image()):
-                return self.get_uploaded_image()
-            return self.get_webcam_image()
+            if(self.uploaded_frame.is_valid()):
+                copy = self.uploaded_frame.get_copy()
+            else:
+                copy = self.get_webcam_image()
+            return self.draw_and_convert_frame(copy)
         except:
             return MyOpencv.convert_to_bytes(MyOpencv.black_image())
     
 
-    def has_uploaded_image(self):
-        with self.lock_uploaded_image:
-            return MyOpencv.validate_image(self.uploaded_image)
-    
-
-    def get_uploaded_image(self):
-        with self.lock_uploaded_image:
-            copy = self.uploaded_image.copy()
-        drawed_immage = self.rectangle.draw_rectangle(copy)
-        return MyOpencv.convert_to_bytes(drawed_immage)
-    
-
     def get_webcam_image(self):
         frame = self.video_capture.capture_frame()
-        self.set_output_frame(frame.copy())
-        drawed_immage = self.rectangle.draw_rectangle(frame)
+        self.captured_frame.set_frame(frame.copy())
+        return frame
+    
+
+    def draw_and_convert_frame(self, copy):
+        drawed_immage = self.rectangle.draw_rectangle(copy)
         return MyOpencv.convert_to_bytes(drawed_immage)
-
-
-    def set_output_frame(self, frame):
-        with self.lock_frame:
-            self.output_frame = frame
 
 
     def get_differentiator_image(self):
-        if(self.has_uploaded_image()):
+        if(self.uploaded_frame.is_valid()):
             return self.crop_uploaded_image()
         return self.selected_rectangle_image()
     
 
     def crop_uploaded_image(self):
-        with self.lock_uploaded_image:
-            copy = self.uploaded_image
-            self.uploaded_image = None
+        copy = self.uploaded_frame.get_copy()
+        self.uploaded_frame.clear()
         return self.rectangle.crop_image(copy)
 
 
     def selected_rectangle_image(self):
-        return self.rectangle.crop_image(self.get_output_frame())
-    
-
-    def get_output_frame(self):
-        with self.lock_frame:
-            return self.output_frame
+        copy = self.captured_frame.get_copy()
+        return self.rectangle.crop_image(copy)
     
 
     def save_uploaded_image(self, image):
@@ -117,19 +98,16 @@ class Webcam():
     
 
     def _save_uploaded_image(self, image):
-        if image:
-            new_image = MyOpencv.convert_and_resize_image(image, self.get_frame_shape())
-            self.set_uploaded_image(new_image)
-    
-
-    def set_uploaded_image(self, image):
-        with self.lock_uploaded_image:
-                self.uploaded_image = image
+        if image is None:
+            return
+        frame = MyOpencv.convert_to_frame(image)
+        new_image = MyOpencv.resize_image(frame, self.video_capture.get_video_dimensions())
+        self.uploaded_frame.set_frame(new_image)
     
 
     def clear_rectangle_and_uploaded_image(self):
         self.rectangle.initial_points_of_rectangle()
-        self.set_uploaded_image(None)
+        self.uploaded_frame.clear()
     
 
     def clear(self):

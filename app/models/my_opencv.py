@@ -42,15 +42,15 @@ class MyOpencv():
     
 
     @staticmethod
-    def convert_and_resize_image(image, shape):
+    def convert_to_frame(image):
         numpy_img = numpy.fromstring(image.read(), numpy.uint8)
         cv2_image = cv2.imdecode(numpy_img, cv2.IMREAD_COLOR)
-        return MyOpencv.resize_image(cv2_image, shape)
+        return cv2_image
     
 
     @staticmethod
-    def resize_image(image, shape):
-        h, w, _ = shape
+    def resize_image(image, dimensions):
+        h, w = dimensions
         return cv2.resize(image, (w, h))
     
 

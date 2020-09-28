@@ -54,7 +54,7 @@ class VideoCapture:
 
     def get_video_dimensions(self):
         with self.lock_video:
-            return (self.video_capture.get(4), self.video_capture.get(3))
+            return (int(self.video_capture.get(4)), int(self.video_capture.get(3)))
     
 
     def capture_frame(self):
