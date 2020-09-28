@@ -1,5 +1,5 @@
 from app.models.my_opencv import MyOpencv
-from app.models.excel_file import Excel_File
+from app.models.excel_file import ExcelFile
 from datetime import datetime
 from base64 import b64encode
 from pyzip import PyZip
@@ -51,7 +51,7 @@ class Results():
 
     def get_xlsx_results(self):
         try:
-            file = Excel_File(title = "Resultados")
+            file = ExcelFile(title = "Resultados")
             return file.create(self.general_info(), self.differentiator_info(), self.captures_info())
         except:
             return ''

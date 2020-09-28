@@ -4,7 +4,7 @@ from openpyxl.chart import ScatterChart, Reference, Series
 from io import BytesIO
 from base64 import b64encode
 
-class Excel_File():
+class ExcelFile():
     def __init__(self, title = ""):
         self.excel_file = Workbook()
         self.spreadsheet = self.excel_file.active
