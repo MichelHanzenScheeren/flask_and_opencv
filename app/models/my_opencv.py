@@ -1,4 +1,5 @@
 import cv2.cv2 as cv2
+import numpy
 
 
 class MyOpencv():
@@ -38,3 +39,26 @@ class MyOpencv():
     @staticmethod
     def encode_to_jpg(image):
         return cv2.imencode(".jpg", image)[1]
+    
+
+    @staticmethod
+    def convert_and_resize_image(image, shape):
+        numpy_img = numpy.fromstring(image.read(), numpy.uint8)
+        cv2_image = cv2.imdecode(numpy_img, cv2.IMREAD_COLOR)
+        return MyOpencv.resize_image(cv2_image, shape)
+    
+
+    @staticmethod
+    def resize_image(image, shape):
+        h, w, _ = shape
+        return cv2.resize(image, (w, h))
+    
+
+    @staticmethod
+    def black_image():
+        return numpy.zeros((480, 640, 3), numpy.uint8)
+    
+
+    @staticmethod
+    def validate_image(image):
+        return isinstance(image, numpy.ndarray)

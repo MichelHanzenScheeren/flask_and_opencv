@@ -1,6 +1,4 @@
 from threading import Lock
-import cv2.cv2 as cv2
-import numpy
 import time
 from app.models.rectangle import Rectangle
 from app.models.my_opencv import MyOpencv
@@ -61,21 +59,21 @@ class Webcam():
             h, w, success = (480, 640, False)
             self.set_success_frame(False)
         else:
-            h, w, _ = self.new_frame().shape
+            h, w, _ = self.get_frame_shape()
             success = self.is_getting_frames()
         return {"style": f"height:{h}px;min-height:{h}px;width:{w}px;min-width:{w}px;",
             "success": success, "current": self.webcam_port}
     
 
+    def get_frame_shape(self):
+        return self.new_frame().shape
+
+
     def new_frame(self):
         with self.lock_video_stream:
             success, frame = self.video_stream.read()
         self.set_success_frame(success)
-        return frame if success else self.black_image()
-    
-
-    def black_image(self):
-        return numpy.zeros((480, 640, 3), numpy.uint8)
+        return frame if success else MyOpencv.black_image()
     
 
     def webcans_list(self):
@@ -121,12 +119,12 @@ class Webcam():
                 return self.get_uploaded_image()
             return self.get_webcam_image()
         except:
-            return MyOpencv.convert_to_bytes(self.black_image())
+            return MyOpencv.convert_to_bytes(MyOpencv.black_image())
     
 
     def has_uploaded_image(self):
         with self.lock_uploaded_image:
-            return isinstance(self.uploaded_image, numpy.ndarray)
+            return MyOpencv.validate_image(self.uploaded_image)
     
 
     def get_uploaded_image(self):
@@ -137,7 +135,7 @@ class Webcam():
     
 
     def get_webcam_image(self):
-        frame = self.new_frame() if self.can_get_frame() else self.black_image()
+        frame = self.new_frame() if self.can_get_frame() else MyOpencv.black_image()
         self.set_output_frame(frame.copy())
         drawed_immage = self.rectangle.draw_rectangle(frame)
         return MyOpencv.convert_to_bytes(drawed_immage)
@@ -150,7 +148,7 @@ class Webcam():
     def set_output_frame(self, frame):
         with self.lock_frame:
             self.output_frame = frame
-    
+
 
     def get_differentiator_image(self):
         if(self.has_uploaded_image()):
@@ -183,20 +181,8 @@ class Webcam():
 
     def _save_uploaded_image(self, image):
         if image:
-            converted_image  = self.convert_image(image)
-            self.set_uploaded_image(converted_image)
-    
-
-    def convert_image(self, image):
-        numpy_img = numpy.fromstring(image.read(), numpy.uint8)
-        cv2_image = cv2.imdecode(numpy_img, cv2.IMREAD_COLOR)
-        return self.resize_image(cv2_image)
-    
-
-    def resize_image(self, image):
-        with self.lock_frame:
-            h, w, _ = self.output_frame.shape
-        return cv2.resize(image, (w, h))
+            new_image = MyOpencv.convert_and_resize_image(image, self.get_frame_shape())
+            self.set_uploaded_image(new_image)
     
 
     def set_uploaded_image(self, image):
