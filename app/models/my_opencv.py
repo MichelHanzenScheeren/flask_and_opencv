@@ -24,3 +24,8 @@ class MyOpencv():
         return list_webcans
 
 
+    @staticmethod
+    def draw_rectangle(frame, initial_xy, final_xy):
+        red_color = (0, 0, 255) # formato bgr (no lugar de rgb)
+        cv2.rectangle(frame, initial_xy, final_xy, red_color, thickness = 1)
+

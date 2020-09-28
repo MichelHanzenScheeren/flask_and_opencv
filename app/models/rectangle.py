@@ -1,5 +1,5 @@
 from threading import Lock
-import cv2.cv2 as cv2
+from app.models.my_opencv import MyOpencv
 
 class Rectangle():
     def __init__(self):
@@ -38,6 +38,12 @@ class Rectangle():
         with self.lock_drawing:
             return ((self.x_initial != 0 or self.x_final != 0) 
             and (self.y_initial != 0 or self.y_final))
+    
+
+    def draw_rectangle(self, frame):
+        if self.is_valid_rectangle():
+            MyOpencv.draw_rectangle(frame, self.initial_xy(), self.final_xy())
+        return frame
 
 
     def initial_xy(self):

@@ -80,7 +80,7 @@ class Webcam():
 
     def webcans_list(self):
         return MyOpencv.webcans_list(self.webcam_port)
-    
+
 
     def change_current_webcam(self, index):
         try:
@@ -132,13 +132,13 @@ class Webcam():
     def get_uploaded_image(self):
         with self.lock_uploaded_image:
             copy = self.uploaded_image.copy()
-        return self.convert_to_bytes(self.draw_rectangle_on_image(copy))
+        return self.convert_to_bytes(self.rectangle.draw_rectangle(copy))
     
 
     def get_webcam_image(self):
         frame = self.new_frame() if self.can_get_frame() else self.black_image()
         self.set_output_frame(frame.copy())
-        return self.convert_to_bytes(self.draw_rectangle_on_image(frame))
+        return self.convert_to_bytes(self.rectangle.draw_rectangle(frame))
     
 
     def can_get_frame(self):
@@ -148,14 +148,7 @@ class Webcam():
     def set_output_frame(self, frame):
         with self.lock_frame:
             self.output_frame = frame
-    
 
-    def draw_rectangle_on_image(self, frame):
-        if self.rectangle.is_valid_rectangle():
-            cv2.rectangle(img = frame, color = (0, 0, 255), thickness = 1,
-                pt1 = self.rectangle.initial_xy(), pt2 = self.rectangle.final_xy())
-        return frame
-    
 
     def convert_to_bytes(self, image):
         return self.encode_to_jpg(image).tobytes()
