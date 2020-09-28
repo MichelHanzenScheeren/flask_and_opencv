@@ -3,6 +3,7 @@ import cv2.cv2 as cv2
 import numpy
 import time
 from app.models.rectangle import Rectangle
+from app.models.my_opencv import MyOpencv
 
 
 class Webcam():
@@ -45,7 +46,7 @@ class Webcam():
 
     def start_video_stream(self):
         with self.lock_video_stream:
-            self.video_stream = cv2.VideoCapture(self.webcam_port) #, cv2.CAP_DSHOW
+            self.video_stream = MyOpencv.new_stream(self.webcam_port)
 
 
     def define_resolution(self):
@@ -65,6 +66,7 @@ class Webcam():
         return {"style": f"height:{h}px;min-height:{h}px;width:{w}px;min-width:{w}px;",
             "success": success, "current": self.webcam_port}
     
+
     def new_frame(self):
         with self.lock_video_stream:
             success, frame = self.video_stream.read()
@@ -77,18 +79,8 @@ class Webcam():
     
 
     def webcans_list(self):
-        list_webcans, index = [], 0
-        while True:
-            if index == self.webcam_port:
-                list_webcans.append(index)
-            else:
-                video = cv2.VideoCapture(index)
-                if video is None or not video.isOpened():
-                    break
-                list_webcans.append(index)
-            index += 1
-        return list_webcans
-
+        return MyOpencv.webcans_list(self.webcam_port)
+    
 
     def change_current_webcam(self, index):
         try:
