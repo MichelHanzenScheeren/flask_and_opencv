@@ -27,7 +27,7 @@ class Results():
 
     def get_differentiator_image(self):
         try:
-            jpg_image = image_pack.encode_to_jpg(self.differentiator_image)
+            jpg_image = ImagePack.encode_to_jpg(self.differentiator_image)
             return b64encode(jpg_image)
         except:
             return ''
@@ -42,10 +42,10 @@ class Results():
 
     def encode_all_images(self):
         encoded = PyZip()
-        encoded["diferenciador.jpg"] = image_pack.convert_to_bytes(self.differentiator_image)
+        encoded["diferenciador.jpg"] = ImagePack.convert_to_bytes(self.differentiator_image)
         for i in range(0, len(self.captures_images)):
             image = self.captures_images[i]
-            encoded[f"captura_{i + 1}.jpg"] = image_pack.convert_to_bytes(image)
+            encoded[f"captura_{i + 1}.jpg"] = ImagePack.convert_to_bytes(image)
         return b64encode(encoded.to_bytes())
 
 
