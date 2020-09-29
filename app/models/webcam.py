@@ -1,7 +1,7 @@
 import time
 from app.models.rectangle import Rectangle
 from app.models.video_capture import VideoCapture
-from app.models.my_opencv import MyOpencv
+from app.models.image_pack import ImagePack
 from app.models.frame import Frame
 
 
@@ -29,7 +29,7 @@ class Webcam():
         for index in range(100):
             if index == self.current_port:
                 continue
-            if not MyOpencv.is_valid_webcam(index):
+            if not ImagePack.is_valid_webcam(index):
                 break
             list_webcans.append(index)
         list_webcans.insert(self.current_port, self.current_port)
@@ -70,7 +70,7 @@ class Webcam():
                 copy = self.get_webcam_image()
             return self.draw_and_convert_frame(copy)
         except:
-            return MyOpencv.convert_to_bytes(MyOpencv.black_image())
+            return ImagePack.convert_to_bytes(ImagePack.black_image())
     
 
     def get_webcam_image(self):
@@ -81,7 +81,7 @@ class Webcam():
 
     def draw_and_convert_frame(self, copy):
         drawed_image = self.rectangle.draw_rectangle(copy)
-        return MyOpencv.convert_to_bytes(drawed_image)
+        return ImagePack.convert_to_bytes(drawed_image)
 
 
     def get_differentiator_image(self):
@@ -111,8 +111,8 @@ class Webcam():
     def _save_uploaded_image(self, image):
         if image is None:
             return
-        frame = MyOpencv.convert_to_frame(image)
-        new_image = MyOpencv.resize_image(frame, self.video_capture.get_video_dimensions())
+        frame = ImagePack.convert_to_frame(image)
+        new_image = ImagePack.resize_image(frame, self.video_capture.get_video_dimensions())
         self.uploaded_frame.set_frame(new_image)
     
 

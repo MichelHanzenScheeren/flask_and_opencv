@@ -1,5 +1,5 @@
 from threading import Lock
-from app.models.my_opencv import MyOpencv
+from app.models.image_pack import ImagePack
 
 
 class Frame:
@@ -22,7 +22,7 @@ class Frame:
 
     def is_valid(self):
         with self._lock:
-            return MyOpencv.validate_image(self._frame)
+            return ImagePack.validate_image(self._frame)
     
 
     def clear(self):

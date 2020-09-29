@@ -1,5 +1,5 @@
 from threading import Lock
-from app.models.my_opencv import MyOpencv
+from app.models.image_pack import ImagePack
 
 class Rectangle():
     def __init__(self):
@@ -42,7 +42,7 @@ class Rectangle():
 
     def draw_rectangle(self, frame):
         if self.is_valid_rectangle():
-            MyOpencv.draw_rectangle(frame, self.initial_xy(), self.final_xy())
+            ImagePack.draw_rectangle(frame, self.initial_xy(), self.final_xy())
         return frame
 
 

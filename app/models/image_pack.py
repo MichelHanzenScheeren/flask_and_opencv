@@ -2,7 +2,7 @@ import cv2.cv2 as cv2
 import numpy
 
 
-class MyOpencv():
+class ImagePack():
 
     @staticmethod
     def new_stream(port):
@@ -11,7 +11,7 @@ class MyOpencv():
 
     @staticmethod
     def is_valid_webcam(test_port):
-        video = MyOpencv.new_stream(test_port)
+        video = ImagePack.new_stream(test_port)
         return not (video is None or not video.isOpened())
         
 
@@ -24,7 +24,7 @@ class MyOpencv():
 
     @staticmethod
     def convert_to_bytes(image):
-        return MyOpencv.encode_to_jpg(image).tobytes()
+        return ImagePack.encode_to_jpg(image).tobytes()
 
 
     @staticmethod

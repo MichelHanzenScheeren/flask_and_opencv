@@ -1,5 +1,5 @@
 from threading import Lock
-from app.models.my_opencv import MyOpencv
+from app.models.image_pack import ImagePack
 
 class VideoCapture:
     def __init__(self):
@@ -27,7 +27,7 @@ class VideoCapture:
 
     def start_video_stream(self, port):
         with self.lock_video:
-            self.video_capture = MyOpencv.new_stream(port)
+            self.video_capture = ImagePack.new_stream(port)
 
 
     def define_resolution(self):
@@ -61,14 +61,14 @@ class VideoCapture:
     def capture_frame(self):
         if(self.is_working() and self.is_valid()):
             return self._do_capture()
-        return MyOpencv.black_image()
+        return ImagePack.black_image()
     
 
     def _do_capture(self):
         with self.lock_video:
             success, frame = self.video_capture.read()
         self.set_working_state(success)
-        return frame if success else MyOpencv.black_image()
+        return frame if success else ImagePack.black_image()
 
     def change(self, new_port):
         try:
