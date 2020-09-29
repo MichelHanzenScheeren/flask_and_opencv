@@ -12,14 +12,14 @@ def configure(app):
             webcam.init_webcam()
             return render_template("index.html", page="index", 
                 frame_status=webcam.video_status(), webcans_list=webcam.webcans_list())
-        except Exception as erro:
-            print(erro)
+        except Exception as exception:
+            print(exception)
             return redirect(url_for('error'))
 
 
     @app.route("/play_webcam")
     def play_webcam():
-        return Response(webcam.generate(), mimetype='multipart/x-mixed-replace; boundary=frame')
+        return Response(webcam.generate_images(), mimetype='multipart/x-mixed-replace; boundary=frame')
 
 
     @app.route("/upload_image", methods = ['POST'])

@@ -25,7 +25,15 @@ class Webcam():
     
 
     def webcans_list(self):
-        return MyOpencv.webcans_list(self.current_port)
+        list_webcans = []
+        for index in range(100):
+            if index == self.current_port:
+                continue
+            if not MyOpencv.is_valid_webcam(index):
+                break
+            list_webcans.append(index)
+        list_webcans.insert(self.current_port, self.current_port)
+        return list_webcans
 
 
     def change_current_webcam(self, index):
@@ -39,16 +47,19 @@ class Webcam():
         return index is None or (type(index) is not int) or index < 0
 
 
-    def generate(self):
+    def generate_images(self):
         try:
-            FRAME_RATE, previous = 0.1, 0
-            while True:
-                img = self.get_image()
-                if (time.time() - previous) > (FRAME_RATE):
-                    previous = time.time()
-                    yield(b'--frame\r\nContent-Type:image/jpeg\r\n\r\n' + img + b'\r\n\r\n')
-        except:
-            pass
+            yield from self._generate_images()
+        except Exception as exception:
+            print(exception)
+    
+    def _generate_images(self):
+        FRAME_RATE, previous = 0.1, 0
+        while True:
+            img = self.get_image()
+            if (time.time() - previous) > (FRAME_RATE):
+                previous = time.time()
+                yield(b'--frame\r\nContent-Type:image/jpeg\r\n\r\n' + img + b'\r\n\r\n')
     
 
     def get_image(self):
@@ -69,8 +80,8 @@ class Webcam():
     
 
     def draw_and_convert_frame(self, copy):
-        drawed_immage = self.rectangle.draw_rectangle(copy)
-        return MyOpencv.convert_to_bytes(drawed_immage)
+        drawed_image = self.rectangle.draw_rectangle(copy)
+        return MyOpencv.convert_to_bytes(drawed_image)
 
 
     def get_differentiator_image(self):

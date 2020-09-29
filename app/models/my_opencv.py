@@ -10,19 +10,10 @@ class MyOpencv():
     
 
     @staticmethod
-    def webcans_list(current_port):
-        list_webcans = []
-        index = 0
-        while True:
-            if index == current_port:
-                list_webcans.append(index)
-            else:
-                video = MyOpencv.new_stream(index)
-                if video is None or not video.isOpened():
-                    break
-                list_webcans.append(index)
-            index += 1
-        return list_webcans
+    def is_valid_webcam(test_port):
+        video = MyOpencv.new_stream(test_port)
+        return not (video is None or not video.isOpened())
+        
 
 
     @staticmethod
