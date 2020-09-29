@@ -50,14 +50,15 @@ def configure(app):
     @app.route('/get_differentiator', methods=['POST'])
     def get_differentiator():
         analyze.clear()
-        return analyze.get_differentiator(webcam)
+        return analyze.calculate_differentiator(webcam.get_differentiator_image)
 
 
     @app.route('/start_analysis', methods=['POST'])
     def start_analysis():
         try:
             time, qtd, desc = request.form['time'],request.form['qtd'],request.form["description"]
-            analyze.start_analyze(time, qtd, desc, webcam)
+            analyze.start_analyze(time, qtd, desc, webcam.get_differentiator_image)
+            webcam.clear()
             return redirect(url_for('results'))
         except:
             return redirect(url_for('error'))

@@ -87,7 +87,7 @@ class Webcam():
     def get_differentiator_image(self):
         if(self.uploaded_frame.is_valid()):
             return self.crop_uploaded_image()
-        return self.selected_rectangle_image()
+        return self.get_drawed_image()
     
 
     def crop_uploaded_image(self):
@@ -96,7 +96,7 @@ class Webcam():
         return self.rectangle.crop_image(copy)
 
 
-    def selected_rectangle_image(self):
+    def get_drawed_image(self):
         copy = self.captured_frame.get_copy()
         return self.rectangle.crop_image(copy)
     

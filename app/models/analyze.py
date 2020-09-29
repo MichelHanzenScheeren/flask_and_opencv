@@ -8,15 +8,16 @@ class Analyze():
         self.results = Results()
     
 
-    def get_differentiator(self, webcam):
+    def calculate_differentiator(self, get_differentiator_image):
         try:
-            return self._get_differentiator(webcam)
-        except:
+            return self._calculate_differentiator(get_differentiator_image)
+        except Exception as exception:
+            print(exception)
             return ''
     
 
-    def _get_differentiator(self, webcam):
-        image = webcam.get_differentiator_image()
+    def _calculate_differentiator(self, get_differentiator_image):
+        image = get_differentiator_image()
         self.results.differentiator_image = image
         result = self.calculate_average(image)
         self.results.differentiator = result
@@ -27,19 +28,18 @@ class Analyze():
         return image.mean(axis=0).mean(axis=0)
 
 
-    def start_analyze(self, total_time, captures_seg, description, webcam):
+    def start_analyze(self, total_time, captures_seg, description, get_drawed_image):
         if (total_time.isdigit() and captures_seg.isdigit()):
             self.results.initialize(int(total_time), int(captures_seg), description)
-            self.save_analyze_frames(webcam)
+            self.save_analyze_frames(get_drawed_image)
             self.do_analyze()
             self.calculate_signal()
-            webcam.clear()
     
 
-    def save_analyze_frames(self, webcam):
+    def save_analyze_frames(self, get_drawed_image):
         repetitions = int(self.results.total_time * self.results.captures_seg)
         for _ in range(0, repetitions):
-            image = webcam.selected_rectangle_image()
+            image = get_drawed_image()
             self.results.captures_images.append(image)
             sleep(self.results.interval)
 
