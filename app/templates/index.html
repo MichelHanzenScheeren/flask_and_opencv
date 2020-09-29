@@ -10,7 +10,7 @@
                 <div class="col mx-0 pl-0 pr-3 my-0 py-0">
                     <select id="selectCurrentWebcam" class="selectpicker selectpicker-sm" style="min-width:104px;">
                         {% for value in webcans_list %}
-                            {% if value == frame_status["current"] %}
+                            {% if value == video_status["current"] %}
                                 <option selected value="{{ value }}"> Webcam {{ value + 1 }} </option>
                             {% else %}
                                 <option value="{{ value }}"> Webcam {{ value + 1 }} </option>

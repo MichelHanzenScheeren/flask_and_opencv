@@ -11,7 +11,7 @@ def configure(app):
         try:
             webcam.init_webcam()
             return render_template("index.html", page="index", 
-                frame_status=webcam.video_status(), webcans_list=webcam.webcans_list())
+                video_status=webcam.video_status(), webcans_list=webcam.webcans_list())
         except Exception as exception:
             print(exception)
             return redirect(url_for('error'))
