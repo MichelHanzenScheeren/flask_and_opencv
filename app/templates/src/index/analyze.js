@@ -44,7 +44,7 @@ function failedToGetDifferentiator() {
   body = `Infelizmente, não conseguimos calcular o diferenciador. 
       Por favor, verifique a solicitação e tente novamente...
       Se isso não funcionar, tente recarregar a página.`
-  complement = `<button type="button" class="btn btn-lg btn-block btn-dark" onclick="location.reload(true);">
+  complement = `<button type="button" class="btn btn-lg btn-block btn-dark" onclick="location.reload();">
       Atualizar página </button>`
   showMessage(title, body, complement, true);
 }

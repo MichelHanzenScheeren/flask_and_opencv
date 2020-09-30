@@ -43,5 +43,11 @@ def configure_routes(app, webcam):
   @app.route('/change_current_webcam/<int:index_webcam>', methods = ['POST'])
   def change_current_webcam(index_webcam=None):
     return webcam.change_current_webcam(index_webcam)
+  
+
+  @app.route('/teste', methods = ['POST'])
+  def teste():
+    print("DEU CERTOO")
+    return ''
 
 

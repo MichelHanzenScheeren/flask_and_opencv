@@ -1,8 +1,11 @@
 
 window.addEventListener('pageshow', function(_) {
-  if(performance.navigation.type == 2) {
-    location.reload(true);
-  }
+  try {
+    const entries = performance.getEntriesByType("navigation");
+    if(entries.map(nav => nav.type)[0] == "back_forward") {
+      location.reload();
+    }
+  } catch (_) {}
 }); // Atualizar pagina quando voltar dos resultados (para ativar webcam)
 
 (() => {
@@ -28,7 +31,7 @@ function messageInvalidWebcam() {
   title = 'Problemas para configurar sua webcam &#128533;'
   body = `Infelizmente, não conseguimos obter imagens da sua webcam. 
       Por favor, verifique se a mesma está instalada e disponível para uso...`
-  complement = `<button type="button" class="btn btn-lg btn-block btn-dark" onclick="location.reload(true);">
+  complement = `<button type="button" class="btn btn-lg btn-block btn-dark" onclick="location.reload();">
       Tentar novamente </button>`
   showMessage(title, body, complement);
 }
