@@ -4,6 +4,6 @@ from app.controllers import controller
 
 def create_app():
     app = Flask(__name__)
-    controller.configure(app)
+    controller.configure_routes(app)
     return app
 
