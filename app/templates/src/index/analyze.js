@@ -1,15 +1,7 @@
 (() => {
   document.getElementById('getDifferentiatorButton').setAttribute('onclick', 'getDifferentiator()');
-  document.getElementById('startAnalyzeButton').setAttribute('onclick', 'configAnalyze()');
+  document.getElementById('analyzeForm').setAttribute('onsubmit', 'configAnalyze()');
 }) () // Função auto-executada
-
-function configAnalyze() {
-  document.getElementById('getDifferentiatorButton').disabled = true;
-  document.getElementById('refreshRectangleButton').disabled = true;
-  document.getElementById('clearRectangleButton').disabled = true;
-  document.getElementById('div1').style.display = 'none';
-  document.getElementById('div2').style.display = 'block';
-}
 
 async function getDifferentiator(){
   try {
@@ -47,6 +39,15 @@ function failedToGetDifferentiator() {
   complement = `<button type="button" class="btn btn-lg btn-block btn-dark" onclick="location.reload();">
       Atualizar página </button>`
   showMessage(title, body, complement, true);
+}
+
+function configAnalyze() {
+  document.getElementById('getDifferentiatorButton').disabled = true;
+  document.getElementById('refreshRectangleButton').disabled = true;
+  document.getElementById('clearRectangleButton').disabled = true;
+  document.getElementById('div1').style.display = 'none';
+  document.getElementById('div2').style.display = 'block';
+  return false;
 }
 
 
