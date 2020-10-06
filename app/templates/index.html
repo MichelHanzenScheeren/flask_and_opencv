@@ -1,110 +1,109 @@
 {% extends '_layout.html' %}
 
 {% block content %}
-    <div class="row h-100 py-4 px-4 align-items-center justify-content-center">
-        <div class="px-4 mb-2" id="div-items-left">
-            <div class="row justify-content-between align-items-center mb-2">
-                <img id="frameImg" draggable="false" class="img-fluid rounded" src="{{ url_for('play_webcam') }}">
-            </div>
-            <div class="row justify-content-between align-items-center">
-                <div class="col mx-0 pl-0 pr-3 my-0 py-0">
-                    <select id="selectCurrentWebcam" class="selectpicker selectpicker-sm" style="min-width:104px;">
-                        {% for value in webcans_list %}
-                            {% if value == video_status["current"] %}
-                                <option selected value="{{ value }}"> Webcam {{ value + 1 }} </option>
-                            {% else %}
-                                <option value="{{ value }}"> Webcam {{ value + 1 }} </option>
-                            {% endif %}
-                        {% endfor %}
-                    </select>
-                </div>
-                <div class="col mx-0 px-0 my-0 py-0">
-                    <label style="margin-bottom:0rem;">X1:</label>
-                    <input id="x1" type="number" style="width:3em;" value="0" min="0">
-                </div>
-                <div class="col mx-0 px-0 my-0 py-0">
-                    <label style="margin-bottom:0rem;">Y1:</label>
-                    <input id="y1" type="number" style="width:3em;" value="0" min="0">
-                </div>
-                <div class="col mx-0 px-0 my-0 py-0">
-                    <label style="margin-bottom:0rem;">X2:</label>
-                    <input id="x2" type="number" style="width:3em;" value="0" min="0">
-                </div>
-                <div class="col mx-0 px-0 my-0 py-0">
-                    <label style="margin-bottom:0rem;">Y2:</label>
-                    <input id="y2" type="number" style="width:3em;" value="0" min="0">
-                </div>
-                <div class="col  mx-0 px-1 my-0 py-0">
-                    <button id="refreshRectangleButton" type="button" class="btn btn-dark btn-sm btn-block"><span class="fa fa-refresh"></span></button>
-                </div>
-                <div class="col mx-0 pr-0 pl-1 my-0 py-0">
-                    <button id="clearRectangleButton" type="button" class="btn btn-dark btn-sm btn-block"><span class="fa fa-trash"></span></button>
-                </div>
-            </div>
+  <div class="row h-100 py-4 px-4 align-items-center justify-content-center">
+    <div class="px-4 mb-2" id="div-items-left">
+      <div class="row justify-content-between align-items-center mb-2">
+        <img id="frameImg" draggable="false" class="img-fluid rounded" src="{{ url_for('play_webcam') }}">
+      </div>
+      <div class="row justify-content-between align-items-center">
+        <div class="col mx-0 pl-0 pr-3 my-0 py-0">
+          <select id="selectCurrentWebcam" class="selectpicker selectpicker-sm" style="min-width:104px;">
+            {% for value in webcans_list %}
+              {% if value == video_status["current"] %}
+                <option selected value="{{ value }}"> Webcam {{ value + 1 }} </option>
+              {% else %}
+                <option value="{{ value }}"> Webcam {{ value + 1 }} </option>
+              {% endif %}
+            {% endfor %}
+          </select>
         </div>
-        <div class="col-xl h-100 mb-2" style="min-height: 520px;" id="div-items-rigth">
-            <div class="row h-100 align-items-top">
-                <div class="col-md h-100 mx-2 border border-dark rounded p-3">
-                    <form enctype="multipart/form-data">
-                        <div class="custom-file">
-                            <label class="custom-file-label" id="uploadImageLabel" for="uploadImageInput">Escolher imagem local</label>
-                            <input type="file" id="uploadImageInput" class="custom-file-input"accept="image/png,image/jpeg" multiple="false">
-                        </div>
-                    </form>
-                    <button id="getDifferentiatorButton" class="btn btn-md btn-block btn-dark text-white mt-2 mb-1">Obter diferenciador</button>
-                    <label class="mt-2 mb-1 my-text">Dados obtidos:</label>
-                    <div id="red" class="alert alert-danger alert-lg mb-2" role="alert">Aguardando...</div>
-                    <div id="green" class="alert alert-success mb-2" role="alert">Aguardando...</div>
-                    <div id="blue" class="alert alert-primary mb-1" role="alert"> Aguardando... </div>
-                    <label class="mt-2 mb-2 my-text">Diferenciador:</label><br>
-                    <div class="mx-1 row align-items-center justify-content-center">
-                        <img id="differentiatorImage" src="{{ url_for('static', filename='files/clock.jpg') }}" class="my-img" draggable="false">
-                    </div>
-                </div>
-                <div class="col-md h-100 mx-2 border border-dark rounded ">
-                    <h4 class="mt-3">Análise</h4>
-                    <form action="start_analysis" method="POST">
-                        <div class="form-row">
-                            <div class="col form-group my-3">
-                                <label for="time" class="control-label my-text-secondary">Tempo (seg)</label>
-                                <input name="time" class="form-control" type="number" value="5" min="1"/>
-                            </div>
-                        </div>
-                        <div class="form-row">
-                            <div class="col form-group my-2">
-                                <label for="qtd" class="control-label my-text-secondary">Nº capturas/seg</label>
-                                <input name="qtd" class="form-control" type="number" value="1" min="1"/>
-                            </div>
-                        </div>
-                        <div class="form-row">
-                            <div class="col form-group my-2">
-                                <label for="description" class="control-label  my-text-secondary">Descrição (opcional)</label>
-                                <textarea name="description" class="form-control my-textarea mb-3" maxlength="500" rows="5"></textarea>
-                            </div>
-                        </div>
-                        <div id="div1">
-                            <input disabled id="startAnalyzeButton" type="submit" value="INICIAR" class="btn btn-lg btn-block btn-success">
-                        </div>
-                        <div id="div2" style="display:none">
-                            <button type="button" disabled class="btn btn-lg btn-block btn-warning">
-                                <span class="spinner-border spinner-border-lg" role="status" aria-hidden="true"></span>
-                                &nbsp; ANALISANDO...
-                            </button>
-                        </div>
-                    </form>
-                </div>
-            </div>
+        <div class="col mx-0 px-0 my-0 py-0">
+          <label style="margin-bottom:0rem;">X1:</label>
+          <input id="x1" type="number" style="width:3em;" value="0" min="0">
         </div>
+        <div class="col mx-0 px-0 my-0 py-0">
+          <label style="margin-bottom:0rem;">Y1:</label>
+          <input id="y1" type="number" style="width:3em;" value="0" min="0">
+        </div>
+        <div class="col mx-0 px-0 my-0 py-0">
+          <label style="margin-bottom:0rem;">X2:</label>
+          <input id="x2" type="number" style="width:3em;" value="0" min="0">
+        </div>
+        <div class="col mx-0 px-0 my-0 py-0">
+          <label style="margin-bottom:0rem;">Y2:</label>
+          <input id="y2" type="number" style="width:3em;" value="0" min="0">
+        </div>
+        <div class="col  mx-0 px-1 my-0 py-0">
+          <button id="refreshRectangleButton" type="button" class="btn btn-dark btn-sm btn-block"><span class="fa fa-refresh"></span></button>
+        </div>
+        <div class="col mx-0 pr-0 pl-1 my-0 py-0">
+          <button id="clearRectangleButton" type="button" class="btn btn-dark btn-sm btn-block"><span class="fa fa-trash"></span></button>
+        </div>
+      </div>
     </div>
-
+    <div class="col-xl h-100 mb-2" style="min-height: 520px;" id="div-items-rigth">
+      <div class="row h-100 align-items-top">
+        <div class="col-md h-100 mx-2 border border-dark rounded p-3">
+          <form enctype="multipart/form-data">
+            <div class="custom-file">
+              <label class="custom-file-label" id="uploadImageLabel" for="uploadImageInput">Escolher imagem local</label>
+              <input type="file" id="uploadImageInput" class="custom-file-input"accept="image/png,image/jpeg" multiple="false">
+            </div>
+          </form>
+          <button id="getDifferentiatorButton" class="btn btn-md btn-block btn-dark text-white mt-2 mb-1">Obter diferenciador</button>
+          <label class="mt-2 mb-1 my-text">Dados obtidos:</label>
+          <div id="red" class="alert alert-danger alert-lg mb-2" role="alert">Aguardando...</div>
+          <div id="green" class="alert alert-success mb-2" role="alert">Aguardando...</div>
+          <div id="blue" class="alert alert-primary mb-1" role="alert"> Aguardando... </div>
+          <label class="mt-2 mb-2 my-text">Diferenciador:</label><br>
+          <div class="mx-1 row align-items-center justify-content-center">
+            <img id="differentiatorImage" src="{{ url_for('static', filename='files/clock.jpg') }}" class="my-img" draggable="false">
+          </div>
+        </div>
+          <div class="col-md h-100 mx-2 border border-dark rounded ">
+            <h4 class="mt-3">Análise</h4>
+            <form action="start_analysis" method="POST">
+              <div class="form-row">
+                <div class="col form-group my-3">
+                  <label for="time" class="control-label my-text-secondary">Tempo (seg)</label>
+                  <input name="time" class="form-control" type="number" value="5" min="1"/>
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="col form-group my-2">
+                  <label for="qtd" class="control-label my-text-secondary">Nº capturas/seg</label>
+                  <input name="qtd" class="form-control" type="number" value="1" min="1"/>
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="col form-group my-2">
+                  <label for="description" class="control-label  my-text-secondary">Descrição (opcional)</label>
+                  <textarea name="description" class="form-control my-textarea mb-3" maxlength="500" rows="5"></textarea>
+                </div>
+              </div>
+              <div id="div1">
+                  <input disabled id="startAnalyzeButton" type="submit" value="INICIAR" class="btn btn-lg btn-block btn-success">
+              </div>
+              <div id="div2" style="display:none">
+                <button type="button" disabled class="btn btn-lg btn-block btn-warning">
+                  <span class="spinner-border spinner-border-lg" role="status" aria-hidden="true"></span>
+                    &nbsp; ANALISANDO...
+                </button>
+              </div>
+            </form>
+          </div>
+      </div>
+    </div>
+  </div>
 {% endblock%}
 
 {% block scripts %}
-    <script type="">
-        {% include 'src/index/webcam.js' %}
-        {% include 'src/index/rectangle.js' %}
-        {% include 'src/index/load_image.js' %}
-        {% include 'src/index/analyze.js' %}
-    </script>
+  <script type="">
+    {% include 'src/index/webcam.js' %}
+    {% include 'src/index/rectangle.js' %}
+    {% include 'src/index/load_image.js' %}
+    {% include 'src/index/analyze.js' %}
+  </script>
 {% endblock%}
 
