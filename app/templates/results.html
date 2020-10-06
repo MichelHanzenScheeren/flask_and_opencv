@@ -36,6 +36,12 @@
         </div>
       </div>
     </div>
+    <div class="mt-4">
+      <div class="panel-heading">
+        <h4 class="pl-3">Gráfico dos Sinais</h4>
+      </div>
+      <div id="lineChartDiv"></div>
+    </div>
     <div id="differentiator_table" class="mt-4">
       <div class="panel-heading">
         <h4 class="pl-3">Diferenciador</h4>
@@ -67,6 +73,7 @@
         <table class="table table-hover table-bordered">
           <thead class="table-dark"> 
             <tr>
+              <th scope="col"> Nº captura </th>
               <th scope="col"> Tempo (seg) </th>
               <th scope="col"> Vermelho </th>
               <th scope="col"> Verde </th>
@@ -77,7 +84,8 @@
             <tbody class="bg-white">
               {% for index in range(results.captures|length) %}
                 <tr>
-                  <td class="text-black"> {{  ((index + 1) * results.interval)|round(2) }}</td>
+                  <td class="text-black"> {{ (index + 1) }} </td>
+                  <td class="text-black"> {{ ((index + 1) * results.interval)|round(2) }}</td>
                   <td class="text-danger"> {{ results.captures[index][2]|round(3) }}</td>
                   <td class="text-success"> {{ results.captures[index][1]|round(3) }}</td>
                   <td class="text-info"> {{ results.captures[index][0]|round(3) }}</td>
@@ -87,12 +95,6 @@
             </tbody>
         </table> 
       </div>
-    </div>
-    <div class="mt-4">
-      <div class="panel-heading">
-        <h4 class="pl-3">Gráfico dos Sinais</h4>
-      </div>
-      <div id="lineChartDiv"></div>
     </div>
     <div style="height: 50px;"></div>
   </div>
