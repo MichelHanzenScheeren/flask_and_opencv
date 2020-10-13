@@ -50,7 +50,8 @@ class VideoCapture:
       h, w = self.get_video_dimensions()
       _ = self.capture_frame() # Necessário para verificação do funcionamento
       success = self.is_working()
-    return (h, w, success)
+    return {'style': f'height:{h}px;min-height:{h}px;width:{w}px;min-width:{w}px;',
+        'success': success}
   
 
   def get_video_dimensions(self):
@@ -73,7 +74,7 @@ class VideoCapture:
 
   def change(self, new_port):
     try:
-      _change_video(new_port)
+      return self._change_video(new_port)
     except:
       return ''
   
