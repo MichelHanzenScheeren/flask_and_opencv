@@ -13,7 +13,7 @@ def configure_routes(app, webcam, analyze):
     try:
       form = request.form
       time, qtd, description = form['time'], form['qtd'], form['description']
-      analyze.start_analyze(time, qtd, description, webcam.get_differentiator_image)
+      analyze.start_analyze(time, qtd, description, webcam.get_drawed_image)
       webcam.clear()
       return redirect(url_for('results'))
     except:
