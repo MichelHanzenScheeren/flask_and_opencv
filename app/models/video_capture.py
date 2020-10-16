@@ -92,21 +92,12 @@ class VideoCapture:
 
   def change(self, new_port):
     try:
-      return self._change_video(new_port)
+      self.turn_off()
+      self.start_video(new_port)
+      return self.video_status()
     except:
       return ''
-  
 
-  def _change_video(self, new_port):
-    with self.lock_video:
-      to_free = self.video_capture
-      self.video_capture = None
-    free_thread = self.thread
-    self.start_video(new_port)
-    to_free.release()
-    free_thread.join()
-    return self.video_status()
-  
 
   def turn_off(self):
     self.set_working_state(False)
