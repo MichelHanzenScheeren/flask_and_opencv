@@ -17,7 +17,7 @@ def configure_routes(app, webcam):
 
   @app.route('/play_webcam')
   def play_webcam():
-    return Response(webcam.generate_images(), mimetype='multipart/x-mixed-replace; boundary=frame')
+    return Response(webcam.stream_webcam(), mimetype='multipart/x-mixed-replace; boundary=frame')
 
 
   @app.route('/upload_image', methods = ['POST'])

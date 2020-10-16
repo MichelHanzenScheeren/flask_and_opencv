@@ -28,18 +28,18 @@ class Analyze():
     return image.mean(axis=0).mean(axis=0)
 
 
-  def start_analyze(self, total_time, captures_seg, description, get_drawed_image):
+  def start_analyze(self, total_time, captures_seg, description, get_cropped_image):
     if (total_time.isdigit() and captures_seg.isdigit()):
       self.results.initialize(int(total_time), int(captures_seg), description)
-      self.save_analyze_frames(get_drawed_image)
+      self.save_analyze_frames(get_cropped_image)
       self.do_analyze()
       self.calculate_signal()
   
 
-  def save_analyze_frames(self, get_drawed_image):
+  def save_analyze_frames(self, get_cropped_image):
     repetitions = int(self.results.total_time * self.results.captures_seg)
     for _ in range(0, repetitions):
-      image = get_drawed_image()
+      image = get_cropped_image()
       self.results.captures_images.append(image)
       sleep(self.results.interval)
 

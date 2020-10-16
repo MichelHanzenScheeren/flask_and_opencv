@@ -3,16 +3,17 @@ from app.models.rectangle import Rectangle
 from app.models.video_capture import VideoCapture
 from app.models.image_pack import ImagePack
 from app.models.frame import Frame
+from time import sleep
 
 
 class Webcam():
   def __init__(self):
     self.current_port = 0
     self.rectangle = Rectangle()
-    self.video_capture = VideoCapture()
-    self.captured_frame = Frame()
     self.uploaded_frame = Frame()
-  
+    self.captured_frame = Frame()
+    self.video_capture = VideoCapture(self.captured_frame.set_frame)
+
 
   def init_webcam(self):
     self.video_capture.start_video(self.current_port)
@@ -47,38 +48,35 @@ class Webcam():
     return index is None or (type(index) is not int) or index < 0
 
 
-  def generate_images(self):
+  def stream_webcam(self):
     try:
-      yield from self._generate_images()
+      while True:
+        img = self.get_image()
+        yield(b'--frame\r\nContent-Type:image/jpeg\r\n\r\n' + img + b'\r\n\r\n')
+        sleep(0.1)
     except Exception as exception:
       print(exception)
   
 
-  def _generate_images(self):
-    FRAME_RATE, previous = 0.1, 0
-    while True:
-      img = self.get_image()
-      if (time.time() - previous) > (FRAME_RATE):
-        previous = time.time()
-        yield(b'--frame\r\nContent-Type:image/jpeg\r\n\r\n' + img + b'\r\n\r\n')
-  
+  # def _generate_images(self):
+  #       FRAME_RATE, previous = 0.1, 0
+  #   while True:
+  #     img = self.get_image()
+  #     if (time.time() - previous) > (FRAME_RATE):
+  #       previous = time.time()
+  #       yield(b'--frame\r\nContent-Type:image/jpeg\r\n\r\n' + img + b'\r\n\r\n')
+    
 
   def get_image(self):
     try:
       if(self.uploaded_frame.is_valid()):
         copy = self.uploaded_frame.get_copy()
       else:
-        copy = self.get_webcam_image()
+        copy = self.captured_frame.get_copy()
       return self.draw_and_convert_frame(copy)
     except:
       return ImagePack.convert_to_bytes(ImagePack.black_image())
-  
 
-  def get_webcam_image(self):
-    frame = self.video_capture.capture_frame()
-    self.captured_frame.set_frame(frame.copy())
-    return frame
-  
 
   def draw_and_convert_frame(self, copy):
     drawed_image = self.rectangle.draw_rectangle(copy)
@@ -88,7 +86,7 @@ class Webcam():
   def get_differentiator_image(self):
     if(self.uploaded_frame.is_valid()):
       return self.crop_uploaded_image()
-    return self.get_drawed_image()
+    return self.get_cropped_image()
   
 
   def crop_uploaded_image(self):
@@ -97,7 +95,7 @@ class Webcam():
     return self.rectangle.crop_image(copy)
 
 
-  def get_drawed_image(self):
+  def get_cropped_image(self):
     copy = self.captured_frame.get_copy()
     return self.rectangle.crop_image(copy)
   
@@ -110,8 +108,6 @@ class Webcam():
   
 
   def _save_uploaded_image(self, image):
-    if image is None:
-      return
     frame = ImagePack.convert_to_frame(image)
     video_dimensions = self.video_capture.get_video_dimensions()
     new_image = ImagePack.resize_image(frame, video_dimensions)
@@ -130,3 +126,5 @@ class Webcam():
 
   def __del__(self):
     self.video_capture.turn_off()
+    self.clear_rectangle_and_uploaded_image()
+

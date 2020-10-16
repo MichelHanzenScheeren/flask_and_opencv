@@ -1,18 +1,21 @@
-from threading import Lock
+from threading import Lock, Thread
 from app.models.image_pack import ImagePack
 
 class VideoCapture:
-  def __init__(self):
+  def __init__(self, set_frame):
+    self.set_frame = set_frame
     self._is_working = True
     self.video_capture = None
     self.lock_video = Lock()
+    self.thread = None
   
 
   def start_video(self, port):
-    if not self.is_valid() or not self.is_working():
+    if not self.is_working() or not self.is_valid():
       self.start_video_stream(port)
-      self.define_resolution()
       self.set_working_state(True)
+      self.start_thread()
+      self.define_resolution()
   
 
   def is_valid(self):
@@ -28,7 +31,22 @@ class VideoCapture:
   def start_video_stream(self, port):
     with self.lock_video:
       self.video_capture = ImagePack.new_stream(port)
+  
 
+  def start_thread(self):
+    self.thread = Thread(target=self.capture_webcam_image, daemon=True)
+    self.thread.start()
+  
+
+  def capture_webcam_image(self):
+    while self.is_working():
+      try:
+        frame = self.capture_frame()
+        self.set_frame(frame)
+      except Exception as erro:
+        print(erro)
+        continue
+  
 
   def define_resolution(self):
     with self.lock_video:
@@ -83,8 +101,10 @@ class VideoCapture:
     with self.lock_video:
       to_free = self.video_capture
       self.video_capture = None
+    free_thread = self.thread
     self.start_video(new_port)
     to_free.release()
+    free_thread.join()
     return self.video_status()
   
 
@@ -93,3 +113,8 @@ class VideoCapture:
       if self.video_capture:
         self.video_capture.release()
         self.video_capture = None
+    self.set_working_state(False)
+    if(self.thread != None and self.thread.is_alive()):
+      self.thread.join()
+      self.thread = None
+
