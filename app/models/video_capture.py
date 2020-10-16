@@ -109,12 +109,10 @@ class VideoCapture:
   
 
   def turn_off(self):
+    self.set_working_state(False)
     with self.lock_video:
       if self.video_capture:
         self.video_capture.release()
         self.video_capture = None
-    self.set_working_state(False)
-    if(self.thread != None and self.thread.is_alive()):
-      self.thread.join()
-      self.thread = None
+    self.thread = None
 
