@@ -1,5 +1,6 @@
 from threading import Lock, Thread
 from app.models.image_pack import ImagePack
+from time import sleep
 
 class VideoCapture:
   def __init__(self, set_frame):
@@ -43,6 +44,7 @@ class VideoCapture:
       try:
         frame = self.capture_frame()
         self.set_frame(frame)
+        sleep(0.04)
       except Exception as erro:
         print(erro)
         continue

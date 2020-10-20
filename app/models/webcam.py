@@ -1,4 +1,3 @@
-import time
 from app.models.rectangle import Rectangle
 from app.models.video_capture import VideoCapture
 from app.models.image_pack import ImagePack
@@ -53,7 +52,7 @@ class Webcam():
       while True:
         img = self.get_image()
         yield(b'--frame\r\nContent-Type:image/jpeg\r\n\r\n' + img + b'\r\n\r\n')
-        sleep(0.1)
+        sleep(0.04)
     except Exception as exception:
       print(exception)
   
