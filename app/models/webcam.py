@@ -58,15 +58,6 @@ class Webcam():
       print(exception)
   
 
-  # def _generate_images(self):
-  #       FRAME_RATE, previous = 0.1, 0
-  #   while True:
-  #     img = self.get_image()
-  #     if (time.time() - previous) > (FRAME_RATE):
-  #       previous = time.time()
-  #       yield(b'--frame\r\nContent-Type:image/jpeg\r\n\r\n' + img + b'\r\n\r\n')
-    
-
   def get_image(self):
     try:
       if(self.uploaded_frame.is_valid()):
