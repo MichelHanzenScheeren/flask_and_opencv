@@ -2,7 +2,7 @@ from app.models.rectangle import Rectangle
 from app.models.video_capture import VideoCapture
 from app.models.image_pack import ImagePack
 from app.models.frame import Frame
-from time import sleep
+import time
 
 
 class Webcam():
@@ -47,12 +47,23 @@ class Webcam():
     return index is None or (type(index) is not int) or index < 0
 
 
+  # def stream_webcam(self):
+  #   try:
+  #     while True:
+  #       img = self.get_image()
+  #       yield(b'--frame\r\nContent-Type:image/jpeg\r\n\r\n' + img + b'\r\n\r\n')
+  #       sleep(0.04)
+  #   except Exception as exception:
+  #     print(exception)
+
   def stream_webcam(self):
     try:
+      FRAME_RATE, previous = 0.04, 0
       while True:
-        img = self.get_image()
-        yield(b'--frame\r\nContent-Type:image/jpeg\r\n\r\n' + img + b'\r\n\r\n')
-        sleep(0.04)
+        if (time.time() - previous) >= FRAME_RATE:
+          img = self.get_image()
+          yield(b'--frame\r\nContent-Type:image/jpeg\r\n\r\n' + img + b'\r\n\r\n')
+          previous = time.time()
     except Exception as exception:
       print(exception)
   

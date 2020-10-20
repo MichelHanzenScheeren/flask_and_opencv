@@ -1,3 +1,4 @@
+import time
 from threading import Lock, Thread
 from app.models.image_pack import ImagePack
 
@@ -39,13 +40,15 @@ class VideoCapture:
   
 
   def capture_webcam_image(self):
-    while self.is_working():
-      try:
-        frame = self.capture_frame()
-        self.set_frame(frame)
-      except Exception as erro:
-        print(erro)
-        continue
+    try:
+      FRAME_RATE, previous = 0.04, 0
+      while self.is_working():
+        if (time.time() - previous) >= FRAME_RATE:
+          frame = self.capture_frame()
+          self.set_frame(frame)
+          previous = time.time()
+    except Exception as erro:
+      print(erro)
   
 
   def define_resolution(self):
