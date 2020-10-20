@@ -95,8 +95,12 @@ class VideoCapture:
 
   def change(self, new_port):
     try:
-      self.turn_off()
-      self.start_video(new_port)
+      with self.lock_video:
+        to_dispose = self.video_capture
+        self.video_capture = ImagePack.new_stream(new_port)
+        self._is_working = True
+      self.define_resolution()
+      to_dispose.release()
       return self.video_status()
     except:
       return ''
