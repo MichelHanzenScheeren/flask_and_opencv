@@ -62,7 +62,7 @@ class Webcam():
       while True:
         if (time.time() - previous) >= FRAME_RATE:
           img = self.get_image()
-          yield(b'--frame\r\nContent-Type:image/jpeg\r\n\r\n' + img + b'\r\n\r\n')
+          yield(b'--frame\r\nContent-Type:image/jpeg\r\n\r\n' + bytearray(img) + b'\r\n\r\n')
           previous = time.time()
     except Exception as exception:
       print(exception)
@@ -76,12 +76,12 @@ class Webcam():
         copy = self.captured_frame.get_copy()
       return self.draw_and_convert_frame(copy)
     except:
-      return ImagePack.convert_to_bytes(ImagePack.black_image())
+      return ImagePack.encode_to_jpg(ImagePack.black_image())
 
 
   def draw_and_convert_frame(self, copy):
     drawed_image = self.rectangle.draw_rectangle(copy)
-    return ImagePack.convert_to_bytes(drawed_image)
+    return ImagePack.encode_to_jpg(drawed_image)
 
 
   def get_differentiator_image(self):
