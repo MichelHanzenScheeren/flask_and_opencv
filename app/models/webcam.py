@@ -47,15 +47,6 @@ class Webcam():
     return index is None or (type(index) is not int) or index < 0
 
 
-  # def stream_webcam(self):
-  #   try:
-  #     while True:
-  #       img = self.get_image()
-  #       yield(b'--frame\r\nContent-Type:image/jpeg\r\n\r\n' + img + b'\r\n\r\n')
-  #       sleep(0.04)
-  #   except Exception as exception:
-  #     print(exception)
-
   def stream_webcam(self):
     try:
       FRAME_RATE, previous = 0.04, 0
