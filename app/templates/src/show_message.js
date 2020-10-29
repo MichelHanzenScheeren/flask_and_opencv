@@ -1,3 +1,7 @@
+function clearMessage() {
+  $('#my-toast').remove();
+}
+
 function showMessage(title = '', body = '', complement = '', autohide = false) {
   let message = ` <div id="my-toast" data-autohide="${autohide}" data-delay="4000" class="toast my-toast" role="alert" aria-live="assertive" aria-atomic="true">
     <div class="toast-header bg-warning">
@@ -11,7 +15,7 @@ function showMessage(title = '', body = '', complement = '', autohide = false) {
       ${complement}
     </div>
   </div>`
-  $('#my-toast').remove();
+  clearMessage();
   $('body').append(message);
   $('#my-toast').toast('show');
 }
