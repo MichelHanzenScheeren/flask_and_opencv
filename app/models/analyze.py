@@ -29,12 +29,20 @@ class Analyze():
 
 
   def start_analyze(self, total_time, captures_seg, description, get_cropped_image):
-    if (total_time.isdigit() and captures_seg.isdigit()):
+    if (self.form_is_valid(total_time, captures_seg)):
       self.results.initialize(int(total_time), int(captures_seg), description)
       self.save_analyze_frames(get_cropped_image)
       self.do_analyze()
       self.calculate_signal()
+    else:
+      raise Exception('Formulário inválido!')
   
+
+  def form_is_valid(self, time, captures):
+    is_digit = time.isdigit() and captures.isdigit()
+    valid_range = int(time) >= 1 and int(captures) >= 1 and int(captures) <= 10
+    return is_digit and valid_range
+
 
   def save_analyze_frames(self, get_cropped_image):
     repetitions = int(self.results.total_time * self.results.captures_seg)
