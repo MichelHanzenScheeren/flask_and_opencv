@@ -14,14 +14,15 @@ try {
         label: 'Sinal',
         data: chartData,
         pointBackgroundColor: 'rgba(52, 58, 64, 1)',
-        backgroundColor: 'rgba(52, 58, 64, 0.5)',
+        borderColor: 'rgba(52, 58, 64, 0.7)',
         lineTension: 0,
+        fill: false,
       }],
     },
     options: {
       scales: {
-        xAxes: [{scaleLabel: {...options, labelString: 'Tempo(seg)'}}],
-        yAxes: [{scaleLabel: {...options, labelString: 'Sinal'}}],
+        xAxes: [{scaleLabel: {...options, labelString:'Tempo(seg)'}}],
+        yAxes: [{scaleLabel:{...options, labelString:'Sinal'}}],
       }
     }
   };
