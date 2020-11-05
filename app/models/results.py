@@ -73,10 +73,10 @@ class Results():
   
 
   def captures_info(self):
-    title = ['Capturas', '', '', '', '']
-    table_headers = ['Tempo (segundos)', 'Vermelho', 'Verde', 'Azul', 'Sinal']
-    information = [title, table_headers]
+    title = ['Capturas', '', '', '', '', '']
+    header = ['Nº Captura', 'Tempo (segundos)', 'Vermelho', 'Verde', 'Azul', 'Sinal']
+    information = [title, header]
     for i, value in enumerate(self.captures):
-      new_data = [(i + 1) * self.interval, value[2], value[1], value[0], self.signals[i]]
-      information.append(new_data)
+      row = [i+1, (i+1)*self.interval, value[2], value[1], value[0], self.signals[i]]
+      information.append(row)
     return information
