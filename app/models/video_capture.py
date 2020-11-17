@@ -56,6 +56,7 @@ class VideoCapture:
       if(self.video_capture.get(3) != 640 or self.video_capture.get(4) != 480):
         self.video_capture.set(3, 640)
         self.video_capture.set(4, 480)
+      print(f'\nRESOLUÇÃO: {self.video_capture.get(4):.0f}X{self.video_capture.get(3):.0f}')
   
 
   def set_working_state(self, condition = True):
