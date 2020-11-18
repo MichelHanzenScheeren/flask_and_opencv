@@ -88,7 +88,7 @@ class VideoCapture:
   
 
   def capture_frame(self):
-    """ Método chamado pela Thread para capturar o frame. sempre retorna uma imagem no padrão OpenCV (ndarray).
+    """ Método chamado pela Thread para capturar o frame. Sempre retorna uma imagem no padrão OpenCV (ndarray).
     
     Se _is_working for true e a webcam atual é valida, captura um frame. 
     Caso contrário, retorna uma imagem padrão setada para preto.
