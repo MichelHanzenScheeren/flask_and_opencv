@@ -55,7 +55,7 @@ class Webcam():
   
 
   def _generate_images(self):
-    FRAME_RATE, previous = 0.04, 0
+    FRAME_RATE, previous = 0.1, 0
     while True:
       img = self.get_image()
       if (time.time() - previous) > (FRAME_RATE):
