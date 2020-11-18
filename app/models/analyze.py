@@ -42,10 +42,7 @@ class Analyze():
 
 
   def calculate_average(self, image):
-    """ Método que calcula a média de cores de um frame recebido como parâmetro. 
-    
-    Retorna uma lista de double no padrão [B, G, R].
-    """
+    """ Calcula a média de cores de um frame recebido como parâmetro. Retorna uma lista no padrão [B, G, R]. """
     return image.mean(axis=0).mean(axis=0)
 
 
