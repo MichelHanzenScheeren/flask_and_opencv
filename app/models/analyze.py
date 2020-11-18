@@ -4,11 +4,22 @@ from app.models.results import Results
 
 
 class Analyze():
+  """ Clase que encapsula todos os processos de análise das capturas.
+
+  Aqui que são obtidas as médias das cores do diferenciador e capturas.
+  Também é feito o calculo dos sinais a partir dos resultados anteriores.
+  Os resultados em si são salvos na classe Results.
+  """
   def __init__(self):
     self.results = Results()
   
 
   def calculate_differentiator(self, get_differentiator_image):
+    """ Método que Calcula a média BGR (padrão OpenCV) dos pixels do diferenciador.
+    
+    Se tudo correr bem, retorna os resultados obtidos como uma lista [R, G, B].
+    Se algum erro ocorrer, retorna uma string vazia.
+    """
     try:
       return self._calculate_differentiator(get_differentiator_image)
     except Exception as exception:
@@ -17,6 +28,12 @@ class Analyze():
   
 
   def _calculate_differentiator(self, get_differentiator_image):
+    """ Método que efetivamente salva a imagem do diferenciador e calcula sua média de cores dos pixels.
+    
+    'get_differentiator_image' é um método da classe Webcam que retorna uma imagem padrão OpenCV (ndarray)
+    A imagem do diferenciador pode tanto ser fruto de um upload do usuário quanto o frame atual capturado no diferenciador.
+    Os resultados são salvos como uma lista BGR ([B, G, R]) e retornados como uma lista [R, G, B].
+    """
     image = get_differentiator_image()
     self.results.differentiator_image = image
     result = self.calculate_average(image)
@@ -25,10 +42,21 @@ class Analyze():
 
 
   def calculate_average(self, image):
+    """ Método que calcula a média de cores de um frame recebido como parâmetro. 
+    
+    Retorna uma lista de double no padrão [B, G, R].
+    """
     return image.mean(axis=0).mean(axis=0)
 
 
   def start_analyze(self, total_time, captures_seg, description, get_cropped_image):
+    """ Método que inicia a análise propriamente dita, onde serão salvas as capturas de acordo com os parâmetros recebidos.
+    
+    'total_time' é um valor inteiro > 0 que corresponde ao tempo total da análise (em segundos).
+    'captures_seg' é um inteiro 0 < X < 10 que indica quantas capturas devem ser feitas a cada segundo de análise.
+    'description' é uma string opcional que descreve o análise, exibida na página de resultados e salva no xlsx gerado.
+    'get_cropped_image' é um método da classe Webcam que retorna o frame atual da webcam recortado e em formato ndarray.
+    """
     if (self.form_is_valid(total_time, captures_seg)):
       self.results.initialize(int(total_time), int(captures_seg), description)
       self.save_analyze_frames(get_cropped_image)
@@ -39,12 +67,18 @@ class Analyze():
   
 
   def form_is_valid(self, time, captures):
+    """ Verifica se os valores recebidos são válidos para a análise. """
     is_digit = time.isdigit() and captures.isdigit()
     valid_range = int(time) >= 1 and int(captures) >= 1 and int(captures) <= 10
     return is_digit and valid_range
 
 
   def save_analyze_frames(self, get_cropped_image):
+    """" Método que salva os frames correspondentes a captura.
+    
+    O sleep garante que a relação tempo total e intervalo entre capturas seja seguido.
+    Nenhum retorno.
+    """
     repetitions = int(self.results.total_time * self.results.captures_seg)
     for _ in range(0, repetitions):
       image = get_cropped_image()
@@ -53,12 +87,17 @@ class Analyze():
 
 
   def do_analyze(self):
+    """ Método em que são calculadas as médias de cores de cada captura salva. """
     for image in self.results.captures_images:
       average = self.calculate_average(image)
       self.results.captures.append(average)
 
 
   def calculate_signal(self):
+    """ Método em que os sinais são calculados. 
+    
+    Um 'sinal' é a distância vetorial entre a média de cores de uma captura e a média de cores do diferenciador.
+    """
     differentiator = self.results.differentiator
     for capture in self.results.captures:
       signal = sqrt(
