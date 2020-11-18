@@ -78,6 +78,7 @@ class Webcam():
     O frame atual pode ser o de um upload ou o obtido da webcam.
     O retorno particionado é graças ao yield (tipo de retorno especial do python3). 
     A imagem é retornada em bits e no formato jpeg.
+    Variáveis 'FRAME_RATE' e 'previous' garantem que cada resposta terá um intervalo de pelo menos 0.04 segundos (+/- 25fps) 
     """
     try:
       FRAME_RATE, previous = 0.04, 0
@@ -132,7 +133,7 @@ class Webcam():
     copy = self.uploaded_frame.get_copy()
     self.uploaded_frame.clear()
     return self.rectangle.crop_image(copy)
-
+  
 
   def get_cropped_image(self):
     """ Obtêm e retorna o último frame capturado pela webcam. 
