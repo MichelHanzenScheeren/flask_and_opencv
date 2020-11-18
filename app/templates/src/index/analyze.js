@@ -1,6 +1,6 @@
 (() => {
   document.getElementById('getDifferentiatorButton').setAttribute('onclick', 'getDifferentiator()');
-  document.getElementById('analyzeForm').setAttribute('onsubmit', 'configAnalyze()');
+  document.getElementById('startAnalyzeButton').setAttribute('onclick', 'validateToAnalyze()');
 }) () // Função auto-executada
 
 async function getDifferentiator(){
@@ -41,13 +41,36 @@ function failedToGetDifferentiator() {
   showMessage(title, body, complement, true);
 }
 
+function validateToAnalyze() {
+  try {
+    var stringTempo = document.getElementById('timeInput').value;
+    var stringQtd = document.getElementById('qtdInput').value;
+    var tempo = parseInt(stringTempo);
+    var qtd = parseInt(stringQtd);
+    if(tempo != stringTempo ||  tempo < 1) {
+      var body = 'Tempo deve ser um valor inteiro maior do que 0.';
+      showMessage('Preenchimento inválido', body);
+    } else if (qtd != stringQtd || qtd < 1 || qtd > 10) {
+      var body = 'Nº de capturas deve ser um valor inteiro maior do que 0 e menor do que 11.';
+      showMessage('Preenchimento inválido', body);
+    } else {
+      clearMessage();
+      configAnalyze();
+      document.getElementById('analyzeForm').submit();
+    }
+  } catch (error) {
+    var title = 'Não foi possível completar a solicitação.';
+    var body = 'Por favor, verifique o preenchimento do formulário e tente novamente';
+    showMessage(title, body);
+  }
+}
+
 function configAnalyze() {
   document.getElementById('getDifferentiatorButton').disabled = true;
   document.getElementById('refreshRectangleButton').disabled = true;
   document.getElementById('clearRectangleButton').disabled = true;
   document.getElementById('div1').style.display = 'none';
   document.getElementById('div2').style.display = 'block';
-  return false;
 }
 
 

@@ -1,40 +1,123 @@
-from threading import Lock
+import time
+from threading import Lock, Thread
 from app.models.image_pack import ImagePack
 
+
+PADRONIZED_WIDTH = 640 # largura padrão usada na webcam 
+PADRONIZED_HEIGHT = 480 # altura padrão usada na webcam
+WIDTH_INDEX = 3
+HEIGHT_INDEX = 4 
+
+
 class VideoCapture:
-  def __init__(self):
-    self._is_working = True
-    self.video_capture = None
-    self.lock_video = Lock()
+  """ Classe que encapsula a lógica de obtenção dos frames da webcam a partir da classe VideoCapture da biblioteca OpenCV.
+
+  Uma Thread é usada para gerenciar as capturas e garantir que sejam feitas mesmo durante a análise. 
+  Um Lock também é usado, para garantir que condições de concorrência não ocorram.
+  """
+
+
+  def __init__(self, set_frame):
+    self.set_frame = set_frame # Este será o método usado para salvar o novo frame obtido na classe correspondente.
+    self._is_working = True # Controle interno para decidir se a Thread deve continuar executando (falso caso a captura do frame falhe)
+    self.video_capture = None # Instância da classe VideoCapture, da biblioteca OpenCV.
+    self.lock_video = Lock() # Lock usado para garantir que condições de corrida não ocorram.
+    self.thread = None # Armazena a Thread atual que gerencia a captura dos frames
   
 
   def start_video(self, port):
-    if not self.is_valid() or not self.is_working():
+    """ Método que valida e inicializa a Thread e a captura dos frames da webcam.
+
+    A verificação incial garante que a Thread e a webcam só serão iniciadas se outras não estejam em execução.
+    """
+    if not self.is_working() or not self.is_valid():
       self.start_video_stream(port)
-      self.define_resolution()
       self.set_working_state(True)
+      self.start_thread()
+      self.define_resolution()
   
 
   def is_valid(self):
+    """ Retorna true caso a variável video_capture seja diferente de None e uma captura esteja aberta (webcam em uso). """
     with self.lock_video:
       return self.video_capture and self.video_capture.isOpened()
   
 
   def is_working(self):
+    """ Retorna o valor de _is_working, true por padrão caso nenhum erro ocorra ao capturar frames da webcam. """
     with self.lock_video:
       return self._is_working
   
 
   def start_video_stream(self, port):
+    """ Método que efetivamente cria a instância de VideoCapture da biblioteca OpenCv.
+
+    O método recebe um inteiro correspondente a porta que será usada pela webcam (inicialmente a porta 0).
+    Nenhum retorno.
+    """
     with self.lock_video:
       self.video_capture = ImagePack.new_stream(port)
+  
 
+  def start_thread(self):
+    """ Método responsável por iniciar a Thread que fará a captura dos frames da webcam.
+
+    'target' é a função que ele executará assim que iniciar.
+    'daemon' setado como true significa que a thread será finalizada automaticamente se o programa principal for finalizado.
+    """
+    self.thread = Thread(target=self.capture_webcam_image, daemon=True)
+    self.thread.start()
+  
+
+  def capture_webcam_image(self):
+    """ Executado apenas pela Thread. Faz a captura dos frames da webcam e os salva na classe correspondenete pelo método set_frame.
+
+    'FRAME_RATE' e 'previous' garantem que as capturas terão um intervalo de pelo menos 0.04 segundos (+/- 25fps: 1seg/0.04).
+    Esse controle foi adicionado para evitar excesso de processamento do raspberry.
+    Sem ele, o raspberry não dava conta das capturas. 
+    """
+    try:
+      FRAME_RATE, previous = 0.04, 0
+      while self.is_working():
+        if (time.time() - previous) >= FRAME_RATE:
+          frame = self.capture_frame()
+          self.set_frame(frame)
+          previous = time.time()
+    except Exception as erro:
+      print(erro)
+  
+
+  def capture_frame(self):
+    """ Método chamado pela Thread para capturar o frame. Sempre retorna uma imagem no padrão OpenCV (ndarray).
+    
+    Se _is_working for true e a webcam atual é valida, captura um frame. 
+    Caso contrário, retorna uma imagem padrão setada para preto.
+    """
+    if(self.is_working() and self.is_valid()):
+      return self._do_capture()
+    return ImagePack.black_image()
+  
+
+  def _do_capture(self):
+    """ Método que efetivamente faz a captura do frame. Sempre retorna uma imagem no padrão OpenCV (ndarray). """
+    with self.lock_video:
+      success, frame = self.video_capture.read()
+    self.set_working_state(success)
+    return frame if success else ImagePack.black_image()
+  
 
   def define_resolution(self):
+    """ Padroniza a resolução da imagem, independente da webcam utilizada. Padrão é de 480X640 (height X width).
+
+    O parâmetro WIDTH_INDEX (3) diz respeito a largura da imagem (width).
+    O parâmetro HEIGHT_INDEX (4) diz respeito a altura da imagem (height).
+    Está no planejamento permitir o aumento da resolução, mas a webcam do laboratório tinha resolução máxima 480X640.
+    """
     with self.lock_video:
-      if(self.video_capture.get(3) != 640 or self.video_capture.get(4) != 480):
-        self.video_capture.set(3, 640)
-        self.video_capture.set(4, 480)
+      if(self.video_capture.get(WIDTH_INDEX) != PADRONIZED_WIDTH or self.video_capture.get(HEIGHT_INDEX) != PADRONIZED_HEIGHT):
+        self.video_capture.set(WIDTH_INDEX, PADRONIZED_WIDTH)
+        self.video_capture.set(HEIGHT_INDEX, PADRONIZED_HEIGHT)
+      print(f'\n#RESOLUÇÃO: {self.video_capture.get(HEIGHT_INDEX):.0f}X{self.video_capture.get(WIDTH_INDEX):.0f}')
   
 
   def set_working_state(self, condition = True):
@@ -43,53 +126,47 @@ class VideoCapture:
   
 
   def video_status(self):
+    """ Retorna a resolução da webcam, padronizado para uso no front-end (tamanho do container que vai exibir as imagens). """
     if not self.is_valid():
-      h, w, success = (480, 640, False)
+      h, w, success = (PADRONIZED_HEIGHT, PADRONIZED_WIDTH, False)
       self.set_working_state(False)
     else:
       h, w = self.get_video_dimensions()
-      _ = self.capture_frame() # Necessário para verificação do funcionamento
+      self.capture_frame() # Necessário para captura do primeiro frame e verificação do funcionamento
       success = self.is_working()
-    return {'style': f'height:{h}px;min-height:{h}px;width:{w}px;min-width:{w}px;',
-        'success': success}
+    return {'style': f'height:{h}px;min-height:{h}px;width:{w}px;min-width:{w}px;','success': success}
   
 
   def get_video_dimensions(self):
+    """ Retorna a resolução da webcam, uma tupla de inteiros na forma (height, width). """
     with self.lock_video:
-      return (int(self.video_capture.get(4)), int(self.video_capture.get(3)))
-  
-
-  def capture_frame(self):
-    if(self.is_working() and self.is_valid()):
-      return self._do_capture()
-    return ImagePack.black_image()
-  
-
-  def _do_capture(self):
-    with self.lock_video:
-      success, frame = self.video_capture.read()
-    self.set_working_state(success)
-    return frame if success else ImagePack.black_image()
+      return (int(self.video_capture.get(HEIGHT_INDEX)), int(self.video_capture.get(WIDTH_INDEX)))
 
 
   def change(self, new_port):
+    """ Método encarregado de liberar o video atual e inicializar uma nova webcam a partir da porta recebida por parâmetro. 
+    
+    O parâmetro recebido deve ser um inteiro maior ou igual a zero.
+    Caso o processo seja um sucesso, retorna a resolução da webcam.
+    Caso algo falhe, retorna uma string vazia.
+    """
     try:
-      return self._change_video(new_port)
+      with self.lock_video:
+        to_dispose = self.video_capture
+        self.video_capture = ImagePack.new_stream(new_port)
+        self._is_working = True
+      self.define_resolution()
+      to_dispose.release()
+      return self.video_status()
     except:
       return ''
-  
 
-  def _change_video(self, new_port):
-    with self.lock_video:
-      to_free = self.video_capture
-      self.video_capture = None
-    self.start_video(new_port)
-    to_free.release()
-    return self.video_status()
-  
 
   def turn_off(self):
+    """ Método encarregado de parar a Thread e liberar a webcam. """
+    self.set_working_state(False)
     with self.lock_video:
       if self.video_capture:
         self.video_capture.release()
         self.video_capture = None
+    self.thread = None
