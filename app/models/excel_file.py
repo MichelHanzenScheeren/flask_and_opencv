@@ -77,8 +77,8 @@ class ExcelFile():
     my_chart.style = 16
     my_chart.y_axis.title = 'Sinal'
     my_chart.x_axis.title = 'Tempo (segundos)'
-    x_values = Reference(self.spreadsheet, min_col=1, min_row=row_count - len(captures_info), max_row=row_count - 3)
-    y_values = Reference(self.spreadsheet, min_col=5, min_row=row_count - len(captures_info) - 1, max_row=row_count - 3)
+    x_values = Reference(self.spreadsheet, min_col=2, min_row=row_count - len(captures_info), max_row=row_count - 3)
+    y_values = Reference(self.spreadsheet, min_col=6, min_row=row_count - len(captures_info) - 1, max_row=row_count - 3)
     series = Series(y_values, x_values, title_from_data=True)
     my_chart.series.append(series)
     my_chart.width = 23

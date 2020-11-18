@@ -22,8 +22,8 @@ try {
     options: {
       responsive: true,
       scales: {
-        yAxes: [{scaleLabel: {...options, labelString:'Tempo(seg)'}}],
-        xAxes: [{scaleLabel:{...options, labelString:'Sinal'}}],
+        yAxes: [{scaleLabel: {...options, labelString:'Sinal'}}],
+        xAxes: [{scaleLabel:{...options, labelString:'Tempo (segundos)'}}],
       }
     }
   };
