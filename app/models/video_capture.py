@@ -10,7 +10,7 @@ HEIGHT_INDEX = 4
 
 
 class VideoCapture:
-  """ Classe que encapsula a lógica de obtenção dos frames da webcam a partir da classe Videoapture da biblioteca OpenCV.
+  """ Classe que encapsula a lógica de obtenção dos frames da webcam a partir da classe VideoCapture da biblioteca OpenCV.
 
   Uma Thread é usada para gerenciar as capturas e garantir que sejam feitas mesmo durante a análise. 
   Um Lock também é usado, para garantir que condições de concorrência não ocorram.
