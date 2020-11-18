@@ -6,15 +6,22 @@ from pyzip import PyZip
 
 
 class Results():
+  """ Classe criada para encapsular todos os resultados da análise para que sejam enviados ao front-end. 
+  
+  Também é responsável por recuperar e formatar imagens da análise, bem como criar o arquivo xlsx.
+  """
+  
+
   def __init__(self):
-    self.differentiator = []
-    self.captures = [] 
-    self.signals = []
-    self.captures_images = []
-    self.differentiator_image = None
+    self.differentiator = [] # Armazena a lista BGR [Blue, Green, Red] correspondente a média de cores da imagem do diferenciador.
+    self.captures = [] # Lista de listas dos resultados da média de cores das capturas [[Blue, Green, Red], [Blue, Green, Red], ...].
+    self.signals = [] # Lista de sinais obtidos na análise. [sinal1, sinal2, ...].
+    self.captures_images = [] # Lista de imagens das capturas.
+    self.differentiator_image = None # imagenm do diferenciador.
   
 
   def initialize(self, total_time, captures_seg, description):
+    """ Método executado para salva os primeiros valores da análise e garanir que vestígios de uma análise anterior sejam limpos. """
     self.initial_date = datetime.now().strftime('%d/%m/%Y %H:%M:%S')
     self.total_time = total_time
     self.captures_seg = captures_seg
@@ -26,6 +33,11 @@ class Results():
 
 
   def get_differentiator_image(self):
+    """ Recupera a imagem do diferenciador e a formata para ser retornada ao front-end. 
+    
+    Se nenhum erro ocorrer, retorna uma imagem em formato JPG codificada em bytes na base64.
+    Se um erro ocorrer, retorna uma string vazia.
+    """
     try:
       jpg_image = ImagePack.encode_to_jpg(self.differentiator_image)
       return b64encode(jpg_image)
@@ -34,6 +46,11 @@ class Results():
 
 
   def get_all_images(self):
+    """ Recupera as imagens das capturas e as formata para serem retornadas ao front-end. 
+    
+    Se nenhum erro ocorrer, retorna um json com imagens em formato JPG codificadas em bytes na base64.
+    Se um erro ocorrer, retorna uma string vazia.
+    """
     try:
       return self.encode_all_images()
     except:
@@ -50,6 +67,7 @@ class Results():
 
 
   def get_xlsx_results(self):
+    """ Cria e retorna um arquivo xlsx com os resultados da análise. """
     try:
       file = ExcelFile(title = 'Resultados')
       return file.create(self.general_info(), self.differentiator_info(), self.captures_info())
@@ -58,6 +76,7 @@ class Results():
   
 
   def general_info(self):
+    """ Reúne e retorna uma lista de listas com titulos e informações gerais da análise. """
     title = ['Informações Gerais', '', '', '', '']
     headers = ['Data', 'Duração', 'Capturas', 'Total', 'Descrição']
     content = [self.initial_date, f'{self.total_time} segundos', f'{self.captures_seg} cap./seg.']
@@ -66,6 +85,7 @@ class Results():
   
 
   def differentiator_info(self):
+    """ Reúne titulos e os resultados do diferenciador em uma lista de listas. """
     title = ['Diferenciador', '', '']
     headers = ['Vermelho', 'Verde', 'Azul']
     content = [self.differentiator[2], self.differentiator[1], self.differentiator[0]]
@@ -73,6 +93,7 @@ class Results():
   
 
   def captures_info(self):
+    """ Reúne titulos e os resultados das capturas em uma lista de listas. """
     title = ['Capturas', '', '', '', '', '']
     header = ['Nº Captura', 'Tempo (segundos)', 'Vermelho', 'Verde', 'Azul', 'Sinal']
     information = [title, header]
