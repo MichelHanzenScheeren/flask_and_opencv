@@ -22,7 +22,7 @@ class Results():
 
   def initialize(self, total_time, captures_seg, description):
     """ Método executado para salva os primeiros valores da análise e garanir que vestígios de uma análise anterior sejam limpos. """
-    self.initial_date = datetime.now().strftime('%d/%m/%Y %H:%M:%S')
+    self.initial_date = datetime.now().strftime('%d-%m-%Y %H:%M:%S')
     self.total_time = total_time
     self.captures_seg = captures_seg
     self.interval = (1 / self.captures_seg)
@@ -101,3 +101,11 @@ class Results():
       row = [i+1, (i+1)*self.interval, value[2], value[1], value[0], self.signals[i]]
       information.append(row)
     return information
+  
+
+  def saveNewAnalyzeDate(self, newDate):
+    try:
+      self.initial_date = datetime.strptime(newDate, '%d-%m-%Y %H:%M:%S').strftime('%d-%m-%Y %H:%M:%S');
+      return '';
+    except:
+      return 'Formato Inválido'

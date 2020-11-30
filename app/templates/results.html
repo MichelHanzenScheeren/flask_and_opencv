@@ -7,8 +7,8 @@
       <div class="container">
         <div class="row"> 
           <div class="col-md card p-3 bg-white"> 
-            <h5 class="card-title"> Início da análise </h5> 
-            <p class="card-text"> {{ results.initial_date }} </p>
+            <h5 class="card-title"> Início da análise </h5>
+            <input type="text" class="form-control bg-white" id="myDatetimePicker" value="{{ results.initial_date }}" onchange="saveNewDate()" readonly>
           </div> 
           <div class="col-md card p-3 bg-white"> 
             <h5 class="card-title"> Duração </h5> 
@@ -100,11 +100,15 @@
 {% endblock%}
 
 {% block scripts %}
-  <script src="{{ url_for('static', filename='js/chartjs.min.js') }}"></script>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap-datetimepicker.min.css') }}"> <!-- Biblioteca necessária para o DateTime Picker -->
+  <script src="{{ url_for('static', filename='js/moment.min.js') }}"></script> <!-- Biblioteca necessária para o DateTime Picker -->
+  <script src="{{ url_for('static', filename='js/bootstrap-datetimepicker.min.js') }}"></script> <!-- Biblioteca necessária para o DateTime Picker -->
+  <script src="{{ url_for('static', filename='js/chartjs.min.js') }}"></script>  <!-- Biblioteca para construção do gráfico -->
   <script type="">
-    var signals = {{ results.signals|tojson }};
-    var interval = {{ results.interval|round(2) }};
+    {% include 'src/results/my_datetime_picker.js' %}
     {% include 'src/results/signals_chart.js' %}
     {% include 'src/results/generate_files.js' %}
+    registerDatetimePicker(format = 'D-M-YYYY HH:mm:ss');
+    drawChart(signals = {{ results.signals|tojson }}, interval = {{ results.interval|round(2) }});
   </script>
 {% endblock%}

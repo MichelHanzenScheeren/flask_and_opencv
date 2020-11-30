@@ -46,3 +46,8 @@ def configure_routes(app, webcam, analyze):
     content_type = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
     headers = {'content-type': content_type, 'format': 'base64', 'file-name': 'resultados.xlsx'}
     return Response(analyze.results.get_xlsx_results(), headers = headers)
+
+  @app.route('/saveNewAnalyzeDate', methods=['POST'])
+  @app.route('/saveNewAnalyzeDate/<string:newDate>', methods=['POST'])
+  def saveNewAnalyzeDate(newDate = None):
+    return analyze.results.saveNewAnalyzeDate(newDate)
