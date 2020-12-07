@@ -20,9 +20,12 @@ class Results():
     self.differentiator_image = None # imagenm do diferenciador.
   
 
-  def initialize(self, total_time, captures_seg, description):
+  def initialize(self, total_time, captures_seg, description, select_date, user_date):
     """ Método executado para salva os primeiros valores da análise e garanir que vestígios de uma análise anterior sejam limpos. """
-    self.initial_date = datetime.now().strftime('%d-%m-%Y %H:%M:%S')
+    if(select_date == 'user'): 
+      self.initial_date = datetime.strptime(user_date, '%d-%m-%Y %H:%M:%S').strftime('%d-%m-%Y %H:%M:%S')
+    else:
+      self.initial_date = datetime.now().strftime('%d-%m-%Y %H:%M:%S')
     self.total_time = total_time
     self.captures_seg = captures_seg
     self.interval = (1 / self.captures_seg)
