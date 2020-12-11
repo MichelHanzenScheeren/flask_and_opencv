@@ -46,7 +46,7 @@ class Analyze():
     return image.mean(axis=0).mean(axis=0)
 
 
-  def start_analyze(self, total_time, captures_seg, description, get_cropped_image):
+  def start_analyze(self, total_time, captures_seg, description, select_date, user_date, get_cropped_image):
     """ Método que inicia a análise propriamente dita, onde serão salvas as capturas de acordo com os parâmetros recebidos.
     
     'total_time' é um valor inteiro > 0 que corresponde ao tempo total da análise (em segundos).
@@ -55,7 +55,7 @@ class Analyze():
     'get_cropped_image' é um método da classe Webcam que retorna o frame atual da webcam recortado e em formato ndarray.
     """
     if (self.form_is_valid(total_time, captures_seg)):
-      self.results.initialize(int(total_time), int(captures_seg), description)
+      self.results.initialize(int(total_time), int(captures_seg), description, select_date, user_date)
       self.save_analyze_frames(get_cropped_image)
       self.do_analyze()
       self.calculate_signal()

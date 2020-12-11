@@ -71,6 +71,9 @@ function configAnalyze() {
   document.getElementById('clearRectangleButton').disabled = true;
   document.getElementById('div1').style.display = 'none';
   document.getElementById('div2').style.display = 'block';
+  let dt = new Date();
+  let dateInput = document.getElementById('userDate');
+  dateInput.value = `${dt.getDate()}-${dt.getMonth()+1}-${dt.getFullYear()} ${dt.getHours()}:${dt.getMinutes()}:${dt.getSeconds()}`;
 }
 
 

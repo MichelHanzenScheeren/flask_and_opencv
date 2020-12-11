@@ -17,8 +17,8 @@ def configure_routes(app, webcam, analyze):
   def start_analysis():
     try:
       form = request.form
-      time, qtd, description = form['time'], form['qtd'], form['description']
-      analyze.start_analyze(time, qtd, description, webcam.get_cropped_image)
+      time, qtd, description, select_date, user_date = form['time'], form['qtd'], form['description'], form['selectDate'], form['userDate']
+      analyze.start_analyze(time, qtd, description, select_date, user_date, webcam.get_cropped_image)
       webcam.clear()
       return redirect(url_for('results'))
     except:
