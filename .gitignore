@@ -160,3 +160,8 @@ htmlcov/
 .coverage
 .coverage.*
 *,cover
+
+# Statics:
+app/static/css
+app/static/fonts
+app/static/js
