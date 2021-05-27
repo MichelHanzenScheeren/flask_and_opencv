@@ -1,3 +1,4 @@
+autopep8==1.5.7
 click==7.1.2
 et-xmlfile==1.0.1
 Flask==2.0.0
@@ -7,6 +8,8 @@ Jinja2==3.0.1
 MarkupSafe==2.0.1
 numpy==1.19.2
 opencv-contrib-python==4.1.2.30
-openpyxl==3.0.5
+openpyxl==3.0.7
+pycodestyle==2.7.0
 pyzip==0.2.0
+toml==0.10.2
 Werkzeug==2.0.1
