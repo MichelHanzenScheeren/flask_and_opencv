@@ -146,16 +146,13 @@ class VideoCapture:
         Caso o processo seja um sucesso, retorna a resolução da webcam.
         Caso algo falhe, retorna uma string vazia.
         """
-        try:
-            with self.lock_video:
-                to_dispose = self.video_capture
-                self.video_capture = ImagePack.new_stream(new_port)
-                self._is_working = True
-            self.define_resolution()
-            to_dispose.release()
-            return self.video_status()
-        except:
-            return ''
+        with self.lock_video:
+            to_dispose = self.video_capture
+            self.video_capture = ImagePack.new_stream(new_port)
+            self._is_working = True
+        self.define_resolution()
+        to_dispose.release()
+        return self.video_status()
 
     def turn_off(self):
         """ Método encarregado de parar a Thread e liberar a webcam. """

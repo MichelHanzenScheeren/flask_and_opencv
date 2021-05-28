@@ -1,28 +1,28 @@
 
-window.addEventListener('pageshow', function(_) {
+window.addEventListener('pageshow', function (_) {
   try {
     const entries = performance.getEntriesByType("navigation");
-    if(entries.map(nav => nav.type)[0] == "back_forward") {
+    if (entries.map(nav => nav.type)[0] == "back_forward") {
       location.reload();
     }
-  } catch (_) {}
+  } catch (_) { }
 }); // Atualizar pagina quando voltar dos resultados (para ativar webcam)
 
 (() => {
   defineImageStyle('{{ video_status["style"] }}');
   validateWebcam();
   addEventToChangeWebcam();
-}) () // Função auto-executada
+})() // Função auto-executada
 
 function defineImageStyle(style) {
   document.getElementById('frameImg').style = style;
-  leftDivHeigth = document.getElementById('div-items-left').offsetHeight ;
+  leftDivHeigth = document.getElementById('div-items-left').offsetHeight;
   document.getElementById('div-items-rigth').style.minHeight = `${leftDivHeigth}px`;
 }
 
 function validateWebcam() {
   let got_image = ('{{ video_status["success"] }}');
-  if(got_image == 'False') {
+  if (got_image == 'False') {
     messageInvalidWebcam();
   }
 } // validação inicial de funcionamento da webcam
@@ -40,14 +40,16 @@ function addEventToChangeWebcam() {
   document.getElementById('selectCurrentWebcam').setAttribute('onchange', 'changeCurrentWebcam()');
 }
 
-async function changeCurrentWebcam () {
+async function changeCurrentWebcam() {
   try {
     let select = document.getElementById('selectCurrentWebcam');
     let response = await axios.post(`{{url_for("change_current_webcam")}}/${select.value}`);
-    if(response == '' || response.data['success'] == false) {
+    console.log(response)
+    if (response == '' || response.data['success'] == false) {
       messageInvalidWebcam();
     } else {
-      defineImageStyle(response.data['style']);
+      let result = response.data;
+      defineImageStyle(result.data['style']);
       $('#my-toast').remove();
     }
   } catch (error) {

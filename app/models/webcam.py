@@ -59,11 +59,8 @@ class Webcam():
         """ Método responsável por alterar a webcam usada no sistema. 
 
         Recebe um inteiro correspondente a nova porta webcam que será usada.
-        Retorna string vazia em caso de falha. 
-        Retorna as dimensões do frame da nova webcam em caso de sucesso. 
+        Retorna as dimensões do frame da nova webcam. 
         """
-        if self.is_invalid_index(index):
-            return ''
         self.current_port = index
         return self.video_capture.change(index)
 
