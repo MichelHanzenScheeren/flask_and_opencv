@@ -39,26 +39,15 @@ class Results():
         """ Recupera a imagem do diferenciador e a formata para ser retornada ao front-end. 
 
         Se nenhum erro ocorrer, retorna uma imagem em formato JPG codificada em bytes na base64.
-        Se um erro ocorrer, retorna uma string vazia.
         """
-        try:
-            jpg_image = ImagePack.encode_to_jpg(self.differentiator_image)
-            return b64encode(jpg_image)
-        except:
-            return ''
+        jpg_image = ImagePack.encode_to_jpg(self.differentiator_image)
+        return b64encode(jpg_image)
 
     def get_all_images(self):
         """ Recupera as imagens das capturas e as formata para serem retornadas ao front-end. 
 
         Se nenhum erro ocorrer, retorna um json com imagens em formato JPG codificadas em bytes na base64.
-        Se um erro ocorrer, retorna uma string vazia.
         """
-        try:
-            return self.encode_all_images()
-        except:
-            return ''
-
-    def encode_all_images(self):
         encoded = PyZip()
         encoded['diferenciador.jpg'] = ImagePack.convert_to_bytes(self.differentiator_image)
         for i in range(0, len(self.captures_images)):
@@ -68,11 +57,8 @@ class Results():
 
     def get_xlsx_results(self):
         """ Cria e retorna um arquivo xlsx com os resultados da análise. """
-        try:
-            file = ExcelFile(title='Resultados')
-            return file.create(self.general_info(), self.differentiator_info(), self.captures_info())
-        except:
-            return ''
+        file = ExcelFile(title='Resultados')
+        return file.create(self.general_info(), self.differentiator_info(), self.captures_info())
 
     def general_info(self):
         """ Reúne e retorna uma lista de listas com titulos e informações gerais da análise. """
@@ -100,8 +86,4 @@ class Results():
         return information
 
     def saveNewAnalyzeDate(self, newDate):
-        try:
-            self.initial_date = datetime.strptime(newDate, '%d-%m-%Y %H:%M:%S').strftime('%d-%m-%Y %H:%M:%S')
-            return ''
-        except:
-            return 'Formato Inválido'
+        self.initial_date = datetime.strptime(newDate, '%d-%m-%Y %H:%M:%S').strftime('%d-%m-%Y %H:%M:%S')

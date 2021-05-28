@@ -1,13 +1,13 @@
 (() => {
 	document.getElementById('getAllImagesButton').setAttribute('onclick', 'getAllImages()');
 	document.getElementById('getXlsxResultsButton').setAttribute('onclick', 'getXlsxResults()');
-}) () //Função auto-executada
+})() //Função auto-executada
 
 async function getAllImages() {
 	try {
 		document.getElementById('getAllImagesButton').disabled = true;
 		let response = await axios.post('{{url_for("get_all_images")}}');
-		if(response.data == "") {
+		if (response.status != 200) {
 			showError();
 		} else {
 			let headers = response.headers;
@@ -25,7 +25,7 @@ async function getXlsxResults() {
 	try {
 		document.getElementById('getXlsxResultsButton').disabled = true;
 		let response = await axios.post('{{url_for("get_xlsx_results")}}');
-		if(response.data == '') {
+		if (response.status != 200) {
 			showError();
 		} else {
 			let headers = response.headers;

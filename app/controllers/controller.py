@@ -17,8 +17,6 @@ def configure_routes(app):
     def error():
         return render_template('error.html', page='error')
 
-    webcam = Webcam()
-    analyze = Analyze()
     appUseCase = AppUseCase()
     home_controller.configure_routes(app, appUseCase)
-    analyze_controller.configure_routes(app, webcam, analyze)
+    analyze_controller.configure_routes(app, appUseCase)
