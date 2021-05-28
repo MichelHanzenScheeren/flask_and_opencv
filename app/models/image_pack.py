@@ -15,10 +15,17 @@ class ImagePack():
         return cv2.VideoCapture(port)
 
     @staticmethod
-    def is_valid_webcam(test_port):
+    def is_invalid_webcam(test_port):
         """ Verifica se determinada porta recebida por parâmetro corresponde a de uma webcam válida. """
         video = ImagePack.new_stream(test_port)
-        return not (video is None or not video.isOpened())
+        is_invalid = video is None or not video.isOpened()
+        ImagePack.dispose_video_stream(video)
+        return is_invalid
+
+    @staticmethod
+    def dispose_video_stream(video):
+        if video is not None:
+            video.release()
 
     @staticmethod
     def draw_rectangle(frame, initial_xy, final_xy):

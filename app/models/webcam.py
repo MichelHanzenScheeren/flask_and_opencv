@@ -49,7 +49,7 @@ class Webcam():
         for index in range(100):
             if index == self.current_port:
                 continue
-            if not ImagePack.is_valid_webcam(index):
+            if ImagePack.is_invalid_webcam(index):
                 break
             list_webcans.append(index)
         list_webcans.insert(self.current_port, self.current_port)
