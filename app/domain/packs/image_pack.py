@@ -10,6 +10,7 @@ class ImagePack():
 
     Foi criada pensando em reduzir os possíveis impactos de uma mudança de biblioteca.
     Também reúne os usos da biblioteca numpy, relacionada com a biblioteca OpenCV.
+    Conta ainda com criação de zip (PyZip), de bytes (BytesIO) e de coversão a b64 (b64encode)
     """
 
     @staticmethod
@@ -68,7 +69,6 @@ class ImagePack():
 
     @staticmethod
     def validate_image(image):
-        """ Verifica se uma imagem qualquer é uma imagem OpenCV válida (instância de ndaray). """
         return isinstance(image, numpy.ndarray)
 
     @staticmethod
