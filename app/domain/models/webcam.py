@@ -1,3 +1,4 @@
+from app.configuration import FRAME_RATE
 import time
 from app.domain.packs.image_pack import ImagePack
 from app.domain.models.rectangle import Rectangle
@@ -76,7 +77,7 @@ class Webcam():
         Variáveis 'FRAME_RATE' e 'previous' garantem que a resposta terá um intervalo >= 0.04 segundos (+/- 25fps) 
         """
         try:
-            FRAME_RATE, previous = 0.04, 0
+            previous = 0
             while True:
                 if (time.time() - previous) >= FRAME_RATE:
                     img = self.get_image()

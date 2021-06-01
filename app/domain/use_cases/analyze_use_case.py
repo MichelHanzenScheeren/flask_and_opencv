@@ -1,55 +1,18 @@
+from app.domain.models.valves_control import ValvesControl
 from app.domain.errors.app_error import AppError
 from app.domain.models.webcam import Webcam
 from app.domain.models.analyze import Analyze
 
 
-class AppUseCase():
-    def __init__(self):
-        self.webcam = Webcam()
+class AnalyzeUseCase():
+    def __init__(self, webcam):
+        self.webcam = webcam
         self.analyze = Analyze()
-
-    def init_webcam(self):
-        self.webcam.init_webcam()
-        return self.webcam.video_status_and_port(), self.webcam.webcans_list()
-
-    def save_uploaded_image(self, file):
-        try:
-            self.webcam.save_uploaded_image(file)
-            return self._success_response(message='Imagem salva!')
-        except Exception as error:
-            message = f'Não foi possível salvar a imagem. (ERRO: {str(error)}'
-            return self.error_response(AppError('save_uploaded_image', message))
-
-    def define_points_of_rectangle(self, x1, y1, x2, y2):
-        try:
-            self.webcam.rectangle.define_points_of_rectangle(x1, y1, x2, y2)
-            return self._success_response(message='Retângulo definido!')
-        except Exception as error:
-            message = f'Não foi possível definir o retângulo. (ERRO: {str(error)}'
-            return self.error_response(AppError('define_points_of_rectangle', message))
-
-    def clear_rectangle_and_uploaded_image(self):
-        try:
-            self.webcam.clear_rectangle_and_uploaded_image()
-            return self._success_response()
-        except Exception as error:
-            message = f'Não foi possível concluir a solicitação. (ERRO: {str(error)}'
-            return self.error_response(AppError('clear_rectangle_and_uploaded_image', message))
-
-    def change_current_webcam(self, index):
-        try:
-            if index is None or (type(index) is not int) or index < 0:
-                return self.error_response(AppError('change_current_webcam', 'Índice de webcam inválido'))
-            data = self.webcam.change_current_webcam(index)
-            return self._success_response(message='Webcam atual alterada', data=data)
-        except Exception as error:
-            message = f'Não foi possível alterar a webcam atual. (ERRO: {str(error)}'
-            return self.error_response(AppError('change_current_webcam', message))
 
     def calculate_differentiator(self):
         try:
-            differentiator_image = self.webcam.get_differentiator_image()
             self.analyze.clear()
+            differentiator_image = self.webcam.get_differentiator_image()
             data = self.analyze.calculate_differentiator(differentiator_image)
             return self._success_response(data=data)
         except Exception as error:

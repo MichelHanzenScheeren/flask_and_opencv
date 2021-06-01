@@ -1,3 +1,4 @@
+from app.configuration import FRAME_RATE
 import time
 from threading import Lock, Thread
 from app.domain.packs.image_pack import ImagePack
@@ -74,7 +75,7 @@ class VideoCapture:
         Sem ele, o raspberry não estava dando conta das capturas. 
         """
         try:
-            FRAME_RATE, previous = 0.04, 0
+            previous = 0
             while self.is_working():
                 if (time.time() - previous) >= FRAME_RATE:
                     frame = self.capture_frame()

@@ -1,5 +1,7 @@
 from flask import render_template
-from app.domain.use_cases.app_use_case import AppUseCase
+from app.domain.models.webcam import Webcam
+from app.domain.use_cases.webcam_use_case import WebcamUseCase
+from app.domain.use_cases.analyze_use_case import AnalyzeUseCase
 from app.controllers import home_controller, analyze_controller
 
 
@@ -14,6 +16,8 @@ def configure_routes(app):
     def error():
         return render_template('error.html', page='error')
 
-    appUseCase = AppUseCase()
-    home_controller.configure_routes(app, appUseCase)
-    analyze_controller.configure_routes(app, appUseCase)
+    webcam = Webcam()
+    webcamUseCase = WebcamUseCase(webcam)
+    analyzeUseCase = AnalyzeUseCase(webcam)
+    home_controller.configure_routes(app, webcamUseCase)
+    analyze_controller.configure_routes(app, analyzeUseCase)

@@ -1,3 +1,4 @@
+from app.configuration import STRING_FORMAT
 from app.domain.packs.image_pack import ImagePack
 from app.domain.models.excel_file import ExcelFile
 from app.domain.packs.image_pack import ImagePack
@@ -22,10 +23,9 @@ class Results():
     def initialize(self, total_time, captures_seg, description, select_date, user_date):
         """ Salva os primeiros valores da análise e garante que dados de uma análise anterior sejam limpos. """
         if(select_date == 'user'):
-            self.initial_date = datetime.strptime(
-                user_date, '%d-%m-%Y %H:%M:%S').strftime('%d-%m-%Y %H:%M:%S')
+            self.initial_date = datetime.strptime(user_date, STRING_FORMAT).strftime(STRING_FORMAT)
         else:
-            self.initial_date = datetime.now().strftime('%d-%m-%Y %H:%M:%S')
+            self.initial_date = datetime.now().strftime(STRING_FORMAT)
         self.total_time = total_time
         self.captures_seg = captures_seg
         self.interval = (1 / self.captures_seg)
@@ -85,4 +85,4 @@ class Results():
         return information
 
     def saveNewAnalyzeDate(self, newDate):
-        self.initial_date = datetime.strptime(newDate, '%d-%m-%Y %H:%M:%S').strftime('%d-%m-%Y %H:%M:%S')
+        self.initial_date = datetime.strptime(newDate, STRING_FORMAT).strftime(STRING_FORMAT)
