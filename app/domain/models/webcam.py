@@ -1,8 +1,8 @@
-from app.models.rectangle import Rectangle
-from app.models.video_capture import VideoCapture
-from app.models.image_pack import ImagePack
-from app.models.frame import Frame
 import time
+from app.domain.packs.image_pack import ImagePack
+from app.domain.models.rectangle import Rectangle
+from app.domain.models.video_capture import VideoCapture
+from app.domain.models.frame import Frame
 
 
 class Webcam():

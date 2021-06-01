@@ -1,5 +1,8 @@
 import cv2.cv2 as cv2
 import numpy
+from pyzip import PyZip
+from io import BytesIO
+from base64 import b64encode
 
 
 class ImagePack():
@@ -67,3 +70,15 @@ class ImagePack():
     def validate_image(image):
         """ Verifica se uma imagem qualquer é uma imagem OpenCV válida (instância de ndaray). """
         return isinstance(image, numpy.ndarray)
+
+    @staticmethod
+    def encode_to_b64(file):
+        return b64encode(file)
+
+    @staticmethod
+    def create_zip_file():
+        return PyZip()
+
+    @staticmethod
+    def create_bytes_file():
+        return BytesIO()

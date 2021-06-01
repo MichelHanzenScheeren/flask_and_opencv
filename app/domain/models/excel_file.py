@@ -1,8 +1,7 @@
 from openpyxl import Workbook
 from openpyxl.styles import Font, Alignment, PatternFill
 from openpyxl.chart import ScatterChart, Reference, Series
-from io import BytesIO
-from base64 import b64encode
+from app.domain.packs.image_pack import ImagePack
 
 
 class ExcelFile():
@@ -83,8 +82,8 @@ class ExcelFile():
 
     def encode_excel(self, excel_file):
         """ Codifica o arquivo xlsx em bytes na base_64. """
-        encoded = BytesIO()
+        encoded = ImagePack.create_bytes_file()
         excel_file.save(encoded)
         encoded.seek(0)
-        base_64_result = b64encode(encoded.read())
+        base_64_result = ImagePack.encode_to_b64(encoded.read())
         return base_64_result

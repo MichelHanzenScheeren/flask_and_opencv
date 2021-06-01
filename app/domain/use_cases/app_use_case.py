@@ -1,6 +1,6 @@
-from app.errors.app_error import AppError
-from app.models.webcam import Webcam
-from app.models.analyze import Analyze
+from app.domain.errors.app_error import AppError
+from app.domain.models.webcam import Webcam
+from app.domain.models.analyze import Analyze
 
 
 class AppUseCase():

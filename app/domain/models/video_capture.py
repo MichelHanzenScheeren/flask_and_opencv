@@ -1,6 +1,6 @@
 import time
 from threading import Lock, Thread
-from app.models.image_pack import ImagePack
+from app.domain.packs.image_pack import ImagePack
 
 
 PADRONIZED_WIDTH = 640  # largura padrão usada na webcam

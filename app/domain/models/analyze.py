@@ -1,6 +1,6 @@
 from time import sleep
 from math import sqrt, pow
-from app.models.results import Results
+from app.domain.models.results import Results
 
 
 class Analyze():

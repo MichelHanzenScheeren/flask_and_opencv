@@ -1,8 +1,7 @@
-from app.models.image_pack import ImagePack
-from app.models.excel_file import ExcelFile
+from app.domain.packs.image_pack import ImagePack
+from app.domain.models.excel_file import ExcelFile
+from app.domain.packs.image_pack import ImagePack
 from datetime import datetime
-from base64 import b64encode
-from pyzip import PyZip
 
 
 class Results():
@@ -41,19 +40,19 @@ class Results():
         Se nenhum erro ocorrer, retorna uma imagem em formato JPG codificada em bytes na base64.
         """
         jpg_image = ImagePack.encode_to_jpg(self.differentiator_image)
-        return b64encode(jpg_image)
+        return ImagePack.encode_to_b64(jpg_image)
 
     def get_all_images(self):
         """ Recupera as imagens das capturas e as formata para serem retornadas ao front-end. 
 
         Se nenhum erro ocorrer, retorna um json com imagens em formato JPG codificadas em bytes na base64.
         """
-        encoded = PyZip()
+        encoded = ImagePack.create_zip_file()
         encoded['diferenciador.jpg'] = ImagePack.convert_to_bytes(self.differentiator_image)
         for i in range(0, len(self.captures_images)):
             image = self.captures_images[i]
             encoded[f'captura_{i + 1}.jpg'] = ImagePack.convert_to_bytes(image)
-        return b64encode(encoded.to_bytes())
+        return ImagePack.encode_to_b64(encoded.to_bytes())
 
     def get_xlsx_results(self):
         """ Cria e retorna um arquivo xlsx com os resultados da análise. """

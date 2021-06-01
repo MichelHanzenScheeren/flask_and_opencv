@@ -1,8 +1,5 @@
-# pylint: disable=unused-variable
 from flask import render_template
-from app.use_cases.app_use_case import AppUseCase
-from app.models.webcam import Webcam
-from app.models.analyze import Analyze
+from app.domain.use_cases.app_use_case import AppUseCase
 from app.controllers import home_controller, analyze_controller
 
 
