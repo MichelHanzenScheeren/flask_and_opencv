@@ -17,7 +17,7 @@ class AnalyzeUseCase():
             data = self.analyze.calculate_differentiator(differentiator_image)
             return ResponseUseCase.success_response(data=data)
         except Exception as error:
-            message = f'Não foi possível obter o diferenciador. (ERRO: {str(error)}'
+            message = f'Não foi possível obter o diferenciador. (ERRO: {str(error)})'
             return ResponseUseCase.error_response(AppError('calculate_differentiator', message))
 
     def get_differentiator_image(self):
@@ -33,9 +33,13 @@ class AnalyzeUseCase():
         return self.analyze.results
 
     def get_all_images(self):
-        zip_file = self.analyze.results.get_all_images()
-        headers = {'content-type': 'application/zip', 'format': 'base64', 'file-name': 'imagens.zip'}
-        return zip_file, headers
+        try:
+            zip_file = self.analyze.results.get_all_images()
+            headers = {'content-type': 'application/zip', 'format': 'base64', 'file-name': 'imagens.zip'}
+            return zip_file, headers
+        except Exception as error:
+            message = f'Não foi possível fazer o download do arquivo. Tente novamente mais tarde...'
+            raise AppError('get_all_images', message)
 
     def get_xlsx_results(self):
         xlsx_file = self.analyze.results.get_xlsx_results()
@@ -49,6 +53,3 @@ class AnalyzeUseCase():
             return ResponseUseCase.success_response()
         except Exception as error:
             return ResponseUseCase.error_response(error)
-
-    def _success_response(self, message='Operação concluída', data=''):
-        return {'message': message, 'data': data}, 200

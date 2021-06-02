@@ -6,7 +6,7 @@ function drawChart(signals, interval) {
       chartLabels.push(((index + 1) * interval).toFixed(1).toString());
       chartData.push(parseFloat(signals[index]).toFixed(4));
     }
-    var options = {display: true,fontSize: 16};
+    var options = { display: true, fontSize: 16 };
     var configAndData = {
       type: 'line',
       data: {
@@ -23,14 +23,15 @@ function drawChart(signals, interval) {
       options: {
         responsive: true,
         scales: {
-          yAxes: [{scaleLabel: {...options, labelString:'Sinal'}}],
-          xAxes: [{scaleLabel:{...options, labelString:'Tempo (segundos)'}}],
+          yAxes: [{ scaleLabel: { ...options, labelString: 'Sinal' } }],
+          xAxes: [{ scaleLabel: { ...options, labelString: 'Tempo (segundos)' } }],
         }
       }
     };
     new Chart(document.getElementById('lineChartCanvas'), configAndData);
   } catch (error) {
-    console.log(error);
-    showErrorMessage(error);
-  } 
+    console.warn(error);
+    let message = 'Não foi possível renderizar os gráficos corretamente';
+    showMessage('Problemas ao exibir os gráficos', message, undefined, false);
+  }
 }

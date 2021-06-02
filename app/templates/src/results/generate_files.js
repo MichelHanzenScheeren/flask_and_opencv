@@ -3,39 +3,25 @@
 	document.getElementById('getXlsxResultsButton').setAttribute('onclick', 'getXlsxResults()');
 })() //Função auto-executada
 
-async function getAllImages() {
-	try {
-		document.getElementById('getAllImagesButton').disabled = true;
-		let response = await axios.post('{{url_for("get_all_images")}}');
-		if (response.status != 200) {
-			showError();
-		} else {
-			let headers = response.headers;
-			let zip = response.data
-			submitDownload(zip, headers['file-name'], headers['content-type'], headers['format']);
-		}
-	} catch (error) {
-		showErrorMessage(error);
-	} finally {
+function getAllImages() {
+	document.getElementById('getAllImagesButton').disabled = true;
+	axios.post('{{url_for("get_all_images")}}').then(function (response) {
+		let headers = response.headers;
+		let zip = response.data
+		submitDownload(zip, headers['file-name'], headers['content-type'], headers['format']);
+	}).catch(showErrorMessage).then(function () {
 		document.getElementById('getAllImagesButton').disabled = false;
-	}
+	});
 }
 
-async function getXlsxResults() {
-	try {
-		document.getElementById('getXlsxResultsButton').disabled = true;
-		let response = await axios.post('{{url_for("get_xlsx_results")}}');
-		if (response.status != 200) {
-			showError();
-		} else {
-			let headers = response.headers;
-			submitDownload(response.data, headers['file-name'], headers['content-type'], headers['format']);
-		}
-	} catch (error) {
-		showErrorMessage(error);
-	} finally {
+function getXlsxResults() {
+	document.getElementById('getXlsxResultsButton').disabled = true;
+	axios.post('{{url_for("get_xlsx_results")}}').then(function (response) {
+		let headers = response.headers;
+		submitDownload(response.data, headers['file-name'], headers['content-type'], headers['format']);
+	}).catch(showErrorMessage).then(function () {
 		document.getElementById('getXlsxResultsButton').disabled = false;
-	}
+	});
 }
 
 function submitDownload(data, title, contentType, format) {
@@ -43,11 +29,4 @@ function submitDownload(data, title, contentType, format) {
 	link.href = `data:${contentType};${format},${data}`;
 	link.download = title;
 	link.click();
-}
-
-function showError() {
-	title = 'Falha no download do arquivo &#128533;'
-	body = `Infelizmente, não foi possível fazer o download do arquivo solicitado. 
-			Por favor, tente novamente mais tarde...`
-	showMessage(title, body, undefined, true);
 }
