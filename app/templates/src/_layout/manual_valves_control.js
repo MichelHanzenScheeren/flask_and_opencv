@@ -23,13 +23,8 @@ async function submitValvesConfig() {
   if (response.data['success'] == true) {
     $("#unsavedDiv").css("display", "none");
     $("#savedDiv").css("display", "block");
-
   } else {
-    errorMessage(response.data["message"]);
+    let title = 'Problemas para completar a solicitação &#128533;';
+    showMessage(title, response.data['message'], undefined, true);
   }
-}
-
-function errorMessage(message) {
-  let title = 'Problemas para completar a solicitação &#128533;';
-  showMessage(title, message, undefined, true);
 }
