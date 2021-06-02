@@ -3,43 +3,22 @@
   document.getElementById('startAnalyzeButton').setAttribute('onclick', 'validateToAnalyze()');
 })() // Função auto-executada
 
-async function getDifferentiator() {
-  try {
-    let response = await axios.post('{{ url_for("get_differentiator") }}');
-    if (response.status != 200) {
-      failedToGetDifferentiator();
-    } else {
-      let data = response.data['data'];
-      document.getElementById('red').innerHTML = 'Red: ' + data[0];
-      document.getElementById('green').innerHTML = 'Green: ' + data[1];
-      document.getElementById('blue').innerHTML = 'Blue: ' + data[2];
-      document.getElementById('startAnalyzeButton').disabled = false;
-      getDifferentiatorImage()
-    }
-  } catch (error) {
-    showErrorMessage(error);
-  }
+function getDifferentiator() {
+  axios.post('{{ url_for("get_differentiator") }}').then(function (response) {
+    let data = response.data['data'];
+    document.getElementById('red').innerHTML = 'Red: ' + data[0];
+    document.getElementById('green').innerHTML = 'Green: ' + data[1];
+    document.getElementById('blue').innerHTML = 'Blue: ' + data[2];
+    document.getElementById('startAnalyzeButton').disabled = false;
+    getDifferentiatorImage()
+  }).catch(showErrorMessage);
 }
 
-async function getDifferentiatorImage() {
-  try {
-    let response = await axios.post('{{ url_for("get_differentiator_image") }}');
-    if (response.status != 200) return;
+function getDifferentiatorImage() {
+  axios.post('{{ url_for("get_differentiator_image") }}').then(function (response) {
     let differentiatorImage = document.getElementById('differentiatorImage')
     differentiatorImage.setAttribute('src', 'data:image/jpeg;base64,' + response.data);
-  } catch (error) {
-    showErrorMessage(error);
-  }
-}
-
-function failedToGetDifferentiator() {
-  title = 'Problemas para calcular o diferenciador &#128533;'
-  body = `Infelizmente, não conseguimos calcular o diferenciador. 
-      Por favor, verifique a solicitação e tente novamente...
-      Se isso não funcionar, tente recarregar a página.`
-  complement = `<button type="button" class="btn btn-lg btn-block btn-dark" onclick="location.reload();">
-      Atualizar página </button>`
-  showMessage(title, body, complement, true);
+  }).catch(showErrorMessage);
 }
 
 function validateToAnalyze() {
@@ -74,7 +53,8 @@ function configAnalyze() {
   document.getElementById('div2').style.display = 'block';
   let dt = new Date();
   let dateInput = document.getElementById('userDate');
-  dateInput.value = `${dt.getDate()}-${dt.getMonth() + 1}-${dt.getFullYear()} ${dt.getHours()}:${dt.getMinutes()}:${dt.getSeconds()}`;
+  dateInput.value =
+    `${dt.getDate()}-${dt.getMonth() + 1}-${dt.getFullYear()} ${dt.getHours()}:${dt.getMinutes()}:${dt.getSeconds()}`;
 }
 
 

@@ -16,7 +16,7 @@ def configure_routes(app, webcamUseCase):
             parameters = webcamUseCase.get_index_parameters()
             return render_template('index.html', page='index', parameters=parameters)
         except:
-            return redirect(url_for('error'))
+            return redirect(url_for('error_page'))
 
     @app.route('/play_webcam')
     def play_webcam():

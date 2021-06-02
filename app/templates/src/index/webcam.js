@@ -6,7 +6,7 @@ window.addEventListener('pageshow', function (_) {
       location.reload();
     }
   } catch (_) { }
-}); // Atualizar pagina quando voltar dos resultados (para ativar webcam)
+}); // Tenta atualizar a pagina quando voltar da página de resultados (para ativar webcam)
 
 (() => {
   defineImageStyle('{{ parameters["style"] }}');
@@ -40,19 +40,10 @@ function addEventToChangeWebcam() {
   document.getElementById('selectCurrentWebcam').setAttribute('onchange', 'changeCurrentWebcam()');
 }
 
-async function changeCurrentWebcam() {
-  try {
-    let select = document.getElementById('selectCurrentWebcam');
-    let response = await axios.post(`{{url_for("change_current_webcam")}}/${select.value}`);
-    console.log(response)
-    if (response.status != 200) {
-      messageInvalidWebcam();
-    } else {
-      let result = response.data;
-      defineImageStyle(result.data['style']);
-      $('#my-toast').remove();
-    }
-  } catch (error) {
-    showErrorMessage(error);
-  }
+function changeCurrentWebcam() {
+  let select = document.getElementById('selectCurrentWebcam');
+  axios.post(`{{url_for("change_current_webcam")}}/${select.value}`).then(function (response) {
+    defineImageStyle(response.data.data['style']);
+    $('#my-toast').remove();
+  }).catch(showErrorMessage);
 }

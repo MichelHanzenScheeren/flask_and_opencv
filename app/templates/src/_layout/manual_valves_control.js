@@ -12,19 +12,18 @@ window.onload = function () {
   });
 }
 
-async function submitValvesConfig() {
+function submitValvesConfig() {
   let valves = [];
   let toggles = document.getElementsByName('valveToggle');
   for (let i = 0; i < toggles.length; i++) {
-    if (toggles[i].checked)
-      valves.push(i + 1);
+    if (toggles[i].checked) valves.push(i + 1);
   }
-  let response = await axios.post('{{url_for("submit_valves_config")}}', { 'valves': valves });
-  if (response.data['success'] == true) {
-    $("#unsavedDiv").css("display", "none");
-    $("#savedDiv").css("display", "block");
-  } else {
-    let title = 'Problemas para completar a solicitação &#128533;';
-    showMessage(title, response.data['message'], undefined, true);
-  }
+  axios.post('{{url_for("submit_valves_config")}}', { 'valves': valves })
+    .then(_successSubmitValvesConfig)
+    .catch(showErrorMessage);
+}
+
+function _successSubmitValvesConfig(_) {
+  $("#unsavedDiv").css("display", "none");
+  $("#savedDiv").css("display", "block");
 }

@@ -1,4 +1,4 @@
-from flask import render_template
+from flask import render_template, jsonify
 from app.domain.use_cases.valves_use_case import ValvesUseCase
 from app.domain.models.valves_control import ValvesControl
 from app.domain.models.webcam import Webcam
@@ -14,9 +14,13 @@ def configure_routes(app):
     Define-se também a rota de erro da aplicação, usada em ambos os casos.
     """
 
-    @app.route('/error')
-    def error():
+    @app.route('/error_page')
+    def error_page():
         return render_template('error.html', page='error')
+
+    @app.errorhandler(400)
+    def resource_not_found(error):
+        return jsonify(str(error).replace('400 Bad Request: ', '')), 400
 
     webcam = Webcam()
     valvesControl = ValvesControl()

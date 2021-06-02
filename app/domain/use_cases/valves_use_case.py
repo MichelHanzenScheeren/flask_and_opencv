@@ -1,5 +1,4 @@
 from app.domain.use_cases.response_use_case import ResponseUseCase
-from app.domain.errors.app_error import AppError
 
 
 class ValvesUseCase():

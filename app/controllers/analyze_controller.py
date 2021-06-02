@@ -1,4 +1,5 @@
 # pylint: disable=unused-variable
+from app.domain.use_cases.response_use_case import ResponseUseCase
 from flask import Response, render_template, redirect, url_for, request
 
 
@@ -17,7 +18,7 @@ def configure_routes(app, analyzeUseCase):
         try:
             return Response(analyzeUseCase.get_differentiator_image())
         except Exception as error:
-            return analyzeUseCase.error_response(error)
+            return ResponseUseCase.error_response(error)
 
     @app.route('/start_analyze', methods=['POST'])
     def start_analyze():
@@ -25,14 +26,14 @@ def configure_routes(app, analyzeUseCase):
             analyzeUseCase.start_analyze(request.form)
             return redirect(url_for('results'))
         except:
-            return redirect(url_for('error'))
+            return redirect(url_for('error_page'))
 
     @app.route('/results')
     def results():
         try:
             return render_template('results.html', results=analyzeUseCase.get_results(), page='results')
         except:
-            return redirect(url_for('error'))
+            return redirect(url_for('error_page'))
 
     @app.route('/get_all_images', methods=['POST'])
     def get_all_images():
@@ -40,7 +41,7 @@ def configure_routes(app, analyzeUseCase):
             zip_file, headers = analyzeUseCase.get_all_images()
             return Response(zip_file, headers=headers)
         except Exception as error:
-            return analyzeUseCase.error_response(error)
+            return ResponseUseCase.error_response(error)
 
     @app.route('/get_xlsx_results', methods=['POST'])
     def get_xlsx_results():
@@ -48,7 +49,7 @@ def configure_routes(app, analyzeUseCase):
             xlsx_file, headers = analyzeUseCase.get_xlsx_results()
             return Response(xlsx_file, headers=headers)
         except Exception as error:
-            return analyzeUseCase.error_response(error)
+            return ResponseUseCase.error_response(error)
 
     @app.route('/saveNewAnalyzeDate', methods=['POST'])
     @app.route('/saveNewAnalyzeDate/<string:newDate>', methods=['POST'])

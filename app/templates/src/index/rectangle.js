@@ -15,7 +15,7 @@ let drag = false;
   desenho.addEventListener('mouseleave', mouseLeave, false);
   document.getElementById('refreshRectangleButton').onclick = refreshRectangle;
   document.getElementById('clearRectangleButton').onclick = clearRectangle;
-}) ();
+})();
 
 function mouseDown(e) {
   drag = true;
@@ -35,7 +35,7 @@ function mouseMove(e) {
 }
 
 function mouseUp() {
-  if(drag) {
+  if (drag) {
     drag = false;
     draw();
     clearAuxValues();
@@ -55,44 +55,42 @@ function clearAuxValues() {
 }
 
 function draw() {
+  if (!_validDraw()) {
+    invalidRectangle();
+  } else {
+    let url = '{{url_for("get_measures")}}';
+    let finalX = rect.startX + rect.w;
+    let finalY = rect.startY + rect.h;
+    axios.post(`${url}/${rect.startX}/${rect.startY}/${finalX}/${finalY}`).catch(showErrorMessage);
+  }
+}
+
+function _validDraw() {
   try {
-    parseIntValues();
+    rect.startX = parseInt(rect.startX);
+    rect.startY = parseInt(rect.startY);
+    rect.w = parseInt(rect.w);
+    rect.h = parseInt(rect.h);
     let invalid_width = (rect.startX - (rect.startX + rect.w)) == 0;
     let invalid_height = (rect.startY - (rect.startY + rect.h)) == 0;
-    if(invalid_width || invalid_height) {
-      invalidRectangle();
-    } else {
-      let url = '{{url_for("get_measures")}}';
-      let finalX = rect.startX + rect.w;
-      let finalY = rect.startY + rect.h;
-      axios.post(`${url}/${rect.startX}/${rect.startY}/${finalX}/${finalY}`);
-  }
+    if (invalid_width || invalid_height) return false;
+    return true;
   } catch (error) {
-    showErrorMessage(error);
+    return false;
   }
 }
 
-function parseIntValues() {
-  rect.startX = parseInt(rect.startX);
-  rect.startY = parseInt(rect.startY);
-  rect.w = parseInt(rect.w);
-  rect.h = parseInt(rect.h);
-}
-
-function clearRectangle(){
-  try {
-    axios.post('{{ url_for("clear_rectangle") }}');
+function clearRectangle() {
+  axios.post('{{ url_for("clear_rectangle") }}').then(function (response) {
     document.getElementById('uploadImageLabel').innerHTML = 'Escolher imagem local';
     htmlXY.x1.value = 0;
     htmlXY.x2.value = 0;
     htmlXY.y1.value = 0;
     htmlXY.y2.value = 0;
-  } catch (error) {
-    showErrorMessage(error);
-  }
+  }).catch(showErrorMessage);
 }
 
-function refreshRectangle(){
+function refreshRectangle() {
   try {
     let x1 = parseInt(htmlXY.x1.value);
     let y1 = parseInt(htmlXY.y1.value);
@@ -102,13 +100,13 @@ function refreshRectangle(){
     let y_is_int = htmlXY.y1.value == y1 && htmlXY.y2.value == y2;
     let not_empty_area = ((x1 - x2) != 0) && ((y1 - y2) != 0);
     let gretter_than_zero = x1 >= 0 && y1 >= 0 && x2 >= 0 && y2 >= 0;
-    if(x_is_int && y_is_int && not_empty_area && gretter_than_zero) {
-      axios.post(`{{url_for("get_measures")}}/${x1}/${y1}/${x2}/${y2}`);
+    if (x_is_int && y_is_int && not_empty_area && gretter_than_zero) {
+      axios.post(`{{url_for("get_measures")}}/${x1}/${y1}/${x2}/${y2}`).catch(showErrorMessage);
     } else {
       invalidRectangle();
     }
   } catch (error) {
-    showErrorMessage(error);
+    invalidRectangle();
   }
 }
 

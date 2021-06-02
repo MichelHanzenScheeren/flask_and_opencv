@@ -1,3 +1,4 @@
+from app.domain.use_cases.response_use_case import ResponseUseCase
 from app.configuration import NUMBER_OF_VALVES
 from app.domain.errors.app_error import AppError
 
@@ -18,41 +19,33 @@ class WebcamUseCase():
     def save_uploaded_image(self, file):
         try:
             self.webcam.save_uploaded_image(file)
-            return self._success_response(message='Imagem salva!')
+            return ResponseUseCase.success_response(message='Imagem salva!')
         except Exception as error:
-            message = f'Não foi possível salvar a imagem. (ERRO: {str(error)}'
-            return self.error_response(AppError('save_uploaded_image', message))
+            message = f'Não foi possível salvar a imagem. (ERRO: {str(error)})'
+            return ResponseUseCase.error_response(AppError('save_uploaded_image', message))
 
     def define_points_of_rectangle(self, x1, y1, x2, y2):
         try:
             self.webcam.rectangle.define_points_of_rectangle(x1, y1, x2, y2)
-            return self._success_response(message='Retângulo definido!')
+            return ResponseUseCase.success_response(message='Retângulo definido!')
         except Exception as error:
-            message = f'Não foi possível definir o retângulo. (ERRO: {str(error)}'
-            return self.error_response(AppError('define_points_of_rectangle', message))
+            message = f'Não foi possível definir o retângulo. (ERRO: {str(error)})'
+            return ResponseUseCase.error_response(AppError('define_points_of_rectangle', message))
 
     def clear_rectangle_and_uploaded_image(self):
         try:
             self.webcam.clear_rectangle_and_uploaded_image()
-            return self._success_response()
+            return ResponseUseCase.success_response()
         except Exception as error:
-            message = f'Não foi possível concluir a solicitação. (ERRO: {str(error)}'
-            return self.error_response(AppError('clear_rectangle_and_uploaded_image', message))
+            message = f'Não foi possível concluir a solicitação. (ERRO: {str(error)})'
+            return ResponseUseCase.error_response(AppError('clear_rectangle_and_uploaded_image', message))
 
     def change_current_webcam(self, index):
         try:
             if index is None or (type(index) is not int) or index < 0:
-                return self.error_response(AppError('change_current_webcam', 'Índice de webcam inválido'))
+                return ResponseUseCase.error_response(AppError('change_current_webcam', 'Índice de webcam inválido'))
             data = self.webcam.change_current_webcam(index)
-            return self._success_response(message='Webcam atual alterada', data=data)
+            return ResponseUseCase.success_response(message='Webcam atual alterada', data=data)
         except Exception as error:
-            message = f'Não foi possível alterar a webcam atual. (ERRO: {str(error)}'
-            return self.error_response(AppError('change_current_webcam', message))
-
-    def _success_response(self, message='Operação concluída', data=''):
-        return {'message': message, 'data': data}, 200
-
-    def error_response(self, error):
-        if type(error) is AppError:
-            return {'success': False, 'key': error.origin, 'message': str(error)}
-        return {'key': 'unkown', 'message': f'Erro desconhecido ({str(error)})'}, 404
+            message = f'Não foi possível alterar a webcam atual. (ERRO: {str(error)})'
+            return ResponseUseCase.error_response(AppError('change_current_webcam', message))

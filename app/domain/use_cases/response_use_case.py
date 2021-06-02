@@ -1,4 +1,5 @@
 from app.domain.errors.app_error import AppError
+from flask import abort
 
 
 class ResponseUseCase():
@@ -9,5 +10,5 @@ class ResponseUseCase():
     @staticmethod
     def error_response(error):
         if type(error) is AppError:
-            return {'success': False, 'key': error.origin, 'message': str(error)}
-        return {'success': False, 'key': 'unkown', 'message': f'Erro desconhecido ({str(error)})'}
+            abort(400, description=str(error))
+        abort(400, description=f'Um erro desconhecido ocorreu (descrição: {str(error)})')

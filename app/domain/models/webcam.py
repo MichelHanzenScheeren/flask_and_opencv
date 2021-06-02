@@ -142,13 +142,10 @@ class Webcam():
         Antes de ser salva, a imagem é também redimensionada para o mesmo tamanho do frame atual da webcam.
         Nenhum retorno.
         """
-        try:
-            frame = ImagePack.convert_to_frame(image)
-            video_dimensions = self.video_capture.get_video_dimensions()
-            new_image = ImagePack.resize_image(frame, video_dimensions)
-            self.uploaded_frame.set_frame(new_image)
-        except:
-            pass
+        frame = ImagePack.convert_to_frame(image)
+        video_dimensions = self.video_capture.get_video_dimensions()
+        new_image = ImagePack.resize_image(frame, video_dimensions)
+        self.uploaded_frame.set_frame(new_image)
 
     def clear_rectangle_and_uploaded_image(self):
         """ Responsável por apagar o retângulo previamente desenhado e apagar a imagem enviada pelo usuário. """
