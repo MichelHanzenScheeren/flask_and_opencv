@@ -1,4 +1,5 @@
 # pylint: disable=unused-variable
+from app.configuration import NUMBER_OF_VALVES
 from app.domain.use_cases.response_use_case import ResponseUseCase
 from flask import Response, render_template, redirect, url_for, request
 
@@ -31,7 +32,9 @@ def configure_routes(app, analyzeUseCase):
     @app.route('/results')
     def results():
         try:
-            return render_template('results.html', results=analyzeUseCase.get_results(), page='results')
+            parameters = {'valves_number': NUMBER_OF_VALVES}
+            results = analyzeUseCase.get_results()
+            return render_template('results.html', page='results', results=results, parameters=parameters)
         except:
             return redirect(url_for('error_page'))
 
