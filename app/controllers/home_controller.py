@@ -12,8 +12,9 @@ def configure_routes(app, webcamUseCase):
     @app.route('/home')
     def index():
         try:
-            status, webcans_list = webcamUseCase.init_webcam()
-            return render_template('index.html', page='index', video_status=status, webcans_list=webcans_list)
+            webcamUseCase.init_webcam()
+            parameters = webcamUseCase.get_index_parameters()
+            return render_template('index.html', page='index', parameters=parameters)
         except:
             return redirect(url_for('error'))
 

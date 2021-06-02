@@ -9,7 +9,7 @@ window.addEventListener('pageshow', function (_) {
 }); // Atualizar pagina quando voltar dos resultados (para ativar webcam)
 
 (() => {
-  defineImageStyle('{{ video_status["style"] }}');
+  defineImageStyle('{{ parameters["style"] }}');
   validateWebcam();
   addEventToChangeWebcam();
 })() // Função auto-executada
@@ -21,7 +21,7 @@ function defineImageStyle(style) {
 }
 
 function validateWebcam() {
-  let got_image = ('{{ video_status["success"] }}');
+  let got_image = ('{{ parameters["success"] }}');
   if (got_image == 'False') {
     messageInvalidWebcam();
   }

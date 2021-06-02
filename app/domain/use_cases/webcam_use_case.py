@@ -1,3 +1,4 @@
+from app.configuration import NUMBER_OF_VALVES
 from app.domain.errors.app_error import AppError
 
 
@@ -7,7 +8,12 @@ class WebcamUseCase():
 
     def init_webcam(self):
         self.webcam.init_webcam()
-        return self.webcam.video_status_and_port(), self.webcam.webcans_list()
+
+    def get_index_parameters(self):
+        index_parameters = self.webcam.video_status_and_port()
+        index_parameters['webcans_list'] = self.webcam.webcans_list()
+        index_parameters['valves_number'] = NUMBER_OF_VALVES
+        return index_parameters
 
     def save_uploaded_image(self, file):
         try:
