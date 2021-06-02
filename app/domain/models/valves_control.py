@@ -15,5 +15,27 @@ class ValvesControl():
             valve = Valve(map[BOARD_NUMBER], map[VALVE_NUMBER])
             self.valves.append(valve)
 
+    def submit_valves_config(self, valves_config):
+        self._validate_valves_config(valves_config)
+        if len(valves_config) > 0:
+            self._apply_valves_config(valves_config)
+
+    def _validate_valves_config(self, valves_config):
+        key = 'ValvesControl.submit_valves_config'
+        if type(valves_config) is not list:
+            raise AppError(key, 'Lista de configuração inválida')
+        if len(valves_config) > NUMBER_OF_VALVES:
+            raise AppError(key, 'Quantidade inválida de válvulas')
+        for valve in valves_config:
+            if type(valve) is not int or valve < 0 or valve > NUMBER_OF_VALVES:
+                raise AppError(key, 'Uma ou mais válvulas são inválidas')
+
+    def _apply_valves_config(self, valves_config):
+        for valve in self.valves:
+            if valve.valve_number in valves_config:
+                valve.open_valve()
+            else:
+                valve.close_valve()
+
     def __del__(self):
         GpioPack.cleanup()  # Libera os pinos do raspberry

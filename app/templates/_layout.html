@@ -1,5 +1,6 @@
-<!doctype  html>
+<!doctype html>
 <html lang="pt-br">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -8,44 +9,49 @@
   <title>Projeto SisGARQ - v2.0</title>
   <link rel="icon" href="data:;base64,iVBORwOKGO=" />
   <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.min.css') }}">
-  <link rel="stylesheet" href="{{ url_for('static', filename='css/my_css.css') }}" >
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/my_css.css') }}">
   <link rel="stylesheet" href="{{ url_for('static', filename='css/font-awesome-4_7_0.min.css') }}">
+  <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/bootstrap4-toggle.min.css') }}">
 </head>
+
 <body class="bg-light"></body>
-  <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
-    <div class="container-fluid">
-      <a class="navbar-brand" href="{{ url_for('index') }}">Projeto SisGARQ</a>
-      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse" id="navbarResponsive">
-        <ul class="navbar-nav ml-auto">
-          <li class="nav-item {% if page == 'index' %} active {% endif %}">
-            <a class="nav-link" href="{{ url_for('index') }}">Início</a>
-          </li>
-          <li class="nav-item {% if page == 'about' %} active {% endif %}">
-            <a class="nav-link" href="#">Informações</a>
-          </li>
-          <li class="nav-item {% if page == 'contact' %} active {% endif %}">
-            <a class="nav-link" href="#">Contato</a>
-          </li>
-        </ul>
-      </div>
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="{{ url_for('index') }}">Projeto SisGARQ</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive"
+      aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarResponsive">
+      <ul class="navbar-nav ml-auto">
+        <li class="nav-item {% if page == 'index' %} active {% endif %}">
+          <button class="btn btn-outline-light btn-sm" data-toggle="modal" data-target="#manualValvesModal">
+            Controle Manual de Válvulas
+          </button>
+        </li>
+      </ul>
     </div>
-  </nav>
-  <div class="container-fluid h-100">
-    {% block content %}
-      <!-- Conteúdo -->
-    {% endblock %}
   </div>
-  <script src="{{ url_for('static', filename='js/jquery-3_5_1.slim.min.js') }}"></script>
-  <script src="{{ url_for('static', filename='js/popper-1_14_6.min.js') }}"></script>
-  <script src="{{ url_for('static', filename='js/bootstrap.min.js') }}"></script>
-  <script src="{{ url_for('static', filename='js/axios.min.js') }}"></script>
-  <script type=""> {% include 'src/show_message.js' %} </script>
-  {% block scripts %}
-    <!-- scripts -->
-  {% endblock%}
+</nav>
+<div class="container-fluid h-100">
+  {% block content %}
+  <!-- Conteúdo -->
+  {% endblock %}
+</div>
+
+{% include 'partials/_layout/manual_valves_control.html' %}
+
+<script src="{{ url_for('static', filename='js/jquery-3_5_1.slim.min.js') }}"></script>
+<script src="{{ url_for('static', filename='js/popper-1_14_6.min.js') }}"></script>
+<script src="{{ url_for('static', filename='js/bootstrap.min.js') }}"></script>
+<script src="{{ url_for('static', filename='js/axios.min.js') }}"></script>
+<script src="{{ url_for('static', filename='js/toggle/bootstrap4-toggle.min.js') }}"></script>
+<script type=""> {% include 'src/show_message.js' %} </script>
+<script type=""> {% include 'src/_layout/manual_valves_control.js' %} </script>
+{% block scripts %}
+<!-- scripts -->
+{% endblock%}
 
 </body>
+
 </html>
