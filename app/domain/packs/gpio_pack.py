@@ -8,7 +8,7 @@ class GpioPack():
     """
 
     @staticmethod
-    def set_board_pinout():  # TODO call in __init__ valves_control
+    def set_board_pinout():
         gpio.setmode(gpio.BOARD)
 
     @staticmethod
@@ -24,7 +24,7 @@ class GpioPack():
         gpio.output(board_number, gpio.LOW)
 
     @staticmethod
-    def cleanup():  # TODO call in __dell__ valves_control
+    def cleanup():
         gpio.cleanup()
 
 
