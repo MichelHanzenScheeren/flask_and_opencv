@@ -38,7 +38,7 @@ class AnalyzeUseCase():
     def get_results(self):
         try:
             if len(self.analyze.results.signals) == 0:
-                raise AppError('get_results', 'Nenhum resultado encontrado')
+                raise AppError('get_results', 'Nenhum resultado foi encontrado.')
             return self.analyze.results
         except Exception as error:
             return ResponseUseCase.redirect_to_error_page(error)

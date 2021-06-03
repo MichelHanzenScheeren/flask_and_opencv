@@ -21,7 +21,7 @@ def configure_routes(app):
 
     @app.errorhandler(404)
     def internal_server_error(error):
-        parameters = {'message': str(error), 'valves_number': NUMBER_OF_VALVES}
+        parameters = {'message': str(error).replace('404 Not Found: ', ''), 'valves_number': NUMBER_OF_VALVES}
         return render_template('error.html', page='error', parameters=parameters), 404
 
     webcam = Webcam()
