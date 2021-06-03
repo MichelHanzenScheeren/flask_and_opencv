@@ -3,7 +3,7 @@ function clearMessage() {
 }
 
 function showMessage(title = '', body = '', complement = '', autohide = false) {
-  let message = ` <div id="my-toast" data-autohide="${autohide}" data-delay="4000" class="toast my-toast" role="alert" aria-live="assertive" aria-atomic="true">
+  let message = ` <div id="my-toast" data-autohide="${autohide}" data-delay="6000" class="toast my-toast" role="alert" aria-live="assertive" aria-atomic="true">
     <div class="toast-header bg-warning">
     <strong class="mr-auto text-dark"> ${title} </strong>
     <button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close">
@@ -26,6 +26,6 @@ $('#my-toast').on('hidden.bs.toast', function () {
 
 function showErrorMessage(error) {
   console.warn(error.response.data);
-  let title = 'Não foi possível completar a solicitação &#128533;';
+  let title = 'Problemas para completar a solicitação &#128533;';
   showMessage(title, error.response.data, undefined, true);
 }

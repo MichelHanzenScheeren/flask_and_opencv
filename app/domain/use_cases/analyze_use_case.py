@@ -21,16 +21,27 @@ class AnalyzeUseCase():
             return ResponseUseCase.error_response(AppError('calculate_differentiator', message))
 
     def get_differentiator_image(self):
-        return self.analyze.results.get_differentiator_image()
+        try:
+            return self.analyze.results.get_differentiator_image()
+        except Exception as error:
+            message = f'Um erro impediu que a imagem do diferenciador fosse exibida. (ERRO: {str(error)})'
+            return ResponseUseCase.error_response(AppError('get_all_images', message))
 
     def start_analyze(self, form):
-        self.analyze.start_analyze(form, self.webcam.get_cropped_image)
-        self.webcam.clear()
+        try:
+            self.analyze.start_analyze(form, self.webcam.get_cropped_image)
+            self.webcam.clear()
+        except Exception as error:
+            message = f'Um erro interno impediu que a análise fosse concluída. (ERRO: {str(error)})'
+            return ResponseUseCase.redirect_to_error_page(AppError('get_all_images', message))
 
     def get_results(self):
-        if len(self.analyze.results.signals) == 0:
-            raise AppError('results', 'Nenhum resultado encontrado')
-        return self.analyze.results
+        try:
+            if len(self.analyze.results.signals) == 0:
+                raise AppError('get_results', 'Nenhum resultado encontrado')
+            return self.analyze.results
+        except Exception as error:
+            return ResponseUseCase.redirect_to_error_page(error)
 
     def get_all_images(self):
         try:
@@ -38,14 +49,18 @@ class AnalyzeUseCase():
             headers = {'content-type': 'application/zip', 'format': 'base64', 'file-name': 'imagens.zip'}
             return zip_file, headers
         except Exception as error:
-            message = f'Não foi possível fazer o download do arquivo. Tente novamente mais tarde...'
-            raise AppError('get_all_images', message)
+            message = f'Não foi possível fazer o download do arquivo. (ERRO: {str(error)})'
+            return ResponseUseCase.error_response(AppError('get_all_images', message))
 
     def get_xlsx_results(self):
-        xlsx_file = self.analyze.results.get_xlsx_results()
-        content_type = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
-        headers = {'content-type': content_type, 'format': 'base64', 'file-name': 'resultados.xlsx'}
-        return xlsx_file, headers
+        try:
+            xlsx_file = self.analyze.results.get_xlsx_results()
+            content_type = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+            headers = {'content-type': content_type, 'format': 'base64', 'file-name': 'resultados.xlsx'}
+            return xlsx_file, headers
+        except Exception as error:
+            message = f'Não foi possível fazer o download do arquivo. (ERRO: {str(error)})'
+            return ResponseUseCase.error_response(AppError('get_xlsx_results', message))
 
     def saveNewAnalyzeDate(self, newDate):
         try:

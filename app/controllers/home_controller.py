@@ -1,4 +1,4 @@
-from flask import Response, render_template, redirect, url_for, request
+from flask import Response, render_template, request
 
 
 def configure_routes(app, webcamUseCase):
@@ -11,12 +11,8 @@ def configure_routes(app, webcamUseCase):
     @app.route('/index')
     @app.route('/home')
     def index():
-        try:
-            webcamUseCase.init_webcam()
-            parameters = webcamUseCase.get_index_parameters()
-            return render_template('index.html', page='index', parameters=parameters)
-        except:
-            return redirect(url_for('error_page'))
+        parameters = webcamUseCase.init_webcam_and_get_parameters()
+        return render_template('index.html', page='index', parameters=parameters)
 
     @app.route('/play_webcam')
     def play_webcam():

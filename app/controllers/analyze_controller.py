@@ -1,6 +1,5 @@
 # pylint: disable=unused-variable
 from app.configuration import NUMBER_OF_VALVES
-from app.domain.use_cases.response_use_case import ResponseUseCase
 from flask import Response, render_template, redirect, url_for, request
 
 
@@ -16,43 +15,28 @@ def configure_routes(app, analyzeUseCase):
 
     @app.route('/get_differentiator_image', methods=['POST'])
     def get_differentiator_image():
-        try:
-            return Response(analyzeUseCase.get_differentiator_image())
-        except Exception as error:
-            return ResponseUseCase.error_response(error)
+        return Response(analyzeUseCase.get_differentiator_image())
 
     @app.route('/start_analyze', methods=['POST'])
     def start_analyze():
-        try:
-            analyzeUseCase.start_analyze(request.form)
-            return redirect(url_for('results'))
-        except:
-            return redirect(url_for('error_page'))
+        analyzeUseCase.start_analyze(request.form)
+        return redirect(url_for('results'))
 
     @app.route('/results')
     def results():
-        try:
-            parameters = {'valves_number': NUMBER_OF_VALVES}
-            results = analyzeUseCase.get_results()
-            return render_template('results.html', page='results', results=results, parameters=parameters)
-        except:
-            return redirect(url_for('error_page'))
+        parameters = {'valves_number': NUMBER_OF_VALVES}
+        results = analyzeUseCase.get_results()
+        return render_template('results.html', page='results', results=results, parameters=parameters)
 
     @app.route('/get_all_images', methods=['POST'])
     def get_all_images():
-        try:
-            zip_file, headers = analyzeUseCase.get_all_images()
-            return Response(zip_file, headers=headers)
-        except Exception as error:
-            return ResponseUseCase.error_response(error)
+        zip_file, headers = analyzeUseCase.get_all_images()
+        return Response(zip_file, headers=headers)
 
     @app.route('/get_xlsx_results', methods=['POST'])
     def get_xlsx_results():
-        try:
-            xlsx_file, headers = analyzeUseCase.get_xlsx_results()
-            return Response(xlsx_file, headers=headers)
-        except Exception as error:
-            return ResponseUseCase.error_response(error)
+        xlsx_file, headers = analyzeUseCase.get_xlsx_results()
+        return Response(xlsx_file, headers=headers)
 
     @app.route('/saveNewAnalyzeDate', methods=['POST'])
     @app.route('/saveNewAnalyzeDate/<string:newDate>', methods=['POST'])

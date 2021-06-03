@@ -12,3 +12,9 @@ class ResponseUseCase():
         if type(error) is AppError:
             abort(400, description=str(error))
         abort(400, description=f'Um erro desconhecido ocorreu (descrição: {str(error)})')
+
+    @staticmethod
+    def redirect_to_error_page(error):
+        if type(error) is AppError:
+            abort(404, description=str(error))
+        abort(404, description=f'Um erro desconhecido ocorreu (descrição: {str(error)})')

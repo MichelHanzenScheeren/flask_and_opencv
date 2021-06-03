@@ -7,14 +7,16 @@ class WebcamUseCase():
     def __init__(self, webcam):
         self.webcam = webcam
 
-    def init_webcam(self):
-        self.webcam.init_webcam()
-
-    def get_index_parameters(self):
-        index_parameters = self.webcam.video_status_and_port()
-        index_parameters['webcans_list'] = self.webcam.webcans_list()
-        index_parameters['valves_number'] = NUMBER_OF_VALVES
-        return index_parameters
+    def init_webcam_and_get_parameters(self):
+        try:
+            self.webcam.init_webcam()
+            index_parameters = self.webcam.video_status_and_port()
+            index_parameters['webcans_list'] = self.webcam.webcans_list()
+            index_parameters['valves_number'] = NUMBER_OF_VALVES
+            return index_parameters
+        except Exception as error:
+            message = f'Um erro ocorreu quando tentávamos configurar sua webcam. (ERRO: {str(error)})'
+            return ResponseUseCase.redirect_to_error_page(AppError('init_webcam_and_get_parameters', message))
 
     def save_uploaded_image(self, file):
         try:
