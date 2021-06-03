@@ -10,14 +10,6 @@ function getDifferentiator() {
     document.getElementById('green').innerHTML = 'Green: ' + data[1];
     document.getElementById('blue').innerHTML = 'Blue: ' + data[2];
     document.getElementById('startAnalyzeButton').disabled = false;
-    getDifferentiatorImage()
-  }).catch(showErrorMessage);
-}
-
-function getDifferentiatorImage() {
-  axios.post('{{ url_for("get_differentiator_image") }}').then(function (response) {
-    let differentiatorImage = document.getElementById('differentiatorImage')
-    differentiatorImage.setAttribute('src', 'data:image/jpeg;base64,' + response.data);
   }).catch(showErrorMessage);
 }
 

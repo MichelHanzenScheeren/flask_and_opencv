@@ -20,13 +20,6 @@ class AnalyzeUseCase():
             message = f'Não foi possível obter o diferenciador. (ERRO: {str(error)})'
             return ResponseUseCase.error_response(AppError('calculate_differentiator', message))
 
-    def get_differentiator_image(self):
-        try:
-            return self.analyze.results.get_differentiator_image()
-        except Exception as error:
-            message = f'Um erro impediu que a imagem do diferenciador fosse exibida. (ERRO: {str(error)})'
-            return ResponseUseCase.error_response(AppError('get_all_images', message))
-
     def start_analyze(self, form):
         try:
             self.analyze.start_analyze(form, self.webcam.get_cropped_image)

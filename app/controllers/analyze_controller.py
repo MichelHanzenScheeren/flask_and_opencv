@@ -13,10 +13,6 @@ def configure_routes(app, analyzeUseCase):
     def get_differentiator():
         return analyzeUseCase.calculate_differentiator()
 
-    @app.route('/get_differentiator_image', methods=['POST'])
-    def get_differentiator_image():
-        return Response(analyzeUseCase.get_differentiator_image())
-
     @app.route('/start_analyze', methods=['POST'])
     def start_analyze():
         analyzeUseCase.start_analyze(request.form)

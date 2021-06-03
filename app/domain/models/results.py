@@ -34,14 +34,6 @@ class Results():
         self.signals.clear()
         self.captures_images.clear()
 
-    def get_differentiator_image(self):
-        """ Recupera a imagem do diferenciador e a formata para ser retornada ao front-end. 
-
-        Se nenhum erro ocorrer, retorna uma imagem em formato JPG codificada em bytes na base64.
-        """
-        jpg_image = ImagePack.encode_to_jpg(self.differentiator_image)
-        return ImagePack.encode_to_b64(jpg_image)
-
     def get_all_images(self):
         """ Recupera as imagens das capturas e as formata para serem retornadas ao front-end. 
 
