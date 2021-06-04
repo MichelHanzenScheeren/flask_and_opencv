@@ -1,0 +1,94 @@
+<div class="modal fade" id="programmingModal" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog  mx-5 mw-100" srole="document">
+    <form id="programationForm" method="POST" action="/" onsubmit="return saveProgramming()">
+      <div class="modal-content p-1">
+        <div class="modal-header">
+          <h4 class="modal-title" id="exampleModalLabel">Nova programação para as válvulas</h4>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Fechar">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body" id="modalBody">
+          <p class="text-justify my-1 py-0">
+            A primeira coluna se refere a marcação do início de cada ciclo de análise, a segunda
+            define o tempo (em segundos) e as {{valves_number}}
+            colunas seguintes correspondem a configuração das válvulas.
+          </p>
+          <p class="text-justify my-1 py-0">
+            As válvulas MARCADAS em uma linha serão aquelas ABERTAS na respectiva rodada, pelo
+            tempo especificado na segunda coluna da linha.
+          </p>
+          <p class="text-justify my-1 py-0">
+            Uma válvula pode ser renomeada para auxiliar em sua identificação. Para isso, basta clicar sobre
+            o nome atual da válvula.
+          </p>
+          <hr class="my-0 py-1">
+          <div id="programmingDataDiv">
+            <div class="row">
+              <div class="col">
+                <input type="checkbox" id="triplicate_checkbox" style="height:14px;width:14px" checked>
+                <label class="px-2" style="font-size:16px">CONSIDERAR CADA CICLO EM TRIPLICATA</label>
+              </div>
+            </div>
+            <hr class="my-0 py-1">
+            <div class="table-responsive">
+              <table id="programmingTable" class="table table-bordered table-hover">
+                <thead class="table-dark" id="tableHead">
+                  <tr align="center" class="titlesRow">
+                    <th scope="col" class="align-middle" style="font-size:15px"> Novo ciclo</th>
+                    <th scope="col" class="align-middle" style="font-size:15px"> Tempo </th>
+                    {% for i in range(0,  parameters["valves_number"]) %}
+                    <th id="{{i+1}}" scope="col" style="font-size:17px">
+                      {{i+1}}
+                      <p onclick="ChangeToInput(this)" style="font-size:12px;cursor:pointer;" class="m-0 valve_name">
+                          Valv. {{i+1}}</p>
+                    </th>
+                    {% endfor %}
+                    <th scope="col" class="align-middle">#</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {% for i in range(0, 3) %}
+                  <tr align="center" class="valve_data">
+                    <td class="align-middle"> <input type="checkbox" class="cycle_checkbox"> </td>
+                    <td class="align-middle">
+                      <input style="width:50px;font-size:14px;" min="1" type="number" value="0" required
+                        class="form-control time_input p-1 m-0" title="Campo obrigatório" />
+                    </td>
+                    {% for i in range(0, parameters["valves_number"]) %}
+                    <td class="align-middle"> <input type="checkbox" class="valve_checkbox"></td>
+                    {% endfor %}
+                    <td>
+                      <button class="btn btn-sml px-0 mx-0" onclick="RemoveTableRow(this)">
+                        <span class="fa fa-times"></span>
+                      </button>
+                    </td>
+                  </tr>
+                  {% endfor %}
+                </tbody>
+                <tfoot>
+                  <tr align="center">
+                    <td colspan="3">
+                      <button type="button" class="btn btn-sml btn-outline-primary" onclick="AddTableRow(this)">
+                        Adicionar linha
+                      </button>
+                    </td>
+                    <td colspan="3">
+                      <button type="button" class="btn btn-sml btn-outline-primary" onclick="AddTableGroup(this)">
+                        Novo grupo
+                      </button>
+                    </td>
+                  </tr>
+                </tfoot>
+              </table>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">FECHAR</button>
+          <button type="submit" class="btn btn-success">SALVAR</button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

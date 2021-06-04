@@ -9,3 +9,7 @@ def configure_routes(app, valvesUseCase):
     @app.route('/submit_valves_config', methods=['POST'])
     def submit_valves_config():
         return valvesUseCase.submit_valves_config(request.json['valves'])
+
+    @app.route('/submit_programming', methods=['POST'])
+    def submit_programming():
+        return valvesUseCase.submit_programming(request.json)

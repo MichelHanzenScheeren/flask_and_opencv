@@ -8,11 +8,13 @@
         <div class="col-md mx-2 p-3">
           {% include "partials/index/differentiator_column.html" %}
           <hr class="my-3">
+          {% include "partials/index/valves_column.html" %}
         </div>
         {% include "partials/index/analyze_column.html" %}
       </div>
     </div>
   </div>
+  {% include "partials/index/programming_modal.html" %}
 {% endblock%}
 
 {% block scripts %}
@@ -21,5 +23,7 @@
     {% include 'src/index/rectangle.js' %}
     {% include 'src/index/load_image.js' %}
     {% include 'src/index/analyze.js' %}
+    {% include 'src/index/send_programming_form.js' %}
+    {% include 'src/index/manipulate_programming_form.js' %}
   </script>
 {% endblock%}

@@ -1,3 +1,4 @@
+from app.domain.models.save_json_programming import SaveJsonProgramming
 from app.domain.errors.app_error import AppError
 from app.configuration import NUMBER_OF_VALVES, VALVE_MAPPING, BOARD_NUMBER, VALVE_NUMBER
 from app.domain.packs.gpio_pack import GpioPack
@@ -36,6 +37,9 @@ class ValvesControl():
                 valve.open_valve()
             else:
                 valve.close_valve()
+
+    def submit_programming(self, dictionary):
+        SaveJsonProgramming(dictionary).create()
 
     def __del__(self):
         GpioPack.cleanup()  # Libera os pinos do raspberry

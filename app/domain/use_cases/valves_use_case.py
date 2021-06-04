@@ -11,3 +11,10 @@ class ValvesUseCase():
             return ResponseUseCase.success_response()
         except Exception as error:
             return ResponseUseCase.error_response(error)
+
+    def submit_programming(self, dictionary):
+        try:
+            self.valves_control.submit_programming(dictionary)
+            return ResponseUseCase.success_response(message='Programação salva com sucesso')
+        except Exception as error:
+            return ResponseUseCase.error_response(error)
