@@ -1,0 +1,44 @@
+<div class="px-4 mb-2" id="div-items-left">
+  <div class="row justify-content-between align-items-center mb-2">
+    <img id="frameImg" draggable="false" class="img-fluid rounded" src="{{ url_for('play_webcam') }}">
+  </div>
+  <div class="row justify-content-between align-items-center pt-1">
+    <div class="col mx-0 pl-0 pr-3 my-0 py-0">
+      <select id="selectCurrentWebcam" class="selectpicker selectpicker-sm" style="min-width:104px;">
+        {% for value in parameters["webcans_list"] %}
+        {% if value == parameters["current"] %}
+        <option selected value="{{ value }}"> Webcam {{ value + 1 }} </option>
+        {% else %}
+        <option value="{{ value }}"> Webcam {{ value + 1 }} </option>
+        {% endif %}
+        {% endfor %}
+      </select>
+    </div>
+    <div class="col mx-0 px-0 my-0 py-0">
+      <label style="margin-bottom:0rem;">X1:</label>
+      <input id="x1" type="number" style="width:3em;" value="0" min="0">
+    </div>
+    <div class="col mx-0 px-0 my-0 py-0">
+      <label style="margin-bottom:0rem;">Y1:</label>
+      <input id="y1" type="number" style="width:3em;" value="0" min="0">
+    </div>
+    <div class="col mx-0 px-0 my-0 py-0">
+      <label style="margin-bottom:0rem;">X2:</label>
+      <input id="x2" type="number" style="width:3em;" value="0" min="0">
+    </div>
+    <div class="col mx-0 px-0 my-0 py-0">
+      <label style="margin-bottom:0rem;">Y2:</label>
+      <input id="y2" type="number" style="width:3em;" value="0" min="0">
+    </div>
+    <div class="col  mx-0 px-1 my-0 py-0">
+      <button id="refreshRectangleButton" type="button" class="btn btn-dark btn-sm btn-block">
+        <span class="fa fa-refresh"></span>
+      </button>
+    </div>
+    <div class="col mx-0 pr-0 pl-1 my-0 py-0">
+      <button id="clearRectangleButton" type="button" class="btn btn-dark btn-sm btn-block">
+        <span class="fa fa-trash"></span>
+      </button>
+    </div>
+  </div>
+</div>

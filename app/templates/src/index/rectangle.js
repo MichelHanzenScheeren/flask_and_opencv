@@ -82,7 +82,7 @@ function _validDraw() {
 
 function clearRectangle() {
   axios.post('{{ url_for("clear_rectangle") }}').then(function (response) {
-    document.getElementById('uploadImageLabel').innerHTML = 'Escolher imagem local';
+    document.getElementById('uploadImageLabel').innerHTML = 'Selecionar';
     htmlXY.x1.value = 0;
     htmlXY.x2.value = 0;
     htmlXY.y1.value = 0;

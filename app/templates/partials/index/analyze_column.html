@@ -1,0 +1,49 @@
+<div class="col-md mx-2">
+  <h4 class="mt-3">Análise</h4>
+  <form id="analyzeForm" action="start_analyze" method="POST">
+    <div class="form-row">
+      <div class="col form-group mb-3">
+        <label for="time" class="control-label my-text-secondary mb-1">Tempo (seg)</label>
+        <input id="timeInput" name="time" class="form-control" type="number" value="10" min="1" required
+          title="O campo precisa conter um número inteiro maior do que zero" />
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="col form-group my-2">
+        <label for="qtd" class="control-label my-text-secondary mb-1">Nº capturas/seg</label>
+        <input id="qtdInput" name="qtd" class="form-control" type="number" value="1" min="1" max="10" required
+          title="O campo precisa conter um número inteiro maior do que zero" />
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="col form-group my-2">
+        <label for="description" class="control-label  my-text-secondary mb-1">Descrição (opcional)</label>
+        <textarea name="description" class="form-control my-textarea" maxlength="500" rows="5"></textarea>
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="col form-group my-2">
+        <label for="selectDate" class="control-label my-text-secondary mb-1">Data/hora</label>
+        <select id="selectDate" name="selectDate" class="selectpicker form-control mb-2">
+          <option selected value="user">Data e hora local</option>
+          <option value="server">Data e hora do servidor</option>
+        </select>
+        <div style="display:none">
+          <input id="userDate" name="userDate" type="text" value="" />
+        </div>
+      </div>
+    </div>
+    <div>
+      <div id="div1">
+        <input disabled id="startAnalyzeButton" type="button" value="INICIAR"  
+        class="btn btn-lg btn-block btn-success mb-4">
+      </div>
+      <div id="div2" style="display:none">
+        <button type="button" disabled class="btn btn-lg btn-block btn-warning mb-4">
+          <span class="spinner-border spinner-border-lg " role="status" aria-hidden="true">
+          </span> &nbsp; AGUARDE...
+        </button>
+      </div>
+    </div>
+  </form>
+</div>

@@ -1,0 +1,23 @@
+<div>
+  <h4 class="mt-2 mb-1">Diferenciador</h4>
+  <form enctype="multipart/form-data">
+    <div class="form-row">
+      <div class="col form-group mb-2">
+        <label for="time" class="control-label my-text-secondary mb-1">Enviar imagem local (opcional)</label>
+        <div class="custom-file">
+          <label class="custom-file-label" id="uploadImageLabel" for="uploadImageInput"> Selecionar </label>
+          <input type="file" id="uploadImageInput" class="custom-file-input" accept="image/png,image/jpeg" multiple="false">
+        </div>
+      </div>
+    </div>
+  </form>
+  <button id="getDifferentiatorButton" class="btn btn-md btn-block btn-dark text-white my-1">
+    Obter diferenciador
+  </button>
+  <label class="mt-1 mb-1 my-text">Dados obtidos:</label>
+  <div id="red" class="alert alert-danger mb-2 py-2 px-3" role="alert">Aguardando...</div>
+  <div id="green" class="alert alert-success mb-2 py-2 px-3" role="alert">Aguardando...</div>
+  <div id="blue" class="alert alert-primary py-2 px-3" role="alert"> Aguardando... </div>
+</div>
+  
+  
