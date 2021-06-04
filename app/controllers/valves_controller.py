@@ -13,3 +13,7 @@ def configure_routes(app, valvesUseCase):
     @app.route('/submit_programming', methods=['POST'])
     def submit_programming():
         return valvesUseCase.submit_programming(request.json)
+
+    @app.route('/upload_user_programming', methods=['POST'])
+    def upload_user_programming():
+        return valvesUseCase.upload_user_programming(request.json)

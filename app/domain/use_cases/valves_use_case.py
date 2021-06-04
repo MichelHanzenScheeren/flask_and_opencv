@@ -18,3 +18,11 @@ class ValvesUseCase():
             return ResponseUseCase.success_response(message='Programação salva com sucesso')
         except Exception as error:
             return ResponseUseCase.error_response(error)
+
+    def upload_user_programming(self, dictionary):
+        try:
+            self.valves_control.submit_programming(dictionary)
+            html = self.valves_control.create_html_from_programming(dictionary)
+            return ResponseUseCase.success_response(data=html)
+        except Exception as error:
+            return ResponseUseCase.error_response(error)

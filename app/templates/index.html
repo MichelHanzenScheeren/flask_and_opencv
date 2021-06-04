@@ -1,29 +1,30 @@
 {% extends '_layout.html' %}
 
 {% block content %}
-  <div class="row h-100 py-2 px-4 align-items-center justify-content-center">
-    {% include "partials/index/webcam_column.html" %}
-    <div class="col-xl h-100 mb-2" style="min-height: 520px;" id="div-items-rigth">
-      <div class="row h-100 align-items-center">
-        <div class="col-md mx-2 p-3">
-          {% include "partials/index/differentiator_column.html" %}
-          <hr class="my-3">
-          {% include "partials/index/valves_column.html" %}
-        </div>
-        {% include "partials/index/analyze_column.html" %}
+<div class="row h-100 py-2 px-4 align-items-center justify-content-center">
+  {% include "partials/index/webcam_column.html" %}
+  <div class="col-xl h-100 mb-2" style="min-height: 520px;" id="div-items-rigth">
+    <div class="row h-100 align-items-center">
+      <div class="col-md mx-2 p-3">
+        {% include "partials/index/differentiator_column.html" %}
+        <hr class="my-3">
+        {% include "partials/index/valves_column.html" %}
       </div>
+      {% include "partials/index/analyze_column.html" %}
     </div>
   </div>
-  {% include "partials/index/programming_modal.html" %}
+</div>
+{% include "partials/index/programming_modal.html" %}
 {% endblock%}
 
 {% block scripts %}
-  <script type="">
+<script type="">
     {% include 'src/index/webcam.js' %}
     {% include 'src/index/rectangle.js' %}
     {% include 'src/index/load_image.js' %}
     {% include 'src/index/analyze.js' %}
     {% include 'src/index/send_programming_form.js' %}
     {% include 'src/index/manipulate_programming_form.js' %}
+    {% include 'src/index/file_programming_control.js' %}
   </script>
 {% endblock%}

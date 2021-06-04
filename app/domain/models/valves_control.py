@@ -1,3 +1,4 @@
+from app.domain.models.create_html_from_programming import CreateHtmlFromProgramming
 from app.domain.models.save_json_programming import SaveJsonProgramming
 from app.domain.errors.app_error import AppError
 from app.configuration import NUMBER_OF_VALVES, VALVE_MAPPING, BOARD_NUMBER, VALVE_NUMBER
@@ -40,6 +41,10 @@ class ValvesControl():
 
     def submit_programming(self, dictionary):
         SaveJsonProgramming(dictionary).create()
+
+    def create_html_from_programming(self, dictionary):
+        html_creator = CreateHtmlFromProgramming(dictionary)
+        return html_creator.create()
 
     def __del__(self):
         GpioPack.cleanup()  # Libera os pinos do raspberry
