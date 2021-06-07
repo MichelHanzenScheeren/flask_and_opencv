@@ -17,7 +17,7 @@ $('#programmingModal').on('hidden.bs.modal', function () {
   $(".to_remove").remove();
   var p = $('p').filter('.valve_name');
   for (let index = 0; index < p.length; index++)
-    p[index].textContent = `Valv. ${index + 1}`;
+    p[index].textContent = `Valv${index + 1}`;
 });
 
 
@@ -55,11 +55,11 @@ function removeWhiteLineIfNecessary() {
     trs[trs.length - 2].remove();
 }
 
-function AddTableRow(item) {
+function AddRow(item) {
   $(item).closest('table').append(createTableRow());
 }
 
-function AddTableGroup(item) {
+function AddGroup(item) {
   let linhaEmBranco = '<tr align="center" class="to_remove valve_data white_line bg-secondary">';
   for (let i = 0; i < valves_number + 3; i++)
     linhaEmBranco += ' <td> </td>'
@@ -84,7 +84,7 @@ function ChangeToLabel(item) {
   let parent_id = "#" + valvId;
   let pConfig = { onclick: "ChangeToInput(this)", style: "font-size:12px;cursor:pointer;", class: "m-0 valve_name" };
   let newLabel = $("<p>", pConfig);
-  newLabel.html(item.value != "" ? item.value : `Valv. ${valvId}`);
+  newLabel.html(item.value != "" ? item.value : `Valv${valvId}`);
   $(parent_id).append(newLabel);
   item.remove();
 }

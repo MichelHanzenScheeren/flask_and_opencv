@@ -3,7 +3,6 @@
 })() //Função auto-executada
 
 function onFileSelected(event) {
-  console.log('OLAAA');
   if (_isValidJsonFile(event)) {
     let uploadedFile = event.target.files[0];
     let reader = new FileReader();

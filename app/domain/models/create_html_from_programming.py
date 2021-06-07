@@ -25,7 +25,7 @@ class CreateHtmlFromProgramming:
         html += '<div id="programmingDataDiv"> <div class="row">  <div class="col"> '
         checked = 'checked' if dictionary[WORKING_IN_TRIPLICATE] else ''
         html += f'<input type="checkbox" id="triplicate_checkbox" style="height:14px;width:14px" {checked}>'
-        html += '<label class="px-2" style="font-size:16px">CONSIDERAR CADA CICLO EM TRIPLICATA</label> '
+        html += '<label class="px-2" style="font-size:16px">Considerar cada ciclo em triplicata</label> '
         html += '</div> </div> <hr class="my-0 py-1"> '
         html += '<div class="table-responsive"> <table id="programmingTable" class="table table-bordered table-hover"> '
         html += '<thead class="table-dark" id="tableHead"> '
@@ -34,8 +34,8 @@ class CreateHtmlFromProgramming:
         html += '<th scope="col" class="align-middle" style="font-size:15px"> Tempo </th> '
         for i in range(1, dictionary[VALVES_QUANTITY] + 1):
             html += f'<th id="{i}" scope="col" style="font-size:17px">{i} <p onclick="ChangeToInput(this)" '
-            name = f'Valv. {i}' if dictionary[SUBTITLE].get(
-                f'Valv. {i}') == None else dictionary[SUBTITLE].get(f'Valv. {i}')
+            name = f'Valv{i}' if dictionary[SUBTITLE].get(
+                f'Valv{i}') == None else dictionary[SUBTITLE].get(f'Valv{i}')
             html += f' style="font-size:12px;cursor:pointer;"class="m-0 valve_name">{name}</p></th> '
         html += '<th scope="col" class="align-middle">#</th> </tr> </thead> '
         return html
@@ -62,9 +62,9 @@ class CreateHtmlFromProgramming:
                 html += '<td> <button class="btn btn-sml px-0 mx-0" onclick="RemoveTableRow(this)">'
                 html += '<span class="fa fa-times"></span> </button> </td> </tr>'
         html += '</tbody> <tfoot> <tr align="center"> <td colspan="3">'
-        html += '<button type="button" class="btn btn-sml btn-outline-primary" onclick="AddTableRow(this)">Adicionar linha</button>'
+        html += '<button type="button" class="btn btn-sm btn-dark p-2" onclick="AddRow(this)">NOVA LINHA</button>'
         html += ' </td> <td colspan="3">'
-        html += '<button type="button" class="btn btn-sml btn-outline-primary" onclick="AddTableGroup(this)">Novo grupo</button>'
+        html += '<button type="button" class="btn btn-sm btn-dark p-2" onclick="AddGroup(this)">NOVO GRUPO</button>'
         html += '</td> </tr> </tfoot> </table> </div> </div>'
         return html
 
