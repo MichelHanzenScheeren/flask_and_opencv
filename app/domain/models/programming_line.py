@@ -37,4 +37,4 @@ class ProgrammingLine():
         elif type(self.open_valves) is not list:
             message = f'Valor inválido para parâmetro "{OPEN_VALVES}"'
         if not message == '':
-            raise AppError('ProgrammingLine.line_number', message)
+            raise AppError('ProgrammingLine', message)

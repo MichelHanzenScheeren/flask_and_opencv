@@ -1,7 +1,8 @@
+from app.configuration import NUMBER_OF_VALVES, VALVE_MAPPING, BOARD_NUMBER, VALVE_NUMBER
+from app.domain.models.programming import Programming
 from app.domain.models.create_html_from_programming import CreateHtmlFromProgramming
 from app.domain.models.save_json_programming import SaveJsonProgramming
 from app.domain.errors.app_error import AppError
-from app.configuration import NUMBER_OF_VALVES, VALVE_MAPPING, BOARD_NUMBER, VALVE_NUMBER
 from app.domain.packs.gpio_pack import GpioPack
 from app.domain.models.valve import Valve
 
@@ -39,10 +40,16 @@ class ValvesControl():
             else:
                 valve.close_valve()
 
-    def submit_programming(self, dictionary):
-        SaveJsonProgramming(dictionary).create()
+    def save_json_programming(self, dictionary):
+        self.convert_dictionary_programming(dictionary) # Vai validar se está tudo ok
+        save_json = SaveJsonProgramming(dictionary)
+        save_json.create()
 
-    def create_html_from_programming(self, dictionary):
+    def convert_dictionary_programming(self, dictionary):
+        programming = Programming().from_dictionary(dictionary)
+        return programming
+
+    def create_html_from_programming_dictionary(self, dictionary):
         html_creator = CreateHtmlFromProgramming(dictionary)
         return html_creator.create()
 

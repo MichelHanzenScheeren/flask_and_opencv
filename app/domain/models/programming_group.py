@@ -31,4 +31,4 @@ class ProgrammingGroup():
         elif type(self.lines) is not list:
             message = f'Valor de "{LINE_NUMBER}" inválido para {GROUP_NUMBER}'
         if not message == '':
-            raise AppError('ProgrammingLine.line_number', message)
+            raise AppError('ProgrammingGroup', message)

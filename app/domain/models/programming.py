@@ -6,7 +6,6 @@ from app.domain.models.programming_group import ProgrammingGroup
 
 class Programming():
     def __init__(self):
-        self.saved_date = datetime.now()
         self.valves_quantity = 0
         self.triplicate = False
         self.subtitle = {}
@@ -14,8 +13,6 @@ class Programming():
 
     def from_dictionary(self, dictionary):
         self._validate_parameter(dictionary)
-        str = dictionary[SAVED_DATE]
-        self.saved_date = datetime.strptime(str, STRING_FORMAT)
         self.valves_quantity = dictionary[VALVES_QUANTITY]
         self.triplicate = dictionary[WORKING_IN_TRIPLICATE]
         self.subtitle.clear()
@@ -32,13 +29,11 @@ class Programming():
     def _validate_parameter(self, dictionary):
         if type(dictionary) is not dict:
             message = 'O arquivo não corresponde a um json de programação válido'
-            raise AppError('ProgrammingGroup.dictionary',  message)
+            raise AppError('Programming.dictionary',  message)
 
     def _validate(self):
-        message = ''
-        if type(self.saved_date) is not datetime:
-            message = f'Valor inválido para parâmetro "{SAVED_DATE}"'
-        elif type(self.valves_quantity) is not int:
+        message = f''
+        if type(self.valves_quantity) is not int:
             message = f'Valor inválido para parâmetro "{VALVES_QUANTITY}"'
         elif type(self.triplicate) is not bool:
             message = f'Valor inválido para parâmetro "{WORKING_IN_TRIPLICATE}"'
@@ -47,4 +42,4 @@ class Programming():
         elif type(self.valves_program) is not list:
             message = f'Valor inválido para parâmetro "{PROGRAMMING}"'
         if not message == '':
-            raise AppError('ProgrammingLine.line_number', message)
+            raise AppError('Programming', message)

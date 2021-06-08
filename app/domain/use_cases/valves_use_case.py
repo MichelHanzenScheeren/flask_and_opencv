@@ -14,15 +14,15 @@ class ValvesUseCase():
 
     def submit_programming(self, dictionary):
         try:
-            self.valves_control.submit_programming(dictionary)
+            self.valves_control.save_json_programming(dictionary)
             return ResponseUseCase.success_response(message='Programação salva com sucesso')
         except Exception as error:
             return ResponseUseCase.error_response(error)
 
     def upload_user_programming(self, dictionary):
         try:
-            self.valves_control.submit_programming(dictionary)
-            html = self.valves_control.create_html_from_programming(dictionary)
+            self.valves_control.save_json_programming(dictionary)
+            html = self.valves_control.create_html_from_programming_dictionary(dictionary)
             return ResponseUseCase.success_response(data=html)
         except Exception as error:
             return ResponseUseCase.error_response(error)
