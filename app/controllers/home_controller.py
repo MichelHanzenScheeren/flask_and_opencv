@@ -11,6 +11,7 @@ def configure_routes(app, webcamUseCase):
     @app.route('/index')
     @app.route('/home')
     def index():
+        webcamUseCase.clear_rectangle_and_uploaded_image()
         parameters = webcamUseCase.init_webcam_and_get_parameters()
         return render_template('index.html', page='index', parameters=parameters)
 

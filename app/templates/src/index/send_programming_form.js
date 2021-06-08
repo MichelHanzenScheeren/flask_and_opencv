@@ -1,6 +1,3 @@
-let savedProgramming = false;
-const valves_number = parseInt("{{ parameters['valves_number'] }}");
-
 function saveProgramming() {
   let map = {};
   saveConfiguration(map);
@@ -56,6 +53,8 @@ function submitProgramation(map) {
 
 function saveState() {
   savedProgramming = true;
+  changeOptionOfSelectAnalyzeMethodToComlete();
+  checkIfNeedToChangeAnalyzeButtonOptions();
   $('#openProgrammingModal').html('Editar programação');
   $('#programmingModal').modal('hide');
 }

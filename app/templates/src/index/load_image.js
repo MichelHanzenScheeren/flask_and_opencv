@@ -8,7 +8,8 @@ function onFileSelected(event) {
   let formData = new FormData();
   formData.append('file', uploadedFile);
   axios.post('{{url_for("upload_image")}}', formData).then(function (response) {
-    document.getElementById('startAnalyzeButton').disabled = true;
+    savedDifferentiator = false;
+    checkIfNeedToChangeAnalyzeButtonOptions();
     configInputFile(uploadedFile.name);
   }).catch(showErrorMessage);
 }

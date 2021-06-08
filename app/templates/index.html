@@ -7,7 +7,7 @@
     <div class="row h-100 align-items-center">
       <div class="col-md mx-2 p-3">
         {% include "partials/index/differentiator_column.html" %}
-        <hr class="my-3">
+        <hr class="mt-2 mb-3">
         {% include "partials/index/valves_column.html" %}
       </div>
       {% include "partials/index/analyze_column.html" %}
@@ -19,12 +19,17 @@
 
 {% block scripts %}
 <script type="">
+  const valves_number = parseInt("{{ parameters['valves_number'] }}");
+  let savedDifferentiator = false;
+  let savedProgramming = false;
+</script>
+<script type="">
     {% include 'src/index/webcam.js' %}
     {% include 'src/index/rectangle.js' %}
     {% include 'src/index/load_image.js' %}
-    {% include 'src/index/analyze.js' %}
     {% include 'src/index/send_programming_form.js' %}
     {% include 'src/index/manipulate_programming_form.js' %}
     {% include 'src/index/file_programming_control.js' %}
+    {% include 'src/index/analyze.js' %}
   </script>
 {% endblock%}

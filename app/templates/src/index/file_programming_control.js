@@ -1,8 +1,8 @@
 (() => {
-  document.getElementById('uploadUserProgrammingInput').setAttribute('onchange', 'onFileSelected(event)');
+  document.getElementById('uploadUserProgrammingInput').setAttribute('onchange', 'onJsonSelected(event)');
 })() //Função auto-executada
 
-function onFileSelected(event) {
+function onJsonSelected(event) {
   if (_isValidJsonFile(event)) {
     let uploadedFile = event.target.files[0];
     let reader = new FileReader();
@@ -35,6 +35,8 @@ function addNewHtmlContent(html) {
   $('#modalBody').append(html);
   $('#openProgrammingModal').html('Editar programação');
   savedProgramming = true;
+  changeOptionOfSelectAnalyzeMethodToComlete();
+  checkIfNeedToChangeAnalyzeButtonOptions();
 }
 
 function configInputFile(name) {
