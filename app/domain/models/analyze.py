@@ -1,6 +1,7 @@
 from time import sleep
 from math import sqrt, pow
 from datetime import datetime
+from threading import Thread
 from app.domain.errors.app_error import AppError
 from app.domain.models.results import Results
 
@@ -32,7 +33,7 @@ class Analyze():
         """ Calcula a média de cores de um frame recebido como parâmetro. Retorna uma lista no padrão [B, G, R]. """
         return image.mean(axis=0).mean(axis=0)
 
-    def start_analyze(self, form, get_cropped_image):
+    def start_analyze(self, form, get_cropped_image, programming_interpret):
         """ Inicia a análise propriamente dita, onde serão salvas as capturas de acordo com os parâmetros recebidos.
 
         'analizeMethod' é uma string que indica o método de análise (simple ou complete)
@@ -40,14 +41,23 @@ class Analyze():
         'captures_seg' é um inteiro 0 < X < 10 que indica quantas capturas devem ser feitas a cada segundo de análise.
         'description' é uma string opcional para descreevr a análise, exibida nos resultados e salva no xlsx gerado.
         'get_cropped_image' é um método da Webcam que retorna o frame atual recortado e em formato ndarray.
+        'programming_interpret' cuida da interpretação do arquivo de programação das válvulas.
         """
         analizeMethod, total_time, captures_seg,  = form['analizeMethod'], form['time'], form['qtd'],
         description, select_date, user_date = form['description'], form['selectDate'], form['userDate']
         self.validate_form(analizeMethod, total_time, captures_seg)
-        self.results.initialize(int(total_time), int(captures_seg), description, select_date, user_date)
-        self.save_analyze_frames(get_cropped_image)
-        self.do_analyze()
-        self.calculate_signal()
+        self.results.initialize(analizeMethod, int(total_time), int(captures_seg), description, select_date, user_date)
+        self._start(get_cropped_image, programming_interpret)
+
+    def _start(self, get_cropped_image, programming_interpret):
+        if self.results.analizeMethod == 'simple':
+            self.simple_save_analyze_frames(get_cropped_image)
+            self.do_analyze()
+            self.calculate_signal()
+        else:
+            cycles_informations = []
+            thread = self.start_valves_thread(programming_interpret, cycles_informations)
+            self.complete_save_analyze_frames(get_cropped_image, thread)
 
     def validate_form(self, analizeMethod, time, captures):
         """ Verifica se os valores recebidos são válidos para a análise. """
@@ -58,7 +68,7 @@ class Analyze():
         if not captures.isdigit() or int(captures) < 1 or int(captures) > 10:
             raise AppError('O número de capturas informado não é válido')
 
-    def save_analyze_frames(self, get_cropped_image):
+    def simple_save_analyze_frames(self, get_cropped_image):
         """" Método que salva os frames correspondentes a captura.
 
         O sleep garante que a relação tempo total e intervalo entre capturas seja seguido.
@@ -87,6 +97,20 @@ class Analyze():
                 pow(capture[2] - differentiator[2], 2)
             )
             self.results.signals.append(signal)
+
+    def start_valves_thread(self, programming_interpret, cycles_informations):
+        thread = Thread(target=programming_interpret, args=(cycles_informations,))
+        thread.start()
+        return thread
+
+    def complete_save_analyze_frames(self, get_cropped_image, thread):
+        while(thread.is_alive()):
+            image = get_cropped_image()
+            self.results.captures_times.append(datetime.now())
+            self.results.captures_images.append(image)
+            print('*** PRINCIPAL Imagem salva!')
+            sleep(self.results.interval)
+        print('*** PRINCIPAL FIM')
 
     def clear(self):
         if len(self.results.differentiator) != 0:

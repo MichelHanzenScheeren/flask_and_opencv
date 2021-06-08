@@ -29,7 +29,7 @@ def configure_routes(app):
 
     webcamUseCase = WebcamUseCase(webcam)
     valvesUseCase = ValvesUseCase(valvesControl)
-    analyzeUseCase = AnalyzeUseCase(webcam)
+    analyzeUseCase = AnalyzeUseCase(webcam, valvesControl)
 
     home_controller.configure_routes(app, webcamUseCase)
     valves_controller.configure_routes(app, valvesUseCase)

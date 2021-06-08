@@ -6,8 +6,9 @@ from app.domain.models.analyze import Analyze
 
 
 class AnalyzeUseCase():
-    def __init__(self, webcam):
+    def __init__(self, webcam, valves_control):
         self.webcam = webcam
+        self.valves_control = valves_control
         self.analyze = Analyze()
 
     def calculate_differentiator(self):
@@ -22,7 +23,9 @@ class AnalyzeUseCase():
 
     def start_analyze(self, form):
         try:
-            self.analyze.start_analyze(form, self.webcam.get_cropped_image)
+            get_image = self.webcam.get_cropped_image
+            programming_interpret = self.valves_control.start_programming_interpretation
+            self.analyze.start_analyze(form, get_image, programming_interpret)
             self.webcam.clear()
         except Exception as error:
             message = f'Um erro interno impediu que a análise fosse concluída. (ERRO: {str(error)})'
