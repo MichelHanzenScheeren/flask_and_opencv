@@ -18,6 +18,7 @@ class Results():
         self.captures = []
         self.signals = []  # Lista de sinais obtidos na análise. [sinal1, sinal2, ...].
         self.captures_images = []  # Lista de imagens das capturas.
+        self.captures_times = []  # Lista de datetimes que representam o instante em que a captura foi feita
         self.differentiator_image = None  # imagenm do diferenciador.
 
     def initialize(self, total_time, captures_seg, description, select_date, user_date):
@@ -33,6 +34,7 @@ class Results():
         self.captures.clear()
         self.signals.clear()
         self.captures_images.clear()
+        self.captures_times.clear()
 
     def get_all_images(self):
         """ Recupera as imagens das capturas e as formata para serem retornadas ao front-end. 

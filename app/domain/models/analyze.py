@@ -1,5 +1,7 @@
 from time import sleep
 from math import sqrt, pow
+from datetime import datetime
+from app.domain.errors.app_error import AppError
 from app.domain.models.results import Results
 
 
@@ -33,25 +35,28 @@ class Analyze():
     def start_analyze(self, form, get_cropped_image):
         """ Inicia a análise propriamente dita, onde serão salvas as capturas de acordo com os parâmetros recebidos.
 
+        'analizeMethod' é uma string que indica o método de análise (simple ou complete)
         'total_time' é um valor inteiro > 0 que corresponde ao tempo total da análise (em segundos).
         'captures_seg' é um inteiro 0 < X < 10 que indica quantas capturas devem ser feitas a cada segundo de análise.
-        'description' é uma string opcional que descreve o análise, exibida na página de resultados e salva no xlsx gerado.
-        'get_cropped_image' é um método da classe Webcam que retorna o frame atual da webcam recortado e em formato ndarray.
+        'description' é uma string opcional para descreevr a análise, exibida nos resultados e salva no xlsx gerado.
+        'get_cropped_image' é um método da Webcam que retorna o frame atual recortado e em formato ndarray.
         """
-        total_time, captures_seg, description = form['time'], form['qtd'], form['description']
-        select_date, user_date = form['selectDate'], form['userDate']
-        if not self.form_is_valid(total_time, captures_seg):
-            raise Exception('Formulário inválido!')
+        analizeMethod, total_time, captures_seg,  = form['analizeMethod'], form['time'], form['qtd'],
+        description, select_date, user_date = form['description'], form['selectDate'], form['userDate']
+        self.validate_form(analizeMethod, total_time, captures_seg)
         self.results.initialize(int(total_time), int(captures_seg), description, select_date, user_date)
         self.save_analyze_frames(get_cropped_image)
         self.do_analyze()
         self.calculate_signal()
 
-    def form_is_valid(self, time, captures):
+    def validate_form(self, analizeMethod, time, captures):
         """ Verifica se os valores recebidos são válidos para a análise. """
-        is_digit = time.isdigit() and captures.isdigit()
-        valid_range = int(time) >= 1 and int(captures) >= 1 and int(captures) <= 10
-        return is_digit and valid_range
+        if not (analizeMethod == 'simple' or analizeMethod == 'complete'):
+            raise AppError('O método de análise informado não é válido')
+        if not time.isdigit() or (analizeMethod == 'simple' and int(time) < 1):
+            raise AppError('O tempo de análise informado não é válido')
+        if not captures.isdigit() or int(captures) < 1 or int(captures) > 10:
+            raise AppError('O número de capturas informado não é válido')
 
     def save_analyze_frames(self, get_cropped_image):
         """" Método que salva os frames correspondentes a captura.
@@ -62,6 +67,7 @@ class Analyze():
         repetitions = int(self.results.total_time * self.results.captures_seg)
         for _ in range(0, repetitions):
             image = get_cropped_image()
+            self.results.captures_times.append(datetime.now())
             self.results.captures_images.append(image)
             sleep(self.results.interval)
 
@@ -72,10 +78,7 @@ class Analyze():
             self.results.captures.append(average)
 
     def calculate_signal(self):
-        """ Método em que os sinais são calculados. 
-
-        Um 'sinal' é a distância vetorial entre a média de cores de uma captura e a média de cores do diferenciador.
-        """
+        """ 'Sinal' é a distância vetorial da média de cores de uma captura e a média de cores do diferenciador. """
         differentiator = self.results.differentiator
         for capture in self.results.captures:
             signal = sqrt(

@@ -2,13 +2,15 @@
   document.getElementById('uploadUserProgrammingInput').setAttribute('onchange', 'onJsonSelected(event)');
 })() //Função auto-executada
 
+let jsonFileUploadedName = 'unkown.json';
+
 function onJsonSelected(event) {
   if (_isValidJsonFile(event)) {
     let uploadedFile = event.target.files[0];
+    jsonFileUploadedName = uploadedFile.name;
     let reader = new FileReader();
     reader.onload = onFileRead;
     reader.readAsText(uploadedFile);
-    configInputFile(uploadedFile.name);
   }
 }
 
@@ -26,6 +28,8 @@ function _isValidJsonFile(event) {
 function onFileRead(event) {
   let converterJson = JSON.parse(event.target.result);
   axios.post('{{url_for("upload_user_programming")}}', converterJson).then(function (response) {
+    document.getElementById('uploadUserProgrammingInput').value = '';
+    document.getElementById('uploadUserProgrammingLabel').textContent = jsonFileUploadedName;
     addNewHtmlContent(response.data['data']);
   }).catch(showErrorMessage);
 }
@@ -37,9 +41,4 @@ function addNewHtmlContent(html) {
   savedProgramming = true;
   changeOptionOfSelectAnalyzeMethodToComlete();
   checkIfNeedToChangeAnalyzeButtonOptions();
-}
-
-function configInputFile(name) {
-  document.getElementById('uploadUserProgrammingInput').value = '';
-  document.getElementById('uploadUserProgrammingLabel').textContent = name;
 }
