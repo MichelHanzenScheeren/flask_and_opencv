@@ -74,7 +74,6 @@ class ValvesControl():
                     self._execute_cycle(group.sequence, cycle_lines, executed_ids, cycles_informations)
                 else:
                     self._execute_line(line)
-        return cycles_informations
 
     def _build_cycle_list(self, current_index, lines):
         elements = [lines[current_index]]

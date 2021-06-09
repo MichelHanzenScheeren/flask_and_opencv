@@ -107,6 +107,7 @@ class Analyze():
         return thread
 
     def complete_save_analyze_frames(self, get_cropped_image, thread):
+        start = datetime.now()
         while(thread.is_alive()):
             image = get_cropped_image()
             self.results.captures_times.append(datetime.now())
@@ -114,6 +115,7 @@ class Analyze():
             print('*** PRINCIPAL Imagem salva!')
             sleep(self.results.interval)
         print('*** PRINCIPAL FIM')
+        self.results.total_time = (datetime.now() - start).seconds
 
     def calculate_calibrate_points(self, cycles_informations):
         times = self.results.captures_times
@@ -123,7 +125,8 @@ class Analyze():
                 signals_index = [i for i, x in enumerate(times) if x > cycle.start and x <= cycle.end]
                 bigger_signal_index = max(signals_index, key=lambda item: self.results.signals[item])
                 biggers_signals.append(self.results.signals[bigger_signal_index])
-            self.calibration_values.append(sum(biggers_signals) / float(len(biggers_signals)))
+            average_signal = sum(biggers_signals) / float(len(biggers_signals))
+            self.results.calibration_values.append(average_signal)
 
     def clear(self):
         if len(self.results.differentiator) != 0:

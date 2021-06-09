@@ -29,7 +29,7 @@ class ProgrammingLine():
             message = f'Valor inválido para parâmetro "id_grupo"'
         elif type(self.cycle_start) is not bool:
             message = f'Valor inválido para parâmetro "{CYCLE_START}"'
-        elif not (type(self.sleep_time) is int or type(self.sleep_time) is float) or int(self.sleep_time) <= 0:
+        elif type(self.sleep_time) is not int or int(self.sleep_time) <= 0:
             message = f'Valor inválido para parâmetro "{SLEEP_TIME}"'
         elif type(self.open_valves) is not list:
             message = f'Valor inválido para parâmetro "{OPEN_VALVES}"'
