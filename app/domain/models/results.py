@@ -18,6 +18,7 @@ class Results():
         self.captures_images = []  # Lista de imagens das capturas.
         self.captures_times = []  # Lista de datetimes que representam o instante em que a captura foi feita
         self.signals = []  # Lista de sinais obtidos na análise. [sinal1, sinal2, ...].
+        self.calibration_values = []  # Lista de coordenadas y do gráfico de calibração da análize.
 
     def initialize(self, analizeMethod, total_time, captures_seg, description, select_date, user_date):
         """ Salva os primeiros valores da análise e garante que dados de uma análise anterior sejam limpos. """
@@ -32,6 +33,7 @@ class Results():
         self.description = description or ""
         self.captures.clear()
         self.signals.clear()
+        self.calibration_values .clear()
         self.captures_images.clear()
         self.captures_times.clear()
 

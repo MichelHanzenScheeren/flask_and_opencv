@@ -60,6 +60,7 @@ class Analyze():
             self.complete_save_analyze_frames(get_cropped_image, thread)
             self.do_analyze()
             self.calculate_signal()
+            self.calculate_calibrate_points(cycles_informations)
 
     def validate_form(self, analizeMethod, time, captures):
         """ Verifica se os valores recebidos são válidos para a análise. """
@@ -113,6 +114,16 @@ class Analyze():
             print('*** PRINCIPAL Imagem salva!')
             sleep(self.results.interval)
         print('*** PRINCIPAL FIM')
+
+    def calculate_calibrate_points(self, cycles_informations):
+        times = self.results.captures_times
+        for group in cycles_informations:
+            biggers_signals = []
+            for cycle in group.information:
+                signals_index = [i for i, x in enumerate(times) if x > cycle.start and x <= cycle.end]
+                bigger_signal_index = max(signals_index, key=lambda item: self.results.signals[item])
+                biggers_signals.append(self.results.signals[bigger_signal_index])
+            self.calibration_values.append(sum(biggers_signals) / float(len(biggers_signals)))
 
     def clear(self):
         if len(self.results.differentiator) != 0:
