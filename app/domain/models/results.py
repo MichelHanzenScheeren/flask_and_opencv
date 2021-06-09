@@ -12,14 +12,12 @@ class Results():
     """
 
     def __init__(self):
-        # Armazena a lista BGR [Blue, Green, Red] correspondente a média de cores da imagem do diferenciador.
-        self.differentiator = []
-        # Lista de listas dos resultados da média de cores das capturas [[Blue, Green, Red], [Blue, ...], ...].
-        self.captures = []
-        self.signals = []  # Lista de sinais obtidos na análise. [sinal1, sinal2, ...].
+        self.differentiator = []  # Lista BGR [Blue, Green, Red] da média de cores da imagem do diferenciador.
+        self.differentiator_image = None  # imagem do diferenciador.
+        self.captures = []  # Matriz de resultados da média de cores das capturas [[B, G, R], [B, ...], ...].
         self.captures_images = []  # Lista de imagens das capturas.
         self.captures_times = []  # Lista de datetimes que representam o instante em que a captura foi feita
-        self.differentiator_image = None  # imagem do diferenciador.
+        self.signals = []  # Lista de sinais obtidos na análise. [sinal1, sinal2, ...].
 
     def initialize(self, analizeMethod, total_time, captures_seg, description, select_date, user_date):
         """ Salva os primeiros valores da análise e garante que dados de uma análise anterior sejam limpos. """
@@ -79,5 +77,5 @@ class Results():
             information.append(row)
         return information
 
-    def saveNewAnalyzeDate(self, newDate):
+    def save_new_analyze_date(self, newDate):
         self.initial_date = datetime.strptime(newDate, STRING_FORMAT).strftime(STRING_FORMAT)

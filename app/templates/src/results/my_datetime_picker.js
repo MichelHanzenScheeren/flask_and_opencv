@@ -5,6 +5,6 @@ function registerDatetimePicker(format) {
 }
 
 function saveNewAnalyzeDate() {
-  axios.post(`{{url_for("saveNewAnalyzeDate")}}/${document.getElementById("myDatetimePicker").value}`)
+  axios.post(`{{url_for("save_new_analyze_date")}}/${document.getElementById("myDatetimePicker").value}`)
     .catch(showErrorMessage);
 }

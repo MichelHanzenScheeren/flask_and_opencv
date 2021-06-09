@@ -58,6 +58,8 @@ class Analyze():
             cycles_informations = []
             thread = self.start_valves_thread(programming_interpret, cycles_informations)
             self.complete_save_analyze_frames(get_cropped_image, thread)
+            self.do_analyze()
+            self.calculate_signal()
 
     def validate_form(self, analizeMethod, time, captures):
         """ Verifica se os valores recebidos são válidos para a análise. """

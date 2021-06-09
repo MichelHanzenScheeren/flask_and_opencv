@@ -34,7 +34,7 @@ def configure_routes(app, analyzeUseCase):
         xlsx_file, headers = analyzeUseCase.get_xlsx_results()
         return Response(xlsx_file, headers=headers)
 
-    @app.route('/saveNewAnalyzeDate', methods=['POST'])
-    @app.route('/saveNewAnalyzeDate/<string:newDate>', methods=['POST'])
-    def saveNewAnalyzeDate(newDate=None):
-        return analyzeUseCase.saveNewAnalyzeDate(newDate)
+    @app.route('/save_new_analyze_date', methods=['POST'])
+    @app.route('/save_new_analyze_date/<string:newDate>', methods=['POST'])
+    def save_new_analyze_date(newDate=None):
+        return analyzeUseCase.save_new_analyze_date(newDate)

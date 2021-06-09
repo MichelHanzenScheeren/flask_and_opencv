@@ -58,9 +58,9 @@ class AnalyzeUseCase():
             message = f'Não foi possível fazer o download do arquivo. (ERRO: {str(error)})'
             return ResponseUseCase.error_response(AppError('get_xlsx_results', message))
 
-    def saveNewAnalyzeDate(self, newDate):
+    def save_new_analyze_date(self, newDate):
         try:
-            self.analyze.results.saveNewAnalyzeDate(newDate)
+            self.analyze.results.save_new_analyze_date(newDate)
             return ResponseUseCase.success_response()
         except Exception as error:
             return ResponseUseCase.error_response(error)
