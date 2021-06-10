@@ -29,12 +29,14 @@
 <!-- Biblioteca para construção do gráfico -->
 <script src="{{ url_for('static', filename='js/chartjs.min.js') }}"></script>
 <script type="">
-    {% include 'src/results/my_datetime_picker.js' %}
-    {% include 'src/results/generate_files.js' %}
-    {% include 'src/results/signals_chart.js' %}
-    {% include 'src/results/calibration_chart.js' %}
+  {% include 'src/results/my_datetime_picker.js' %}
+  {% include 'src/results/generate_files.js' %}
+  {% include 'src/results/draw_charts.js' %}
+</script>
+<script type="">
+  $(document).ready(function() {
     registerDatetimePicker(format = 'D-M-YYYY HH:mm:ss');
-    drawChart(signals = {{ results.signals|tojson }}, interval = {{ results.interval|round(2) }});
-    drawCalibrationChart(calibration_values = {{ results.calibration_values|tojson }})
-  </script>
+    drawCharts({{results.signals|tojson}}, {{results.interval|round(2)}}, {{results.calibration_values|tojson}});
+  });
+</script>
 {% endblock%}
