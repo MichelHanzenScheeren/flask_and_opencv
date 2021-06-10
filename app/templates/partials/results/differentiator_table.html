@@ -1,0 +1,23 @@
+<div id="differentiator_table" class="mt-4">
+  <div class="panel-heading">
+    <h4 class="text-center pb-1">Diferenciador</h4>
+  </div>
+  <div class="panel-body">
+    <table class="table table-hover table-bordered">
+      <thead class="table-dark">
+        <tr>
+          <th scope="col"> Vermelho </th>
+          <th scope="col"> Verde </th>
+          <th scope="col"> Azul </th>
+        </tr>
+      </thead>
+      <tbody class="bg-white">
+        <tr>
+          <td class="text-danger"> {{ results.differentiator[2]|round(3) }}</td>
+          <td class="text-success"> {{ results.differentiator[1]|round(3) }}</td>
+          <td class="text-info"> {{ results.differentiator[0]|round(3) }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

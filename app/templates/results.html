@@ -2,134 +2,39 @@
 
 {% block content %}
 <div class="container" id=results_content>
-  <div id="sumary" class="mt-5">
-    <h4 class="text-center pb-2">Informações Gerais</h4>
-    <div class="container">
-      <div class="row">
-        <div class="col-md card p-3 bg-white">
-          <h5 class="card-title"> Início da análise </h5>
-          <input type="text" class="form-control bg-white" id="myDatetimePicker" value="{{ results.initial_date }}"
-            onchange="saveNewDate()" readonly>
-        </div>
-        <div class="col-md card p-3 bg-white">
-          <h5 class="card-title"> Duração </h5>
-          <p class="card-text"> {{ results.total_time }} segundos </p>
-        </div>
-        <div class="col-md card p-3 bg-white">
-          <h5 class="card-title"> Capturas </h5>
-          <p class="card-text"> {{ results.captures_seg }} captura/seg </p>
-        </div>
-        <div class="col-md card p-3 bg-white">
-          <h5 class="card-title"> Capturas feitas </h5>
-          <p class="card-text"> {{ results.signals|length }} captura(s) </p>
-        </div>
-      </div>
-      <div class="row">
-        <div class="col-md-3 card p-3 bg-white">
-          <h5 class="card-title"> Tipo de análise </h5>
-          <p class="card-text"> {{ "Simples (webcam)" if results.analize_method == "simple"
-            else "Completa (webcam + válvulas)" }} </p>
-        </div>
-        <div class="col-md-5 card p-3 bg-white">
-          <h5 class="card-title"> Descrição </h5>
-          <p class="card-text"> {{ results.description if results.description != "" else "Não informada." }} </p>
-        </div>
-
-        <div class="col-md-4 card p-3 bg-white">
-          <h5 class="card-title"> Opções </h5>
-          <button id="getAllImagesButton" type="button" class="btn btn-block btn-dark">
-            Exportar imagens - zip
-          </button>
-          <button id="getXlsxResultsButton" type="button" class="btn btn-block btn-dark">
-            Exportar resultados - xlsx
-          </button>
-          {% if results.analize_method == "complete" %}
-          <button id="getProgrammingJsonButton" type="button" class="btn btn-block btn-dark">
-            Exportar programação - json
-          </button>
-          {% endif %}
-        </div>
-      </div>
-    </div>
-  </div>
-
+  {% include "partials/results/general_information.html" %}
   <div class="mt-4 card p-3 bg-white">
     <h4 class="text-center pb-2">Gráfico dos Sinais</h4>
-    <canvas id="lineChartCanvas" class="px-2 pb-2" anvas>
+    <canvas id="lineChartCanvas" class="px-2 pb-2"></canvas>
   </div>
 
-  <div id="differentiator_table" class="mt-4">
-    <div class="panel-heading">
-      <h4 class="text-center pb-1">Diferenciador</h4>
-    </div>
-    <div class="panel-body">
-      <table class="table table-hover table-bordered">
-        <thead class="table-dark">
-          <tr>
-            <th scope="col"> Vermelho </th>
-            <th scope="col"> Verde </th>
-            <th scope="col"> Azul </th>
-          </tr>
-        </thead>
-        <tbody class="bg-white">
-          <tr>
-            <td class="text-danger"> {{ results.differentiator[2]|round(3) }}</td>
-            <td class="text-success"> {{ results.differentiator[1]|round(3) }}</td>
-            <td class="text-info"> {{ results.differentiator[0]|round(3) }}</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
+  {% if results.calibration_values|length > 0 %}
+  <div class="mt-4 card p-3 bg-white">
+    <h4 class="text-center pb-2">Gráfico de calibração</h4>
+    <canvas id="calibrationChartCanvas" class="px-2 pb-2"></canvas>
   </div>
-  <div id="sinais_table" class="my-4">
-    <div class="panel-heading">
-      <h4 class="text-center pb-1"> Capturas </h4>
-    </div>
-    <div class="table-responsive">
-      <table class="table table-hover table-bordered">
-        <thead class="table-dark">
-          <tr>
-            <th scope="col"> Nº captura </th>
-            <th scope="col"> Tempo (seg) </th>
-            <th scope="col"> Vermelho </th>
-            <th scope="col"> Verde </th>
-            <th scope="col"> Azul </th>
-            <th scope="col"> Sinal </th>
-          </tr>
-        </thead>
-        <tbody class="bg-white">
-          {% for index in range(results.captures|length) %}
-          <tr>
-            <td class="text-black"> {{ (index + 1) }} </td>
-            <td class="text-black"> {{ ((index + 1) * results.interval)|round(2) }}</td>
-            <td class="text-danger"> {{ results.captures[index][2]|round(3) }}</td>
-            <td class="text-success"> {{ results.captures[index][1]|round(3) }}</td>
-            <td class="text-info"> {{ results.captures[index][0]|round(3) }}</td>
-            <th scope="row" class="text-black"> {{ results.signals[index]|round(3) }}</td>
-          </tr>
-          {% endfor %}
-        </tbody>
-      </table>
-    </div>
-  </div>
+  {% endif %}
+
+  {% include "partials/results/differentiator_table.html" %}
+  {% include "partials/results/signals_table.html" %}
   <div class="" style="height: 30px;"></div>
 </div>
 {% endblock%}
 
 {% block scripts %}
+<!-- Bibliotecas necessária para o DateTime Picker -->
 <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap-datetimepicker.min.css') }}">
-<!-- Biblioteca necessária para o DateTime Picker -->
 <script src="{{ url_for('static', filename='js/moment.min.js') }}"></script>
-<!-- Biblioteca necessária para o DateTime Picker -->
 <script src="{{ url_for('static', filename='js/bootstrap-datetimepicker.min.js') }}"></script>
-<!-- Biblioteca necessária para o DateTime Picker -->
-<script src="{{ url_for('static', filename='js/chartjs.min.js') }}"></script>
 <!-- Biblioteca para construção do gráfico -->
+<script src="{{ url_for('static', filename='js/chartjs.min.js') }}"></script>
 <script type="">
     {% include 'src/results/my_datetime_picker.js' %}
-    {% include 'src/results/signals_chart.js' %}
     {% include 'src/results/generate_files.js' %}
+    {% include 'src/results/signals_chart.js' %}
+    {% include 'src/results/calibration_chart.js' %}
     registerDatetimePicker(format = 'D-M-YYYY HH:mm:ss');
     drawChart(signals = {{ results.signals|tojson }}, interval = {{ results.interval|round(2) }});
+    drawCalibrationChart(calibration_values = {{ results.calibration_values|tojson }})
   </script>
 {% endblock%}

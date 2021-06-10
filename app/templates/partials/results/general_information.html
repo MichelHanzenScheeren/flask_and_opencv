@@ -1,0 +1,50 @@
+<div id="sumary" class="mt-5">
+  <h4 class="text-center pb-2">Informações Gerais</h4>
+  <div class="container">
+    <div class="row">
+      <div class="col-md card p-3 bg-white">
+        <h5 class="card-title"> Início da análise </h5>
+        <input type="text" class="form-control bg-white" id="myDatetimePicker" value="{{ results.initial_date }}"
+          onchange="saveNewDate()" readonly>
+      </div>
+      <div class="col-md card p-3 bg-white">
+        <h5 class="card-title"> Duração </h5>
+        <p class="card-text"> {{ results.total_time }} segundos </p>
+      </div>
+      <div class="col-md card p-3 bg-white">
+        <h5 class="card-title"> Capturas </h5>
+        <p class="card-text"> {{ results.captures_seg }} captura/seg </p>
+      </div>
+      <div class="col-md card p-3 bg-white">
+        <h5 class="card-title"> Capturas feitas </h5>
+        <p class="card-text"> {{ results.signals|length }} captura(s) </p>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-3 card p-3 bg-white">
+        <h5 class="card-title"> Tipo de análise </h5>
+        <p class="card-text"> {{ "Simples (webcam)" if results.analize_method == "simple"
+          else "Completa (webcam + válvulas)" }} </p>
+      </div>
+      <div class="col-md-5 card p-3 bg-white">
+        <h5 class="card-title"> Descrição </h5>
+        <p class="card-text"> {{ results.description if results.description != "" else "Não informada." }} </p>
+      </div>
+
+      <div class="col-md-4 card p-3 bg-white">
+        <h5 class="card-title"> Opções </h5>
+        <button id="getAllImagesButton" type="button" class="btn btn-block btn-dark">
+          Exportar imagens - zip
+        </button>
+        <button id="getXlsxResultsButton" type="button" class="btn btn-block btn-dark">
+          Exportar resultados - xlsx
+        </button>
+        {% if results.analize_method == "complete" %}
+        <button id="getProgrammingJsonButton" type="button" class="btn btn-block btn-dark">
+          Exportar programação - json
+        </button>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</div>

@@ -33,7 +33,7 @@ class Results():
         self.description = description or ""
         self.captures.clear()
         self.signals.clear()
-        self.calibration_values .clear()
+        self.calibration_values.clear()
         self.captures_images.clear()
         self.captures_times.clear()
 
