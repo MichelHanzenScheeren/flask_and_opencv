@@ -18,7 +18,7 @@ class ExcelFile():
         self.spreadsheet.title = title
         self.to_merge_cells = []  # Lista de células que irão compor o spreadsheet.
 
-    def create(self, general_info, differentiator_info, captures_info):
+    def create(self, general_info, differentiator_info, captures_info, calibration_info):
         """ Método responsável por conduzir a personalização do arquivo de acordo com as informações recebidas. 
 
         Os parâmetros são listas de listas contendo títulos e dados.
@@ -27,9 +27,11 @@ class ExcelFile():
         row_count = self.generate_table(general_info, 1)
         row_count = self.generate_table(differentiator_info, row_count)
         row_count = self.generate_table(captures_info, row_count)
-        self.configure_columns_width()
+        calibration_count = self.generate_table(calibration_info, row_count)
+        self.configure_columns_width_and_align()
         self.merge_cells()
         self.generate_captures_graph(captures_info, row_count)
+        self.generate_calibration_graph(calibration_info, calibration_count)
         return self.encode_excel(self.excel_file)
 
     def generate_table(self, current_info, row_count):
@@ -38,6 +40,8 @@ class ExcelFile():
         Recebe como parâmetro as informações que devem ser escritas e o nº da primeira linha que deve ser usada.
         Retorna um inteiro com a próxima linha válida para continuar registrando informações.
         """
+        if len(current_info) == 0:
+            return row_count
         font1 = Font(name='Arial', size=14, bold=True, )
         font2 = Font(name='Arial', size=12)
         for i, row in enumerate(current_info):
@@ -50,14 +54,17 @@ class ExcelFile():
                     self.to_merge_cells.append([row_count, len(current_info[0])])
         return row_count + len(current_info) + 2  # 2 linhas em branco
 
-    def configure_columns_width(self):
-        """ Configura o tamanho mínimo das colunas para que infomações não sejam ocultadas. 
+    def configure_columns_width_and_align(self):
+        """ Configura o tamanho mínimo das colunas e o alinhamento para que infomações não sejam ocultadas. 
 
         Os testes feitos apontaram 25 como um bom tamanho.
         Nenhum valor é retornado.
         """
         for column in self.spreadsheet.columns:
             self.spreadsheet.column_dimensions[column[0].column_letter].width = 25.0
+        for row in self.spreadsheet.iter_rows():
+            for cell in row:
+                cell.alignment = cell.alignment.copy(wrapText=True)
 
     def merge_cells(self):
         """ Mescla as colunas de título do spreedshet. """
@@ -78,7 +85,24 @@ class ExcelFile():
         my_chart.series.append(series)
         my_chart.width = 23
         my_chart.height = 10
-        self.spreadsheet.add_chart(my_chart, f"A{rows}")
+        self.spreadsheet.add_chart(my_chart, f"I1")
+
+    def generate_calibration_graph(self, values, rows):
+        if len(values) == 0:
+            return
+        """ Gera o gráfico sinal X ciclo. """
+        my_chart = ScatterChart()
+        my_chart.title = 'Gráfico de calibração'
+        my_chart.style = 16
+        my_chart.y_axis.title = 'Sinal'
+        my_chart.x_axis.title = 'Ciclo'
+        x_values = Reference(self.spreadsheet, min_col=1, min_row=rows - len(values), max_row=rows - 3)
+        y_values = Reference(self.spreadsheet, min_col=2, min_row=rows - len(values) - 1, max_row=rows - 3)
+        series = Series(y_values, x_values, title_from_data=True)
+        my_chart.series.append(series)
+        my_chart.width = 18
+        my_chart.height = 9
+        self.spreadsheet.add_chart(my_chart, f"I22")
 
     def encode_excel(self, excel_file):
         """ Codifica o arquivo xlsx em bytes na base_64. """

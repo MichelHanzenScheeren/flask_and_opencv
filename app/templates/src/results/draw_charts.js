@@ -28,7 +28,7 @@ function _drawCalibrationChart(calibration_values) {
   }
   xValues.push(calibration_values.length + 1);
   yValues.push(null);
-  _registerChart(xValues, yValues, 'Sinal', 'Concentração', 'Sinal', 'calibrationChartCanvas');
+  _registerChart(xValues, yValues, 'Sinal', 'Ciclo', 'Sinal', 'calibrationChartCanvas');
 }
 
 function _registerChart(xValues, yValues, dataLabel, xLabel, yLabel, htmlComponent) {

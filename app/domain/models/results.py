@@ -52,14 +52,16 @@ class Results():
     def get_xlsx_results(self):
         """ Cria e retorna um arquivo xlsx com os resultados da análise. """
         file = ExcelFile(title='Resultados')
-        return file.create(self.general_info(), self.differentiator_info(), self.captures_info())
+        return file.create(self.general_info(), self.differentiator_info(),
+                           self.captures_info(), self.calibration_info())
 
     def general_info(self):
         """ Reúne e retorna uma lista de listas com titulos e informações gerais da análise. """
-        title = ['Informações Gerais', '', '', '', '']
-        headers = ['Data', 'Duração', 'Capturas', 'Total', 'Descrição']
+        analizeType = 'Completa' if self.analize_method == 'complete' else 'Simples'
+        title = ['Informações Gerais', '', '', '', '', '']
+        headers = ['Data', 'Duração', 'Taxa de capturas', 'Capturas feitas', 'Tipo de análise', 'Descrição']
         content = [self.initial_date, f'{self.total_time} segundos', f'{self.captures_seg} cap./seg.']
-        content.extend([f'{self.total_time * self.captures_seg} cap.', f'{self.description or "Não informada"}'])
+        content.extend([f'{len(self.signals)} cap.', analizeType, f'{self.description or "Não informada"}'])
         return [title, headers, content]
 
     def differentiator_info(self):
@@ -77,6 +79,15 @@ class Results():
         for i, value in enumerate(self.captures):
             row = [i+1, (i+1)*self.interval, value[2], value[1], value[0], self.signals[i]]
             information.append(row)
+        return information
+
+    def calibration_info(self):
+        """ Reúne titulos e os resultados referentes ao gráfico de calibração. """
+        if len(self.calibration_values) == 0:
+            return []
+        information = [['Sinal médio de cada ciclo', ''], ['Ciclo', 'Sinal']]
+        for index, value in enumerate(self.calibration_values):
+            information.append([index + 1, value])
         return information
 
     def save_new_analyze_date(self, newDate):

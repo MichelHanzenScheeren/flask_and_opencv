@@ -1,8 +1,7 @@
 (() => {
 	document.getElementById('getAllImagesButton').setAttribute('onclick', 'getAllImages()');
 	document.getElementById('getXlsxResultsButton').setAttribute('onclick', 'getXlsxResults()');
-	document.getElementById('getProgrammingJsonButton').setAttribute('onclick', 'getProgrammingJson()');
-
+	document.getElementById('getProgrammingJsonButton')?.setAttribute('onclick', 'getProgrammingJson()');
 })() //Função auto-executada
 
 function getAllImages() {
