@@ -1,6 +1,8 @@
 (() => {
 	document.getElementById('getAllImagesButton').setAttribute('onclick', 'getAllImages()');
 	document.getElementById('getXlsxResultsButton').setAttribute('onclick', 'getXlsxResults()');
+	document.getElementById('getProgrammingJsonButton').setAttribute('onclick', 'getProgrammingJson()');
+
 })() //Função auto-executada
 
 function getAllImages() {
@@ -21,6 +23,17 @@ function getXlsxResults() {
 		submitDownload(response.data, headers['file-name'], headers['content-type'], headers['format']);
 	}).catch(showErrorMessage).then(function () {
 		document.getElementById('getXlsxResultsButton').disabled = false;
+	});
+}
+
+function getProgrammingJson() {
+	document.getElementById('getProgrammingJsonButton').disabled = true;
+	axios.post('{{url_for("download_programming")}}').then(function (response) {
+		let title = response["headers"]["content-disposition"]?.split('=')[1] ?? 'file.json';
+		let data = encodeURIComponent(JSON.stringify(response.data));
+		submitDownload(data, title, response["headers"]["content-type"], 'charset=utf-8');
+	}).catch(showErrorMessage).then(function () {
+		document.getElementById('getProgrammingJsonButton').disabled = false;
 	});
 }
 

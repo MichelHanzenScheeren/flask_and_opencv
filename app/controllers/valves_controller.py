@@ -1,4 +1,4 @@
-from flask import request, render_template
+from flask import request, send_file
 
 
 def configure_routes(app, valvesUseCase):
@@ -17,3 +17,8 @@ def configure_routes(app, valvesUseCase):
     @app.route('/upload_user_programming', methods=['POST'])
     def upload_user_programming():
         return valvesUseCase.upload_user_programming(request.json)
+
+    @app.route('/download_programming', methods=['POST'])
+    def download_programming():
+        path = valvesUseCase.get_programming_path()
+        return send_file(path, download_name='programming.json')

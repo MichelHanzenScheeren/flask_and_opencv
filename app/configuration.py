@@ -5,6 +5,7 @@ FRAME_RATE: Final = 0.04
 
 # Caminho do arquivo de programação usado
 JSON_PROGRAMMING_PATH: Final = 'app/static/files/programming.json'
+PARTIAL_JSON_PROGRAMMING_PATH: Final = 'static/files/programming.json'
 
 # Número de válvulas utilizadas na aplicação
 NUMBER_OF_VALVES: Final = 16
@@ -35,7 +36,7 @@ VALVE_MAPPING: Final = [
 ]
 
 # Propriedadas do arquivo de programação
-SAVED_DATE: Final = 'date'
+SAVED_DATE: Final = 'data'
 SUBTITLE: Final = 'legenda'
 PROGRAMMING: Final = 'programacao'
 GROUP_NUMBER: Final = 'grupo_'

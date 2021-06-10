@@ -26,3 +26,9 @@ class ValvesUseCase():
             return ResponseUseCase.success_response(data=html)
         except Exception as error:
             return ResponseUseCase.error_response(error)
+
+    def get_programming_path(self):
+        try:
+            return self.valves_control.validate_file_and_return_programming_path()
+        except Exception as error:
+            return ResponseUseCase.error_response(error)

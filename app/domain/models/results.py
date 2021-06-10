@@ -20,13 +20,13 @@ class Results():
         self.signals = []  # Lista de sinais obtidos na análise. [sinal1, sinal2, ...].
         self.calibration_values = []  # Lista de coordenadas y do gráfico de calibração da análize.
 
-    def initialize(self, analizeMethod, total_time, captures_seg, description, select_date, user_date):
+    def initialize(self, analize_method, total_time, captures_seg, description, select_date, user_date):
         """ Salva os primeiros valores da análise e garante que dados de uma análise anterior sejam limpos. """
         if(select_date == 'user'):
             self.initial_date = datetime.strptime(user_date, STRING_FORMAT).strftime(STRING_FORMAT)
         else:
             self.initial_date = datetime.now().strftime(STRING_FORMAT)
-        self.analizeMethod = analizeMethod
+        self.analize_method = analize_method
         self.total_time = total_time
         self.captures_seg = captures_seg
         self.interval = (1 / self.captures_seg)

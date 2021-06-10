@@ -36,21 +36,21 @@ class Analyze():
     def start_analyze(self, form, get_cropped_image, programming_interpret):
         """ Inicia a análise propriamente dita, onde serão salvas as capturas de acordo com os parâmetros recebidos.
 
-        'analizeMethod' é uma string que indica o método de análise (simple ou complete)
+        'analize_method' é uma string que indica o método de análise (simple ou complete)
         'total_time' é um valor inteiro > 0 que corresponde ao tempo total da análise (em segundos).
         'captures_seg' é um inteiro 0 < X < 10 que indica quantas capturas devem ser feitas a cada segundo de análise.
         'description' é uma string opcional para descreevr a análise, exibida nos resultados e salva no xlsx gerado.
         'get_cropped_image' é um método da Webcam que retorna o frame atual recortado e em formato ndarray.
         'programming_interpret' cuida da interpretação do arquivo de programação das válvulas.
         """
-        analizeMethod, total_time, captures_seg,  = form['analizeMethod'], form['time'], form['qtd'],
+        analize_method, total_time, captures_seg,  = form['analizeMethod'], form['time'], form['qtd'],
         description, select_date, user_date = form['description'], form['selectDate'], form['userDate']
-        self.validate_form(analizeMethod, total_time, captures_seg)
-        self.results.initialize(analizeMethod, int(total_time), int(captures_seg), description, select_date, user_date)
+        self.validate_form(analize_method, total_time, captures_seg)
+        self.results.initialize(analize_method, int(total_time), int(captures_seg), description, select_date, user_date)
         self._start(get_cropped_image, programming_interpret)
 
     def _start(self, get_cropped_image, programming_interpret):
-        if self.results.analizeMethod == 'simple':
+        if self.results.analize_method == 'simple':
             self.simple_save_analyze_frames(get_cropped_image)
             self.do_analyze()
             self.calculate_signal()
@@ -62,11 +62,11 @@ class Analyze():
             self.calculate_signal()
             self.calculate_calibrate_points(cycles_informations)
 
-    def validate_form(self, analizeMethod, time, captures):
+    def validate_form(self, analize_method, time, captures):
         """ Verifica se os valores recebidos são válidos para a análise. """
-        if not (analizeMethod == 'simple' or analizeMethod == 'complete'):
+        if not (analize_method == 'simple' or analize_method == 'complete'):
             raise AppError('O método de análise informado não é válido')
-        if not time.isdigit() or (analizeMethod == 'simple' and int(time) < 1):
+        if not time.isdigit() or (analize_method == 'simple' and int(time) < 1):
             raise AppError('O tempo de análise informado não é válido')
         if not captures.isdigit() or int(captures) < 1 or int(captures) > 10:
             raise AppError('O número de capturas informado não é válido')

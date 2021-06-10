@@ -1,6 +1,6 @@
 from datetime import datetime
 from time import sleep
-from app.configuration import JSON_PROGRAMMING_PATH, NUMBER_OF_VALVES, VALVE_MAPPING, BOARD_NUMBER, VALVE_NUMBER
+from app.configuration import JSON_PROGRAMMING_PATH, NUMBER_OF_VALVES, PARTIAL_JSON_PROGRAMMING_PATH, VALVE_MAPPING, BOARD_NUMBER, VALVE_NUMBER
 from app.domain.packs.gpio_pack import GpioPack
 from app.domain.errors.app_error import AppError
 from app.domain.models.programming import Programming
@@ -98,6 +98,10 @@ class ValvesControl():
         self.apply_valves_config(line.open_valves)
         print(f'--- THREAD aplicada {line.open_valves}')
         sleep(line.sleep_time)
+
+    def validate_file_and_return_programming_path(self):
+        JsonPack.read(JSON_PROGRAMMING_PATH)  # dispara um erro se não existir
+        return PARTIAL_JSON_PROGRAMMING_PATH
 
     def __del__(self):
         GpioPack.cleanup()  # Libera os pinos do raspberry
