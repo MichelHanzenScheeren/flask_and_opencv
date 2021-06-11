@@ -26,7 +26,7 @@ function saveConfiguration(map) {
   map["triplicata"] = document.getElementById("triplicate_checkbox").checked;
   map["legenda"] = {}
   let ps = $('p').filter('.valve_name');
-  for (let j = 0; j < ps.length; j++) {
+  for (let j = 0; j < valves_number; j++) {
     if (ps[j].textContent.trim() != `Valv${j + 1}`) {
       map["legenda"][`Valv${j + 1}`] = ps[j].textContent.trim();
     }
