@@ -1,32 +1,22 @@
-let myHead; // armazena o head da tabela
 $('#programmingModal').on('shown.bs.modal', function () {
-  myHead = $('#tableHead').clone(); // copia o head da tabela, para posterior substituição
+  $('#programmingTable').stickyTableHeaders(); // Habilita header da tabela que acompanha o scroll
 });
 
-// Substitui o header, copiando os dados alterados, par agarantir que o header estará na posição inicial correta.
 // Se necessário, limpa as legendas e inputs preenchidos
 $('#programmingModal').on('hidden.bs.modal', function () {
-  let titlesRow = $('#tableHead').find('.titlesRow');
-  $('#tableHead').remove();
-  $('#programmingTable').prepend(myHead);
-  $('.titlesRow').remove();
-  $('#tableHead').append(titlesRow);
-  if (savedProgramming) return;
-
-  $(this).find('form').trigger('reset');
-  $(".to_remove").remove();
-  var p = $('p').filter('.valve_name');
-  for (let index = 0; index < p.length; index++)
-    p[index].textContent = `Valv${index + 1}`;
+  $('programmingTable').stickyTableHeaders('destroy'); // Desabilita header da tabela que acompanha o scroll
+  if (!savedProgramming) {
+    $(this).find('form').trigger('reset');
+    $(".to_remove").remove();
+    var p = $('p').filter('.valve_name');
+    for (let index = 0; index < p.length; index++)
+      p[index].textContent = `Valv${index + 1}`;
+  }
 });
 
-
-// Desloca em y o header da tabela, caso necessário
+// Chama a função que movimenta o header com o scroll
 document.getElementById('programmingModal').addEventListener('scroll', function (_) {
-  let topDistance = document.getElementById("programmingTable").getBoundingClientRect().top;
-  if (topDistance < 0) {
-    this.querySelector("thead").style.transform = "translate(0," + (topDistance * -1) + "px)";
-  }
+  $(window).trigger('resize.stickyTableHeaders');
 });
 
 function createTableRow() {

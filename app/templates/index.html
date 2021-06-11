@@ -18,6 +18,7 @@
 {% endblock%}
 
 {% block scripts %}
+<script src="{{ url_for('static', filename='js/scroll_header/jquery.stickytableheaders.min.js') }}"></script>
 <script type="">
   const valves_number = parseInt("{{ parameters['valves_number'] }}");
   let savedDifferentiator = false;
