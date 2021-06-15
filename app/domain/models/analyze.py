@@ -114,8 +114,9 @@ class Analyze():
             self.results.captures_images.append(image)
             print('*** PRINCIPAL Imagem salva!')
             sleep(self.results.interval)
-        print('*** PRINCIPAL FIM')
         self.results.total_time = (datetime.now() - start).seconds
+        self.results.captures_images.append(get_cropped_image())
+        print('*** PRINCIPAL FIM')
 
     def calculate_calibrate_points(self, cycles_informations):
         times = self.results.captures_times

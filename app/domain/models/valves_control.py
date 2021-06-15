@@ -61,6 +61,7 @@ class ValvesControl():
         json = JsonPack.read(JSON_PROGRAMMING_PATH)
         program = Programming().from_dictionary(json)
         self.interpret_programming(program, cycles_informations)
+        self.close_all_valves()
         print('--- THREAD FIM')
 
     def interpret_programming(self, program, cycles_informations):
@@ -98,6 +99,9 @@ class ValvesControl():
         self.apply_valves_config(line.open_valves)
         print(f'--- THREAD aplicada {line.open_valves}')
         sleep(line.sleep_time)
+
+    def close_all_valves(self):
+        self.apply_valves_config([])
 
     def validate_file_and_return_programming_path(self):
         JsonPack.read(JSON_PROGRAMMING_PATH)  # dispara um erro se não existir
