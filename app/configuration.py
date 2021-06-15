@@ -1,21 +1,19 @@
-from typing import Final
-
 # FPS das capturas da webcam: (+/- 24 fps)
-FRAME_RATE: Final = 0.04
+FRAME_RATE = 0.04
 
 # Caminho do arquivo de programação usado
-JSON_PROGRAMMING_PATH: Final = 'app/static/files/programming.json'
-PARTIAL_JSON_PROGRAMMING_PATH: Final = 'static/files/programming.json'
+JSON_PROGRAMMING_PATH = 'app/static/files/programming.json'
+PARTIAL_JSON_PROGRAMMING_PATH = 'static/files/programming.json'
 
 # Número de válvulas utilizadas na aplicação
-NUMBER_OF_VALVES: Final = 16
+NUMBER_OF_VALVES = 16
 
 # Propriedades da configuação de Válvulas
-BOARD_NUMBER: Final = 'board_number'
-VALVE_NUMBER: Final = 'valve_number'
+BOARD_NUMBER = 'board_number'
+VALVE_NUMBER = 'valve_number'
 
 # Configuração das válvulas usadas na aplicação
-VALVE_MAPPING: Final = [
+VALVE_MAPPING = [
     {BOARD_NUMBER: 15, VALVE_NUMBER: 1},
     {BOARD_NUMBER: 16, VALVE_NUMBER: 2},
     {BOARD_NUMBER: 18, VALVE_NUMBER: 3},
@@ -36,17 +34,17 @@ VALVE_MAPPING: Final = [
 ]
 
 # Propriedadas do arquivo de programação
-SAVED_DATE: Final = 'data'
-SUBTITLE: Final = 'legenda'
-PROGRAMMING: Final = 'programacao'
-GROUP_NUMBER: Final = 'grupo_'
-LINE_NUMBER: Final = 'linha_'
-CYCLE_START: Final = 'inicio_ciclo'
-SLEEP_TIME: Final = 'tempo_espera'
-OPEN_VALVES: Final = 'valvulas_abertas'
-VALVES_QUANTITY: Final = 'qtd_valvulas'
-WORKING_IN_TRIPLICATE: Final = 'triplicata'
-KEY_SEPARATOR: Final = '_'
+SAVED_DATE = 'data'
+SUBTITLE = 'legenda'
+PROGRAMMING = 'programacao'
+GROUP_NUMBER = 'grupo_'
+LINE_NUMBER = 'linha_'
+CYCLE_START = 'inicio_ciclo'
+SLEEP_TIME = 'tempo_espera'
+OPEN_VALVES = 'valvulas_abertas'
+VALVES_QUANTITY = 'qtd_valvulas'
+WORKING_IN_TRIPLICATE = 'triplicata'
+KEY_SEPARATOR = '_'
 
 # Formato String padrão usado para transformar datetime para string e/ou de string
 STRING_FORMAT = '%d-%m-%Y %H:%M:%S'
