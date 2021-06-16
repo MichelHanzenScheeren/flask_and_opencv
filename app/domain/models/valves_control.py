@@ -24,8 +24,7 @@ class ValvesControl():
 
     def submit_valves_config(self, valves_config):
         self._validate_valves_config(valves_config)
-        if len(valves_config) > 0:
-            self.apply_valves_config(valves_config)
+        self.apply_valves_config(valves_config)
 
     def _validate_valves_config(self, valves_config):
         key = 'ValvesControl.submit_valves_config'
