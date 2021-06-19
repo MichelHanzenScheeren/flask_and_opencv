@@ -53,13 +53,12 @@ class Analyze():
 
     def _start(self, get_cropped_image, programming_interpret):
         if self.results.analize_method == 'simple':
-            self.simple_save_analyze_frames(get_cropped_image)
-            self.do_analyze()
+            self.do_simple_analyze(get_cropped_image)
             self.calculate_signal()
         else:
             cycles_informations = []
             thread = self.start_valves_thread(programming_interpret, cycles_informations)
-            self.complete_save_analyze_frames(get_cropped_image, thread)
+            self.do_complete_analyze(get_cropped_image, thread)
             self.calculate_signal()
             self.calculate_calibrate_points(cycles_informations)
 
@@ -72,8 +71,8 @@ class Analyze():
         if not captures.isdigit() or int(captures) < 1 or int(captures) > 10:
             raise AppError('O número de capturas informado não é válido')
 
-    def simple_save_analyze_frames(self, get_cropped_image):
-        """" Método que salva os frames correspondentes a captura.
+    def do_simple_analyze(self, get_cropped_image):
+        """" Método que salva os frames e calcula a média de cores correspondentes a captura.
 
         O sleep garante que a relação tempo total e intervalo entre capturas seja seguido.
         Nenhum retorno.
@@ -81,9 +80,12 @@ class Analyze():
         repetitions = int(self.results.total_time * self.results.captures_seg)
         for _ in range(0, repetitions):
             image = get_cropped_image()
-            self.results.captures_times.append(datetime.now())
-            self.results.captures_images.append(image)
-            sleep(self.results.interval)
+            to_discount = default_timer()
+            self.save_image_color_average(image)
+            self.save_converted_image(image)
+            discounted_interval = self.results.interval - (default_timer() - to_discount)
+            if discounted_interval > 0:
+                sleep(discounted_interval)
 
     def save_image_color_average(self, image):
         average = self.calculate_average(image)
@@ -91,13 +93,7 @@ class Analyze():
 
     def save_converted_image(self, image):
         converted = ImagePack.convert_to_bytes(image)
-        self.results.captures_images.append(converted)
-
-    def do_analyze(self):
-        """ Método em que são calculadas as médias de cores de cada captura salva. """
-        for image in self.results.captures_images:
-            average = self.calculate_average(image)
-            self.results.captures.append(average)
+        self.results.captures_images[f'captura_{len(self.results.captures_images) + 1}.jpg'] = converted
 
     def calculate_signal(self):
         """ 'Sinal' é a distância vetorial da média de cores de uma captura e a média de cores do diferenciador. """
@@ -115,7 +111,7 @@ class Analyze():
         thread.start()
         return thread
 
-    def complete_save_analyze_frames(self, get_cropped_image, thread):
+    def do_complete_analyze(self, get_cropped_image, thread):
         start = datetime.now()
         while(thread.is_alive()):
             image = get_cropped_image()

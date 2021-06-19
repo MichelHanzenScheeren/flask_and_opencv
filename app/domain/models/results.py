@@ -15,7 +15,7 @@ class Results():
         self.differentiator = []  # Lista BGR [Blue, Green, Red] da média de cores da imagem do diferenciador.
         self.differentiator_image = None  # imagem do diferenciador.
         self.captures = []  # Matriz de resultados da média de cores das capturas [[B, G, R], [B, ...], ...].
-        self.captures_images = []  # Lista de imagens das capturas.
+        self.captures_images = ImagePack.create_zip_file()  # dicionário de imagens das capturas para exportar em zip.
         self.captures_times = []  # Lista de datetimes que representam o instante em que a captura foi feita
         self.signals = []  # Lista de sinais obtidos na análise. [sinal1, sinal2, ...].
         self.calibration_values = []  # Lista de coordenadas y do gráfico de calibração da análize.
@@ -34,7 +34,7 @@ class Results():
         self.captures.clear()
         self.signals.clear()
         self.calibration_values.clear()
-        self.captures_images.clear()
+        self.captures_images = ImagePack.create_zip_file()
         self.captures_times.clear()
 
     def get_all_images(self):
@@ -42,12 +42,8 @@ class Results():
 
         Se nenhum erro ocorrer, retorna um json com imagens em formato JPG codificadas em bytes na base64.
         """
-        encoded = ImagePack.create_zip_file()
-        encoded['diferenciador.jpg'] = ImagePack.convert_to_bytes(self.differentiator_image)
-        for i in range(0, len(self.captures_images)):
-            image = self.captures_images[i]
-            encoded[f'captura_{i + 1}.jpg'] = ImagePack.convert_to_bytes(image)
-        return ImagePack.encode_to_b64(encoded.to_bytes())
+        self.captures_images['diferenciador.jpg'] = ImagePack.convert_to_bytes(self.differentiator_image)
+        return ImagePack.encode_to_b64(self.captures_images.to_bytes())
 
     def get_xlsx_results(self):
         """ Cria e retorna um arquivo xlsx com os resultados da análise. """
