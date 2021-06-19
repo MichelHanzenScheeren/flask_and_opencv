@@ -92,8 +92,9 @@ class Analyze():
         self.results.captures.append(average)
 
     def save_converted_image(self, image):
-        converted = ImagePack.convert_to_bytes(image)
-        self.results.captures_images[f'captura_{len(self.results.captures_images) + 1}.jpg'] = converted
+        converted = ImagePack.compress_and_convert_to_bytes(image)
+        index = len(self.results.captures_images) + 1
+        self.results.captures_images[f'captura_{index}.jpg'] = converted
 
     def calculate_signal(self):
         """ 'Sinal' é a distância vetorial da média de cores de uma captura e a média de cores do diferenciador. """

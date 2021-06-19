@@ -42,7 +42,7 @@ class Results():
 
         Se nenhum erro ocorrer, retorna um json com imagens em formato JPG codificadas em bytes na base64.
         """
-        self.captures_images['diferenciador.jpg'] = ImagePack.convert_to_bytes(self.differentiator_image)
+        self.captures_images['diferenciador.jpg'] = ImagePack.compress_and_convert_to_bytes(self.differentiator_image)
         return ImagePack.encode_to_b64(self.captures_images.to_bytes())
 
     def get_xlsx_results(self):
