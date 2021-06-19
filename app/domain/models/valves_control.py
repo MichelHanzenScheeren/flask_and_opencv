@@ -61,7 +61,6 @@ class ValvesControl():
         program = Programming().from_dictionary(json)
         self.interpret_programming(program, cycles_informations)
         self.close_all_valves()
-        print('--- THREAD FIM')
 
     def interpret_programming(self, program, cycles_informations):
         for group in program.valves_program:
@@ -96,7 +95,6 @@ class ValvesControl():
 
     def _execute_line(self, line):
         self.apply_valves_config(line.open_valves)
-        print(f'--- THREAD aplicada {line.open_valves}')
         sleep(line.sleep_time)
 
     def close_all_valves(self):

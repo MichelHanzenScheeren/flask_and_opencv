@@ -1,9 +1,11 @@
 from time import sleep
-from math import sqrt, pow
 from datetime import datetime
+from timeit import default_timer
+from math import sqrt, pow
 from threading import Thread
 from app.domain.errors.app_error import AppError
 from app.domain.models.results import Results
+from app.domain.packs.image_pack import ImagePack
 
 
 class Analyze():
@@ -58,7 +60,6 @@ class Analyze():
             cycles_informations = []
             thread = self.start_valves_thread(programming_interpret, cycles_informations)
             self.complete_save_analyze_frames(get_cropped_image, thread)
-            self.do_analyze()
             self.calculate_signal()
             self.calculate_calibrate_points(cycles_informations)
 
@@ -83,6 +84,14 @@ class Analyze():
             self.results.captures_times.append(datetime.now())
             self.results.captures_images.append(image)
             sleep(self.results.interval)
+
+    def save_image_color_average(self, image):
+        average = self.calculate_average(image)
+        self.results.captures.append(average)
+
+    def save_converted_image(self, image):
+        converted = ImagePack.convert_to_bytes(image)
+        self.results.captures_images.append(converted)
 
     def do_analyze(self):
         """ Método em que são calculadas as médias de cores de cada captura salva. """
@@ -111,12 +120,13 @@ class Analyze():
         while(thread.is_alive()):
             image = get_cropped_image()
             self.results.captures_times.append(datetime.now())
-            self.results.captures_images.append(image)
-            print('*** PRINCIPAL Imagem salva!')
-            sleep(self.results.interval)
+            to_discount = default_timer()
+            self.save_image_color_average(image)
+            self.save_converted_image(image)
+            discounted_interval = self.results.interval - (default_timer() - to_discount)
+            if(discounted_interval > 0):
+                sleep(discounted_interval)
         self.results.total_time = (datetime.now() - start).seconds
-        self.results.captures_images.append(get_cropped_image())
-        print('*** PRINCIPAL FIM')
 
     def calculate_calibrate_points(self, cycles_informations):
         times = self.results.captures_times
