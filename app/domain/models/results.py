@@ -19,6 +19,15 @@ class Results():
         self.captures_times = []  # Lista de datetimes que representam o instante em que a captura foi feita
         self.signals = []  # Lista de sinais obtidos na análise. [sinal1, sinal2, ...].
         self.calibration_values = []  # Lista de coordenadas y do gráfico de calibração da análize.
+        self.encoded_images = None # Armazena as imagens cnvertidas para envio ao front.
+
+    def clear(self):
+        self.captures.clear()
+        self.signals.clear()
+        self.calibration_values.clear()
+        self.captures_times.clear()
+        self.captures_images = ImagePack.create_zip_file()
+        self.encoded_images = None
 
     def initialize(self, analize_method, total_time, captures_seg, description, select_date, user_date):
         """ Salva os primeiros valores da análise e garante que dados de uma análise anterior sejam limpos. """
@@ -31,19 +40,18 @@ class Results():
         self.captures_seg = captures_seg
         self.interval = (1 / self.captures_seg)
         self.description = description or ""
-        self.captures.clear()
-        self.signals.clear()
-        self.calibration_values.clear()
-        self.captures_images = ImagePack.create_zip_file()
-        self.captures_times.clear()
 
     def get_all_images(self):
         """ Recupera as imagens das capturas e as formata para serem retornadas ao front-end. 
 
         Se nenhum erro ocorrer, retorna um json com imagens em formato JPG codificadas em bytes na base64.
         """
-        self.captures_images['diferenciador.jpg'] = ImagePack.compress_and_convert_to_bytes(self.differentiator_image)
-        return ImagePack.encode_to_b64(self.captures_images.to_bytes())
+        if self.encoded_images is None:
+            converted_differentiator = ImagePack.compress_and_convert_to_bytes(self.differentiator_image)
+            self.captures_images['diferenciador.jpg'] = converted_differentiator
+            self.encoded_images = ImagePack.encode_to_b64(self.captures_images.to_bytes())
+            self.captures_images = None
+        return self.encoded_images
 
     def get_xlsx_results(self):
         """ Cria e retorna um arquivo xlsx com os resultados da análise. """

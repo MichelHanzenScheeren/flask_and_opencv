@@ -26,6 +26,7 @@ class Analyze():
         A imagem do diferenciador pode tanto ser fruto de um upload do usuário quanto o frame atual capturado no diferenciador.
         Os resultados são salvos como uma lista BGR ([B, G, R]) e retornados como uma lista [R, G, B].
         """
+        self.results.clear()
         self.results.differentiator_image = differentiator_image
         result = self.calculate_average(differentiator_image)
         self.results.differentiator = result
@@ -52,6 +53,7 @@ class Analyze():
         self._start(get_cropped_image, programming_interpret)
 
     def _start(self, get_cropped_image, programming_interpret):
+        self.results.clear()
         if self.results.analize_method == 'simple':
             self.do_simple_analyze(get_cropped_image)
             self.calculate_signal()
