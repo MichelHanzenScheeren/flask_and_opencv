@@ -1,8 +1,8 @@
+from datetime import datetime
 from app.configuration import STRING_FORMAT
 from app.domain.packs.image_pack import ImagePack
 from app.domain.models.excel_file import ExcelFile
 from app.domain.packs.image_pack import ImagePack
-from datetime import datetime
 
 
 class Results():
@@ -19,15 +19,7 @@ class Results():
         self.captures_times = []  # Lista de datetimes que representam o instante em que a captura foi feita
         self.signals = []  # Lista de sinais obtidos na análise. [sinal1, sinal2, ...].
         self.calibration_values = []  # Lista de coordenadas y do gráfico de calibração da análize.
-        self.encoded_images = None # Armazena as imagens cnvertidas para envio ao front.
-
-    def clear(self):
-        self.captures.clear()
-        self.signals.clear()
-        self.calibration_values.clear()
-        self.captures_times.clear()
-        self.captures_images = ImagePack.create_zip_file()
-        self.encoded_images = None
+        self.encoded_images = None  # Armazena as imagens cnvertidas para envio ao front.
 
     def initialize(self, analize_method, total_time, captures_seg, description, select_date, user_date):
         """ Salva os primeiros valores da análise e garante que dados de uma análise anterior sejam limpos. """
@@ -95,4 +87,9 @@ class Results():
         return information
 
     def save_new_analyze_date(self, newDate):
+        """ Método relacionado ao salvamento do horário da análize.  
+
+        Foi necessário adicionar essa funcionalidade pois o horário do rasp. fica atrasado se utilizado
+        sem conexão a internet. Assim, a análise utiliza o horário enviado pelo usuário.
+        """
         self.initial_date = datetime.strptime(newDate, STRING_FORMAT).strftime(STRING_FORMAT)
