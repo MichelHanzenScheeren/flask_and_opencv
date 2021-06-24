@@ -18,14 +18,10 @@ class VideoCapture:
     """
 
     def __init__(self, set_frame):
-        # Este será o método usado para salvar o novo frame obtido na classe correspondente.
-        self.set_frame = set_frame
-        # Controle interno para decidir se a Thread deve continuar executando (falso caso a captura do frame falhe)
-        self._is_working = True
-        # Instância da classe VideoCapture, da biblioteca OpenCV.
-        self.video_capture = None
-        # Lock usado para garantir que condições de corrida não ocorram.
-        self.lock_video = Lock()
+        self.set_frame = set_frame  # Método usado para salvar o novo frame obtido na classe correspondente.
+        self._is_working = True  # Indicar se a Thread deve continuar executando (falso caso a captura falhe)
+        self.video_capture = None  # Instância da classe VideoCapture, da biblioteca OpenCV.
+        self.lock_video = Lock()  # Garantir que condições de corrida não ocorram (por causa das threads).
         self.thread = None  # Armazena a Thread atual que gerencia a captura dos frames
 
     def start_video(self, port):
@@ -36,11 +32,11 @@ class VideoCapture:
         if not self.is_working() or not self.is_valid():
             self.start_video_stream(port)
             self.set_working_state(True)
-            self.start_thread()
             self.define_resolution()
+            self.start_thread()
 
     def is_valid(self):
-        """ Retorna true se video_capture é diferente de None e uma captura esteja aberta (webcam em uso). """
+        """ Retorna true se video_capture for uma instância de webcam válida (webcam em uso). """
         with self.lock_video:
             return self.video_capture and self.video_capture.isOpened()
 
@@ -130,8 +126,7 @@ class VideoCapture:
             self.set_working_state(False)
         else:
             h, w = self.get_video_dimensions()
-            # Necessário para captura do primeiro frame e verificação do funcionamento
-            self.capture_frame()
+            self.capture_frame()  # Necessário para captura do primeiro frame e verificação do funcionamento
             success = self.is_working()
         return {'style': f'height:{h}px;min-height:{h}px;width:{w}px;min-width:{w}px;', 'success': success}
 
