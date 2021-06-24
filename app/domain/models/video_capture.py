@@ -108,8 +108,8 @@ class VideoCapture:
             if(self._not_is_padronized_size()):
                 self.video_capture.set(WIDTH_INDEX, PADRONIZED_WIDTH)
                 self.video_capture.set(HEIGHT_INDEX, PADRONIZED_HEIGHT)
-            res = '\n# RESOLUÇÃO'
-            print(f'{res}: {self.video_capture.get(WIDTH_INDEX):.0f}X{self.video_capture.get(HEIGHT_INDEX):.0f} #')
+            res = '#### RESOLUÇÃO'
+            print(f'{res}: {self.video_capture.get(WIDTH_INDEX):.0f}X{self.video_capture.get(HEIGHT_INDEX):.0f} ####')
 
     def _not_is_padronized_size(self):
         padronized_width = self.video_capture.get(WIDTH_INDEX) != PADRONIZED_WIDTH

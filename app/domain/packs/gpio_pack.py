@@ -9,6 +9,7 @@ class GpioPack():
 
     @staticmethod
     def set_board_pinout():
+        gpio.setwarnings(False)
         gpio.setmode(gpio.BOARD)
 
     @staticmethod
@@ -37,6 +38,10 @@ class gpio():
     """
 
     BOARD, OUT, HIGH, LOW = '', '', '', ''
+
+    @staticmethod
+    def setwarnings(_):
+        pass
 
     @staticmethod
     def setmode(_):
