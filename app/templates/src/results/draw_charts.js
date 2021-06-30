@@ -15,7 +15,7 @@ function _drawSignalsChart(signals, interval) {
     xValues.push(((index + 1) * interval).toFixed(1).toString());
     yValues.push(parseFloat(signals[index]).toFixed(4));
   }
-  _registerChart(xValues, yValues, 'Sinal', 'Tempo (segundos)', 'Sinal', 'lineChartCanvas');
+  _registerChart(xValues, yValues, 'Sinal', 'Tempo (segundos)', 'Sinal', 'lineChartCanvas', false);
 }
 
 function _drawCalibrationChart(calibration_values) {
@@ -28,10 +28,10 @@ function _drawCalibrationChart(calibration_values) {
   }
   xValues.push(calibration_values.length + 1);
   yValues.push(null);
-  _registerChart(xValues, yValues, 'Sinal', 'Ciclo', 'Sinal', 'calibrationChartCanvas');
+  _registerChart(xValues, yValues, 'Sinal', 'Ciclo', 'Sinal', 'calibrationChartCanvas', true);
 }
 
-function _registerChart(xValues, yValues, dataLabel, xLabel, yLabel, htmlComponent) {
+function _registerChart(xValues, yValues, dataLabel, xLabel, yLabel, htmlComponent, isTransparent) {
   var options = { display: true, fontSize: 16 };
   var configAndData = {
     type: 'line',
@@ -39,7 +39,7 @@ function _registerChart(xValues, yValues, dataLabel, xLabel, yLabel, htmlCompone
       labels: xValues,
       datasets: [{
         label: dataLabel, data: yValues, lineTension: 0, fill: false,
-        pointBackgroundColor: 'rgba(52, 58, 64, 1)', borderColor: 'rgba(52, 58, 64, 0.7)',
+        pointBackgroundColor: 'rgba(52, 58, 64, 1)', borderColor: `rgba(52, 58, 64, ${isTransparent ? '0.0' : '0.7'})`,
       }],
     },
     options: {
