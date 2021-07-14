@@ -47,12 +47,11 @@ class Webcam():
         Isso se baseia no princípio de que as portas da webcam sempre iniciam no 0 (principal do computador) e vão aumentando de 1 em 1.
         """
         list_webcans = []
-        for index in range(100):
+        for index in range(5):
             if index == self.current_port:
                 continue
-            if ImagePack.is_invalid_webcam(index):
-                break
-            list_webcans.append(index)
+            if ImagePack.is_valid_webcam(index):
+                list_webcans.append(index)
         list_webcans.insert(self.current_port, self.current_port)
         return list_webcans
 
