@@ -162,7 +162,7 @@ htmlcov/
 *,cover
 
 # Statics:
-app/static/css
-app/static/fonts
-app/static/js
+# app/static/css
+# app/static/fonts
+# app/static/js
 *programming.json
