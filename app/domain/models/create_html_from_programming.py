@@ -1,5 +1,5 @@
 from app.domain.errors.app_error import AppError
-from app.configuration import *
+from app.configuration import WORKING_IN_TRIPLICATE, VALVES_QUANTITY, SUBTITLE, PROGRAMMING, GROUP_NUMBER, LINE_NUMBER, OPEN_VALVES, CYCLE_START, SLEEP_TIME
 
 
 class CreateHtmlFromProgramming:
@@ -17,7 +17,7 @@ class CreateHtmlFromProgramming:
             html = self._generate_triplicate_and_subtitle('', self._dictionary)
             html = self._generate_table(html, self._dictionary)
             return html
-        except:
+        except Exception:
             message = 'O arquivo de programação não é válido!'
             raise AppError('CreateHtmlFromJson.dictionary', message)
 
@@ -35,7 +35,7 @@ class CreateHtmlFromProgramming:
         for i in range(1, dictionary[VALVES_QUANTITY] + 1):
             html += f'<th id="{i}" scope="col" style="font-size:17px">{i} <p onclick="ChangeToInput(this)" '
             name = f'Valv{i}' if dictionary[SUBTITLE].get(
-                f'Valv{i}') == None else dictionary[SUBTITLE].get(f'Valv{i}')
+                f'Valv{i}') is None else dictionary[SUBTITLE].get(f'Valv{i}')
             html += f' style="font-size:12px;cursor:pointer;"class="m-0 valve_name">{name}</p></th> '
         html += '<th scope="col" class="align-middle">#</th> </tr> </thead> '
         return html

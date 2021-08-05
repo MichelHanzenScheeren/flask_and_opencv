@@ -27,7 +27,7 @@ class Programming():
     def _validate_parameter(self, dictionary):
         if type(dictionary) is not dict:
             message = 'O arquivo não corresponde a um json de programação válido'
-            raise AppError('Programming.dictionary',  message)
+            raise AppError('Programming.dictionary', message)
 
     def _validate(self):
         message = ''

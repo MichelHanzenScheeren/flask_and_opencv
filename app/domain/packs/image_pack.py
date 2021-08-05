@@ -33,7 +33,7 @@ class ImagePack():
 
     @staticmethod
     def draw_rectangle(frame, initial_xy, final_xy):
-        """ Desenha as bordas vermelhas de um reângulo iniciado em  'initial_xy' e finalizado em 'final_xy'. 
+        """ Desenha as bordas vermelhas de um reângulo iniciado em  'initial_xy' e finalizado em 'final_xy'.
 
         'initial_xy' e 'final_xy' são tuplas da forma (x, y).
         Nenhum valor é retornado.

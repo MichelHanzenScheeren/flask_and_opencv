@@ -1,4 +1,3 @@
-# pylint: disable=unused-variable
 from app.configuration import NUMBER_OF_VALVES
 from flask import Response, render_template, redirect, url_for, request
 

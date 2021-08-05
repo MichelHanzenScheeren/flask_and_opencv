@@ -46,7 +46,7 @@ class Analyze():
         'get_cropped_image' é um método da Webcam que retorna o frame atual recortado e em formato ndarray.
         'programming_interpret' é um método que cuida da interpretação do arquivo de programação das válvulas.
         """
-        analize_method, total_time, captures_seg,  = form['analizeMethod'], form['time'], form['qtd'],
+        analize_method,  total_time, captures_seg = form['analizeMethod'], form['time'], form['qtd']
         description, select_date, user_date = form['description'], form['selectDate'], form['userDate']
         self.validate_form(analize_method, total_time, captures_seg)
         self.results.initialize(analize_method, int(total_time), int(captures_seg), description, select_date, user_date)
@@ -78,7 +78,7 @@ class Analyze():
     def do_simple_analyze(self, get_cropped_image):
         """" Método que salva os frames e calcula a média de cores correspondentes a captura na análise simples.
 
-        "to_discount" e a lógica envolvida garantem que as conversões e cálculos não vão interferir significativamente 
+        "to_discount" e a lógica envolvida garantem que as conversões e cálculos não vão interferir significativamente
         no interalo de capturas, descontando esse tempo do sleep.
         O sleep garante que a relação tempo total e intervalo entre capturas seja seguido.
         """
@@ -98,7 +98,7 @@ class Analyze():
         self.results.captures.append(average)
 
     def save_converted_image(self, image):
-        """" Comprime e converte a imagem para mantê-la em memória. 
+        """" Comprime e converte a imagem para mantê-la em memória.
 
         Foi necessário implementar a compactação e conversão durante a análise para poupar memória RAM.
         Caso contrário, a capacidade de fazer análises grandes seria comprometida (faltava memória de trabalho).
@@ -119,9 +119,9 @@ class Analyze():
             self.results.signals.append(signal)
 
     def start_valves_thread(self, programming_interpret, cycles_informations):
-        """ Método que inicia a thread que cuida da abertura e fechamento das válvulas na análise completa. 
+        """ Método que inicia a thread que cuida da abertura e fechamento das válvulas na análise completa.
 
-        A thread é retornada para que seu fim seja controlado (ela define o fim das capturas da webcam). 
+        A thread é retornada para que seu fim seja controlado (ela define o fim das capturas da webcam).
         """
         thread = Thread(target=programming_interpret, args=(cycles_informations,))
         thread.start()
@@ -130,7 +130,7 @@ class Analyze():
     def do_complete_analyze(self, get_cropped_image, thread):
         """" Método que salva os frames e calcula a média de cores das captura na análise completa.
 
-        "to_discount" e a lógica envolvida garantem que as conversões e cálculos não vão interferir significativamente 
+        "to_discount" e a lógica envolvida garantem que as conversões e cálculos não vão interferir significativamente
         no interalo de capturas, descontando esse tempo do sleep.
         O sleep garante que a relação tempo total e intervalo entre capturas seja seguido.
         O fim da análise é definido pelo final da thread que gerencia a abertura e fechamento das válvulas.
@@ -153,7 +153,7 @@ class Analyze():
         "cycles_information" é uma lista com informações de início e fim dos ciclo de abertura das válvulas.
         Essas informações são usadas para filtrar quais capturas pertencem a cada ciclo.
         Cada ciclo possui uma lista interna com mais 3 dados (ciclos de 3 iterações - análise em triplicata).
-        De cada uma das 3 repetições, pega-se o maior sinal. 
+        De cada uma das 3 repetições, pega-se o maior sinal.
         A média do maior sinal de cada repetição gera uma nova coordenada do gráfico (coordenada x).
         """
         times = self.results.captures_times
@@ -167,10 +167,10 @@ class Analyze():
             self.results.calibration_values.append(average_signal)
 
     def clear(self):
-        """ Liberação da memória de análise anterior. 
+        """ Liberação da memória de análise anterior.
 
-        O "del" e o "collect" são usados para garantir explicitamente que os recursos serão liberados, 
-        já qe o rasp não os possui em abundância.  
+        O "del" e o "collect" são usados para garantir explicitamente que os recursos serão liberados,
+        já qe o rasp não os possui em abundância.
         """
         del self.results
         collect()  # forçar explicitamente a coleta de memória pelo garbage collector do python

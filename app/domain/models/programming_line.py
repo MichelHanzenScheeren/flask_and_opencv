@@ -18,10 +18,10 @@ class ProgrammingLine():
     def _validate_parameters(self, key_name, dictionary):
         if type(key_name) is not str or len(key_name) == 0 or not key_name[-1].isdigit():
             message = 'Id da linha inválido'
-            raise AppError('ProgrammingLine.key_name',  message)
+            raise AppError('ProgrammingLine.key_name', message)
         if type(dictionary) is not dict:
             message = 'Linha de programação não corresponde a um json válido'
-            raise AppError('ProgrammingLine.dictionary',  message)
+            raise AppError('ProgrammingLine.dictionary', message)
 
     def _validate(self):
         message = ''

@@ -1,5 +1,5 @@
-from app.configuration import FRAME_RATE
 import time
+from app.configuration import FRAME_RATE
 from app.domain.packs.image_pack import ImagePack
 from app.domain.models.rectangle import Rectangle
 from app.domain.models.video_capture import VideoCapture
