@@ -33,7 +33,7 @@ class GpioPack():
 class gpio():
     """ Classe de métodos estáticos auxiliar criada para simular as chamada a biblioteca RPI.GPIO.
 
-    Sua criação foi necessária pois o desenvolvimento da aplicação foi feito no windows, que não 
+    Sua criação foi necessária pois o desenvolvimento da aplicação foi feito no windows, que não
     possui a biblioteca RPI.GPIO.
     """
 

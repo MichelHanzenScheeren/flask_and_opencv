@@ -10,7 +10,7 @@ from app.domain.packs.image_pack import ImagePack
 
 
 class Analyze():
-    """ Clase que encapsula todos os processos de análise das capturas.
+    """ Classe que encapsula todos os processos de análise das capturas.
 
     Aqui que são obtidas as médias das cores do diferenciador e capturas.
     Também é feito o calculo dos sinais a partir dos resultados anteriores.
