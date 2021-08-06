@@ -46,7 +46,7 @@ class Analyze():
         'get_cropped_image' é um método da Webcam que retorna o frame atual recortado e em formato ndarray.
         'programming_interpret' é um método que cuida da interpretação do arquivo de programação das válvulas.
         """
-        analize_method,  total_time, captures_seg = form['analizeMethod'], form['time'], form['qtd']
+        analize_method, total_time, captures_seg = form['analizeMethod'], form['time'], form['qtd']
         description, select_date, user_date = form['description'], form['selectDate'], form['userDate']
         self.validate_form(analize_method, total_time, captures_seg)
         self.results.initialize(analize_method, int(total_time), int(captures_seg), description, select_date, user_date)
@@ -112,9 +112,9 @@ class Analyze():
         differentiator = self.results.differentiator
         for capture in self.results.captures:
             signal = sqrt(
-                pow(capture[0] - differentiator[0], 2) +
-                pow(capture[1] - differentiator[1], 2) +
-                pow(capture[2] - differentiator[2], 2)
+                pow(capture[0] - differentiator[0], 2)
+                + pow(capture[1] - differentiator[1], 2)
+                + pow(capture[2] - differentiator[2], 2)
             )
             self.results.signals.append(signal)
 

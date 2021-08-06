@@ -31,17 +31,17 @@ class Webcam():
         self.video_capture.start_video(self.current_port)
 
     def video_status_and_port(self):
-        """ Obtêm e retorna as informações principais relacionadas ao frame capturado na webcam.  
+        """ Obtêm e retorna as informações principais relacionadas ao frame capturado na webcam.
 
         Retorna altura e largura do frame (por padrão 480X640) e a porta atual.
-        O retorno está no formato json. 
+        O retorno está no formato json.
         """
         status = self.video_capture.video_status()
         status['current'] = self.current_port
         return status
 
     def webcans_list(self):
-        """ retorna a lista de webcans disponíveis atualmente. 
+        """ retorna a lista de webcans disponíveis atualmente.
 
         O método tenta abrir as portas de webcam diferentes da atual e finaliza quando falha pela primeira vez.
         Isso se baseia no princípio de que as portas da webcam sempre iniciam no 0 (principal do computador) e vão aumentando de 1 em 1.
@@ -56,10 +56,10 @@ class Webcam():
         return list_webcans
 
     def change_current_webcam(self, index):
-        """ Método responsável por alterar a webcam usada no sistema. 
+        """ Método responsável por alterar a webcam usada no sistema.
 
         Recebe um inteiro correspondente a nova porta webcam que será usada.
-        Retorna as dimensões do frame da nova webcam. 
+        Retorna as dimensões do frame da nova webcam.
         """
         self.current_port = index
         return self.video_capture.change(index)
@@ -71,9 +71,9 @@ class Webcam():
         """ Método que obtêm o frame atual e o retorna particionado em forma de bits.
 
         O frame atual pode ser o de um upload ou o obtido da webcam.
-        O retorno particionado é graças ao yield (tipo de retorno especial do python3). 
+        O retorno particionado é graças ao yield (tipo de retorno especial do python3).
         A imagem é retornada em bits e no formato jpeg.
-        Variáveis 'FRAME_RATE' e 'previous' garantem que a resposta terá um intervalo >= 0.04 segundos (+/- 25fps) 
+        Variáveis 'FRAME_RATE' e 'previous' garantem que a resposta terá um intervalo >= 0.04 segundos (+/- 25fps)
         """
         try:
             previous = 0
@@ -97,7 +97,7 @@ class Webcam():
             else:
                 copy = self.captured_frame.get_copy()
             return self.draw_and_convert_frame(copy)
-        except:
+        except Exception:
             return ImagePack.encode_to_jpg(ImagePack.black_image())
 
     def draw_and_convert_frame(self, copy):
@@ -116,7 +116,7 @@ class Webcam():
         return self.get_cropped_image()
 
     def crop_uploaded_image(self):
-        """ Obtêm e retorna a imagem enviada pelo usuário. 
+        """ Obtêm e retorna a imagem enviada pelo usuário.
 
         A imagem é recortada caso um retângulo tenha sido desenhado pelo usuário (área de interesse da imagem).
         A imagem retornada está no formato padrão do OpenCV (ndarray).
@@ -126,7 +126,7 @@ class Webcam():
         return self.rectangle.crop_image(copy)
 
     def get_cropped_image(self):
-        """ Obtêm e retorna o último frame capturado pela webcam. 
+        """ Obtêm e retorna o último frame capturado pela webcam.
 
         A imagem é recortada caso um retângulo tenha sido desenhado pelo usuário (área de interesse da imagem).
         A imagem retornada está no formato padrão do OpenCV (ndarray).

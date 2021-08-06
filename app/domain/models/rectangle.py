@@ -5,7 +5,7 @@ from app.domain.packs.image_pack import ImagePack
 class Rectangle():
     """ Classe responsável por armazenar e gerenciar o retângulo desenhado pelo usuário.
 
-    Esse retângulo representa a área de interesse da imagem, que será recortada da imagem da webcam 
+    Esse retângulo representa a área de interesse da imagem, que será recortada da imagem da webcam
     (ou enviada pelo upload) no momento da análise.
     """
 
@@ -21,7 +21,7 @@ class Rectangle():
             self.y_final = 0
 
     def define_points_of_rectangle(self, x1, y1, x2, y2):
-        """ Recebe os 4 pontos do retângulo, valida-os e os salva temporariamente. 
+        """ Recebe os 4 pontos do retângulo, valida-os e os salva temporariamente.
 
         Os 4 pontos devem ser inteiros e representar um retângulo válido.
         Nenhum retorno.
@@ -38,7 +38,7 @@ class Rectangle():
         return (type(x1) is int) and (type(y1) is int) and (type(x2) is int) and (type(y2) is int)
 
     def is_valid_points(self, x1, y1, x2, y2):
-        """ Retorna 'true' se os pontos pertencerem a um retângulo válido. Caso contrário, retorna 'false'.  
+        """ Retorna 'true' se os pontos pertencerem a um retângulo válido. Caso contrário, retorna 'false'.
 
         Para ser considerado válido, todos os potos do retênagulo precisam ser >= 0.
         Os pontos também devem garantir que o retângulo tenha área diferente de zero.
@@ -53,9 +53,9 @@ class Rectangle():
             return ((self.x_initial != 0 or self.x_final != 0) and (self.y_initial != 0 or self.y_final != 0))
 
     def draw_rectangle(self, frame):
-        """ Método que recupera os pontos do retângulo, valida-os e desenha no frame recebido como parâmetro. 
+        """ Método que recupera os pontos do retângulo, valida-os e desenha no frame recebido como parâmetro.
 
-        Sempre retorna uma imagem no padrão OpenCV (ndarray). 
+        Sempre retorna uma imagem no padrão OpenCV (ndarray).
         A imagem retornada terá um retângulo desenhado caso exista um retângulo válido salvo.
         """
         if self.is_valid_rectangle():

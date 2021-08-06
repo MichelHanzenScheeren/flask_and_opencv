@@ -13,7 +13,7 @@ HEIGHT_INDEX = 4
 class VideoCapture:
     """ Classe que possui a lógica de obtenção dos frames da webcam da classe VideoCapture pela biblioteca OpenCV.
 
-    Uma Thread é usada para gerenciar as capturas e garantir que sejam feitas mesmo durante a análise. 
+    Uma Thread é usada para gerenciar as capturas e garantir que sejam feitas mesmo durante a análise.
     Um Lock também é usado, para garantir que condições de concorrência não ocorram.
     """
 
@@ -68,7 +68,7 @@ class VideoCapture:
 
         'FRAME_RATE' e 'previous' garantem que as capturas terão um intervalo >= 0.04 segundos (+/- 25fps: 1seg/0.04).
         Esse controle foi adicionado para evitar excesso de processamento do raspberry.
-        Sem ele, o raspberry não estava dando conta das capturas. 
+        Sem ele, o raspberry não estava dando conta das capturas.
         """
         try:
             previous = 0
@@ -83,7 +83,7 @@ class VideoCapture:
     def capture_frame(self):
         """ Método chamado pela Thread para capturar o frame. Sempre retorna uma imagem no padrão OpenCV (ndarray).
 
-        Se _is_working for true e a webcam atual é valida, captura um frame. 
+        Se _is_working for true e a webcam atual é valida, captura um frame.
         Caso contrário, retorna uma imagem padrão setada para preto.
         """
         if(self.is_working() and self.is_valid()):
@@ -136,7 +136,7 @@ class VideoCapture:
             return (int(self.video_capture.get(HEIGHT_INDEX)), int(self.video_capture.get(WIDTH_INDEX)))
 
     def change(self, new_port):
-        """ Método que libera o video atual e inicia uma nova webcam a partir da porta recebida por parâmetro. 
+        """ Método que libera o video atual e inicia uma nova webcam a partir da porta recebida por parâmetro.
 
         O parâmetro recebido deve ser um inteiro maior ou igual a zero.
         Caso o processo seja um sucesso, retorna a resolução da webcam.

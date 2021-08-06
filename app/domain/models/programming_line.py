@@ -1,4 +1,4 @@
-from app.configuration import *
+from app.configuration import KEY_SEPARATOR, CYCLE_START, SLEEP_TIME, OPEN_VALVES
 from app.domain.errors.app_error import AppError
 
 
