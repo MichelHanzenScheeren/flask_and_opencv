@@ -9,7 +9,7 @@ from app.controllers import home_controller, analyze_controller, valves_controll
 
 
 def configure_routes(app):
-    """ Ocorrem as instanciações das classes principais e chamam-se os controladores específicos das rotas. 
+    """ Ocorrem as instanciações das classes principais e chamam-se os controladores específicos das rotas
 
     As classes principais são a 'Webcam' e a 'Analyze'.
     Define-se também a rota de erro da aplicação, usada em ambos os casos.

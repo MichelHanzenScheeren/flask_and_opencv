@@ -9,6 +9,7 @@ class GpioPack():
 
     @staticmethod
     def set_board_pinout():
+        gpio.setwarnings(False)
         gpio.setmode(gpio.BOARD)
 
     @staticmethod
@@ -32,11 +33,15 @@ class GpioPack():
 class gpio():
     """ Classe de métodos estáticos auxiliar criada para simular as chamada a biblioteca RPI.GPIO.
 
-    Sua criação foi necessária pois o desenvolvimento da aplicação foi feito no windows, que não 
+    Sua criação foi necessária pois o desenvolvimento da aplicação foi feito no windows, que não
     possui a biblioteca RPI.GPIO.
     """
 
     BOARD, OUT, HIGH, LOW = '', '', '', ''
+
+    @staticmethod
+    def setwarnings(_):
+        pass
 
     @staticmethod
     def setmode(_):

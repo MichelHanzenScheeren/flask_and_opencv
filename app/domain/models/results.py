@@ -1,8 +1,8 @@
+from datetime import datetime
 from app.configuration import STRING_FORMAT
 from app.domain.packs.image_pack import ImagePack
 from app.domain.models.excel_file import ExcelFile
 from app.domain.packs.image_pack import ImagePack
-from datetime import datetime
 
 
 class Results():
@@ -15,10 +15,11 @@ class Results():
         self.differentiator = []  # Lista BGR [Blue, Green, Red] da média de cores da imagem do diferenciador.
         self.differentiator_image = None  # imagem do diferenciador.
         self.captures = []  # Matriz de resultados da média de cores das capturas [[B, G, R], [B, ...], ...].
-        self.captures_images = []  # Lista de imagens das capturas.
+        self.captures_images = ImagePack.create_zip_file()  # dicionário de imagens das capturas para exportar em zip.
         self.captures_times = []  # Lista de datetimes que representam o instante em que a captura foi feita
         self.signals = []  # Lista de sinais obtidos na análise. [sinal1, sinal2, ...].
         self.calibration_values = []  # Lista de coordenadas y do gráfico de calibração da análize.
+        self.encoded_images = None  # Armazena as imagens cnvertidas para envio ao front.
 
     def initialize(self, analize_method, total_time, captures_seg, description, select_date, user_date):
         """ Salva os primeiros valores da análise e garante que dados de uma análise anterior sejam limpos. """
@@ -31,23 +32,18 @@ class Results():
         self.captures_seg = captures_seg
         self.interval = (1 / self.captures_seg)
         self.description = description or ""
-        self.captures.clear()
-        self.signals.clear()
-        self.calibration_values.clear()
-        self.captures_images.clear()
-        self.captures_times.clear()
 
     def get_all_images(self):
         """ Recupera as imagens das capturas e as formata para serem retornadas ao front-end. 
 
         Se nenhum erro ocorrer, retorna um json com imagens em formato JPG codificadas em bytes na base64.
         """
-        encoded = ImagePack.create_zip_file()
-        encoded['diferenciador.jpg'] = ImagePack.convert_to_bytes(self.differentiator_image)
-        for i in range(0, len(self.captures_images)):
-            image = self.captures_images[i]
-            encoded[f'captura_{i + 1}.jpg'] = ImagePack.convert_to_bytes(image)
-        return ImagePack.encode_to_b64(encoded.to_bytes())
+        if self.encoded_images is None:
+            converted_differentiator = ImagePack.compress_and_convert_to_bytes(self.differentiator_image)
+            self.captures_images['diferenciador.jpg'] = converted_differentiator
+            self.encoded_images = ImagePack.encode_to_b64(self.captures_images.to_bytes())
+            self.captures_images = None
+        return self.encoded_images
 
     def get_xlsx_results(self):
         """ Cria e retorna um arquivo xlsx com os resultados da análise. """
@@ -91,4 +87,9 @@ class Results():
         return information
 
     def save_new_analyze_date(self, newDate):
+        """ Método relacionado ao salvamento do horário da análize.  
+
+        Foi necessário adicionar essa funcionalidade pois o horário do rasp. fica atrasado se utilizado
+        sem conexão a internet. Assim, a análise utiliza o horário enviado pelo usuário.
+        """
         self.initial_date = datetime.strptime(newDate, STRING_FORMAT).strftime(STRING_FORMAT)

@@ -19,12 +19,12 @@ class ImagePack():
         return cv2.VideoCapture(port)
 
     @staticmethod
-    def is_invalid_webcam(test_port):
+    def is_valid_webcam(test_port):
         """ Verifica se determinada porta recebida por parâmetro corresponde a de uma webcam válida. """
         video = ImagePack.new_stream(test_port)
-        is_invalid = video is None or not video.isOpened()
+        is_valid = video is not None and video.isOpened()
         ImagePack.dispose_video_stream(video)
-        return is_invalid
+        return is_valid
 
     @staticmethod
     def dispose_video_stream(video):
@@ -33,7 +33,7 @@ class ImagePack():
 
     @staticmethod
     def draw_rectangle(frame, initial_xy, final_xy):
-        """ Desenha as bordas vermelhas de um reângulo iniciado em  'initial_xy' e finalizado em 'final_xy'. 
+        """ Desenha as bordas vermelhas de um reângulo iniciado em  'initial_xy' e finalizado em 'final_xy'.
 
         'initial_xy' e 'final_xy' são tuplas da forma (x, y).
         Nenhum valor é retornado.
@@ -42,8 +42,9 @@ class ImagePack():
         cv2.rectangle(frame, initial_xy, final_xy, red_color, thickness=1)
 
     @staticmethod
-    def convert_to_bytes(image):
-        return ImagePack.encode_to_jpg(image).tobytes()
+    def compress_and_convert_to_bytes(image):
+        encode_param = [cv2.IMWRITE_JPEG_QUALITY, 80]
+        return (cv2.imencode('.jpg', image, encode_param)[1]).tobytes()
 
     @staticmethod
     def encode_to_jpg(image):

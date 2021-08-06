@@ -1,6 +1,7 @@
 from openpyxl import Workbook
 from openpyxl.styles import Font, Alignment, PatternFill
 from openpyxl.chart import ScatterChart, Reference, Series
+from openpyxl.chart.marker import Marker
 from app.domain.packs.image_pack import ImagePack
 
 
@@ -88,9 +89,9 @@ class ExcelFile():
         self.spreadsheet.add_chart(my_chart, f"I1")
 
     def generate_calibration_graph(self, values, rows):
+        """ Gera o gráfico sinal X ciclo. """
         if len(values) == 0:
             return
-        """ Gera o gráfico sinal X ciclo. """
         my_chart = ScatterChart()
         my_chart.title = 'Gráfico de calibração'
         my_chart.style = 16
@@ -99,9 +100,11 @@ class ExcelFile():
         x_values = Reference(self.spreadsheet, min_col=1, min_row=rows - len(values), max_row=rows - 3)
         y_values = Reference(self.spreadsheet, min_col=2, min_row=rows - len(values) - 1, max_row=rows - 3)
         series = Series(y_values, x_values, title_from_data=True)
+        series.marker = Marker('circle', 7)
+        series.graphicalProperties.line.noFill = True
         my_chart.series.append(series)
-        my_chart.width = 18
-        my_chart.height = 9
+        my_chart.width = 23
+        my_chart.height = 10
         self.spreadsheet.add_chart(my_chart, f"I22")
 
     def encode_excel(self, excel_file):

@@ -18,7 +18,16 @@
         {% for index in range(results.captures|length) %}
         <tr>
           <td class="text-black"> {{ (index + 1) }} </td>
+
+          {% if results.analize_method == "complete" %}
+          <td class="text-black">
+            {{ ((results.captures_times[index] - results.captures_times[0]).total_seconds()
+            + results.interval)|round(2) }}
+          </td>
+          {% else %}
           <td class="text-black"> {{ ((index + 1) * results.interval)|round(2) }}</td>
+          {% endif %}
+
           <td class="text-danger"> {{ results.captures[index][2]|round(3) }}</td>
           <td class="text-success"> {{ results.captures[index][1]|round(3) }}</td>
           <td class="text-info"> {{ results.captures[index][0]|round(3) }}</td>
