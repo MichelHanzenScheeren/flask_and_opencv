@@ -19,10 +19,10 @@ class ProgrammingGroup():
     def _validate_parameters(self, key_name, dictionary):
         if type(key_name) is not str or len(key_name) == 0 or not key_name[-1].isdigit():
             message = 'Id de grupo inválido'
-            raise AppError('ProgrammingGroup.key_name',  message)
+            raise AppError('ProgrammingGroup.key_name', message)
         if type(dictionary) is not dict:
             message = 'Grupo de programação não corresponde a um json válido'
-            raise AppError('ProgrammingGroup.dictionary',  message)
+            raise AppError('ProgrammingGroup.dictionary', message)
 
     def _validate(self):
         message = ''

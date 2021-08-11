@@ -77,7 +77,7 @@ class ValvesControl():
     def _build_cycle_list(self, current_index, lines):
         elements = [lines[current_index]]
         if current_index + 1 < len(lines):
-            for line in lines[current_index+1:]:
+            for line in lines[current_index + 1:]:
                 if line.cycle_start:
                     break
                 elements.append(line)

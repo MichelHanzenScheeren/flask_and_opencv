@@ -6,7 +6,7 @@ from app.domain.packs.image_pack import ImagePack
 
 
 class Results():
-    """ Classe criada para encapsular todos os resultados da análise para que sejam enviados ao front-end. 
+    """ Classe criada para encapsular todos os resultados da análise para que sejam enviados ao front-end.
 
     Também é responsável por recuperar e formatar imagens da análise, bem como criar o arquivo xlsx.
     """
@@ -34,7 +34,7 @@ class Results():
         self.description = description or ""
 
     def get_all_images(self):
-        """ Recupera as imagens das capturas e as formata para serem retornadas ao front-end. 
+        """ Recupera as imagens das capturas e as formata para serem retornadas ao front-end.
 
         Se nenhum erro ocorrer, retorna um json com imagens em formato JPG codificadas em bytes na base64.
         """
@@ -73,7 +73,7 @@ class Results():
         header = ['Nº Captura', 'Tempo (segundos)', 'Vermelho', 'Verde', 'Azul', 'Sinal']
         information = [title, header]
         for i, value in enumerate(self.captures):
-            row = [i+1, (i+1)*self.interval, value[2], value[1], value[0], self.signals[i]]
+            row = [i + 1, (i + 1) * self.interval, value[2], value[1], value[0], self.signals[i]]
             information.append(row)
         return information
 
@@ -87,7 +87,7 @@ class Results():
         return information
 
     def save_new_analyze_date(self, newDate):
-        """ Método relacionado ao salvamento do horário da análize.  
+        """ Método relacionado ao salvamento do horário da análize.
 
         Foi necessário adicionar essa funcionalidade pois o horário do rasp. fica atrasado se utilizado
         sem conexão a internet. Assim, a análise utiliza o horário enviado pelo usuário.

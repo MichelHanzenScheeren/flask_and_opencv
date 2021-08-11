@@ -3,7 +3,7 @@ from app.domain.packs.image_pack import ImagePack
 
 
 class Frame:
-    """ Classe que encapsula o armazenamento, get/setters e validações de um frame. 
+    """ Classe que encapsula o armazenamento, get/setters e validações de um frame.
 
     Também possui um lock para evitar possíveis condições de corrida.
     """
@@ -17,7 +17,7 @@ class Frame:
             self._frame = new_frame
 
     def get_copy(self):
-        """ Cria uma cópia do frame atual para ser retornada a aplicação. 
+        """ Cria uma cópia do frame atual para ser retornada a aplicação.
 
         Uma cópia é criada para garantir que o retângulo que será desenhado não interfira na análise.
         Se nenhum frame estiver salvo, retorna None.

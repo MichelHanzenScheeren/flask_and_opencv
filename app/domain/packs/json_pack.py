@@ -10,7 +10,7 @@ class JsonPack():
         try:
             with open(path) as json_file:
                 return json.load(json_file)
-        except:
+        except Exception:
             message = 'Não foi possível ler o json informado'
             assert AppError('JsonPack.read', message)
 
@@ -19,6 +19,6 @@ class JsonPack():
         try:
             with open(path, 'w+') as json_file:
                 json.dump(data, json_file, indent=4, sort_keys=True)
-        except:
+        except Exception:
             message = 'Não foi possível escrever no caminho informado'
             assert AppError('JsonPack.read', message)

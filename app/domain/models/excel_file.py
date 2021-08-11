@@ -20,7 +20,7 @@ class ExcelFile():
         self.to_merge_cells = []  # Lista de células que irão compor o spreadsheet.
 
     def create(self, general_info, differentiator_info, captures_info, calibration_info):
-        """ Método responsável por conduzir a personalização do arquivo de acordo com as informações recebidas. 
+        """ Método responsável por conduzir a personalização do arquivo de acordo com as informações recebidas.
 
         Os parâmetros são listas de listas contendo títulos e dados.
         Retorna um arquivo xlsx codificado em bytes na base_64.
@@ -56,7 +56,7 @@ class ExcelFile():
         return row_count + len(current_info) + 2  # 2 linhas em branco
 
     def configure_columns_width_and_align(self):
-        """ Configura o tamanho mínimo das colunas e o alinhamento para que infomações não sejam ocultadas. 
+        """ Configura o tamanho mínimo das colunas e o alinhamento para que infomações não sejam ocultadas.
 
         Os testes feitos apontaram 25 como um bom tamanho.
         Nenhum valor é retornado.

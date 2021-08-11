@@ -68,9 +68,9 @@ class CreateHtmlFromProgramming:
         html += '</td> </tr> </tfoot> </table> </div> </div>'
         return html
 
-    def _generate_white_line(_, dictionary):
+    def _generate_white_line(self, dictionary):
         linha_em_branco = '<tr align="center" class="to_remove valve_data white_line bg-secondary"> '
-        for i in range(0, dictionary[VALVES_QUANTITY] + 3):
+        for _ in range(0, dictionary[VALVES_QUANTITY] + 3):
             linha_em_branco += '<td> </td> '
         linha_em_branco += '</tr>'
         return linha_em_branco
