@@ -4,6 +4,6 @@
   "python.linting.pylintEnabled": true,
   "python.linting.pycodestyleEnabled": true,
   "python.linting.pycodestyleArgs": [
-    "--ignore=E501,W503"
+    "--ignore=E501,W503,C0301"
   ],
 }
