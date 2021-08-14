@@ -6,14 +6,13 @@ from app.domain.models.analyze import Analyze
 
 
 class AnalyzeUseCase():
-    def __init__(self, webcam, valves_control):
+    def __init__(self, webcam, valves_control, analyze):
         self.webcam = webcam
         self.valves_control = valves_control
-        self.analyze = Analyze()
+        self.analyze = analyze
 
     def calculate_differentiator(self):
         try:
-            self.analyze.clear()
             differentiator_image = self.webcam.get_differentiator_image()
             data = self.analyze.calculate_differentiator(differentiator_image)
             return ResponseUseCase.success_response(data=data)

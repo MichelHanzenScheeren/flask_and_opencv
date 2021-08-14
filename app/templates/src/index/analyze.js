@@ -2,17 +2,24 @@
   document.getElementById('getDifferentiatorButton').setAttribute('onclick', 'getDifferentiator()');
   document.getElementById('startAnalyzeButton').setAttribute('onclick', 'validateToAnalyze()');
   document.getElementById('analyzeMethodSelect').setAttribute('onchange', 'checkIfNeedToChangeAnalyzeButtonOptions()');
+  showDifferentiatorInfo(JSON.parse('{{ parameters["differentiator"] }}'));
 })() // Função auto-executada
 
 function getDifferentiator() {
   axios.post('{{ url_for("get_differentiator") }}').then(function (response) {
     let data = response.data['data'];
-    document.getElementById('red').innerHTML = 'Red: ' + data[0];
-    document.getElementById('green').innerHTML = 'Green: ' + data[1];
-    document.getElementById('blue').innerHTML = 'Blue: ' + data[2];
+    showDifferentiatorInfo(data);
     savedDifferentiator = true;
     checkIfNeedToChangeAnalyzeButtonOptions();
   }).catch(showErrorMessage);
+}
+
+function showDifferentiatorInfo(data) {
+  if (data['R'] == -1) return;
+  document.getElementById('red').innerHTML = 'Red: ' + (data['R'].toFixed(3));
+  document.getElementById('green').innerHTML = 'Green: ' + data['G'].toFixed(3);
+  document.getElementById('blue').innerHTML = 'Blue: ' + data['B'].toFixed(3);
+  savedDifferentiator = true;
 }
 
 function validateToAnalyze() {

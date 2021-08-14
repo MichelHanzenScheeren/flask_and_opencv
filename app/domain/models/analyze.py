@@ -30,7 +30,11 @@ class Analyze():
         self.results.differentiator_image = differentiator_image
         result = self.calculate_average(differentiator_image)
         self.results.differentiator = result
-        return [f'{result[2]:.3f}', f'{result[1]:.3f}', f'{result[0]:.3f}']
+        return self.differentiator_values()
+
+    def differentiator_values(self):
+        differentiator = self.results.differentiator
+        return {"R": differentiator[2], "G": differentiator[1], "B": differentiator[0]}
 
     def calculate_average(self, image):
         """ Calcula a média de cores de um frame recebido como parâmetro. Retorna uma lista no padrão [B, G, R]. """
@@ -54,8 +58,10 @@ class Analyze():
 
     def validate_form(self, analize_method, time, captures):
         """ Verifica se os valores recebidos são válidos para a análise. """
-        if len(self.results.captures) != 0 or len(self.results.differentiator) == 0:
-            raise AppError('Analyze.validade', 'É preciso capturar o difenenciador antes de dar início a análise')
+        if len(self.results.differentiator) == 0 or self.results.differentiator[0] == -1:
+            raise AppError('Analyze.validade', 'É preciso capturar o diferenciador antes de dar início a análise')
+        if len(self.results.captures) != 0:
+            raise AppError('Analyze.validade', 'Ainda existem dados pendentes de analises anteriores')
         if not (analize_method == 'simple' or analize_method == 'complete'):
             raise AppError('Analyze.validade', 'O método de análise informado não é válido')
         if not time.isdigit() or (analize_method == 'simple' and int(time) < 1):
@@ -172,6 +178,7 @@ class Analyze():
         O "del" e o "collect" são usados para garantir explicitamente que os recursos serão liberados,
         já qe o rasp não os possui em abundância.
         """
-        del self.results
+        del self.results.captures_images
+        del self.results.encoded_images
         collect()  # forçar explicitamente a coleta de memória pelo garbage collector do python
-        self.results = Results()
+        self.results.refresh_data()

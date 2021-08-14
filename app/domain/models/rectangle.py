@@ -20,6 +20,9 @@ class Rectangle():
             self.x_final = 0  # |____________________(x_final, y_final)
             self.y_final = 0
 
+    def rectangle_values(self):
+        return {"X1": self.x_initial, "Y1": self.y_initial, "X2": self.x_final, "Y2": self.y_final}
+
     def define_points_of_rectangle(self, x1, y1, x2, y2):
         """ Recebe os 4 pontos do retângulo, valida-os e os salva temporariamente.
 

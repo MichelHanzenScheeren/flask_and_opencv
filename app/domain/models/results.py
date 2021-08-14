@@ -12,8 +12,11 @@ class Results():
     """
 
     def __init__(self):
-        self.differentiator = []  # Lista BGR [Blue, Green, Red] da média de cores da imagem do diferenciador.
+        self.differentiator = [-1, -1, -1]  # Lista BGR [Blue, Green, Red] da média de cores da imagem do diferenciador.
         self.differentiator_image = None  # imagem do diferenciador.
+        self.refresh_data()
+
+    def refresh_data(self):
         self.captures = []  # Matriz de resultados da média de cores das capturas [[B, G, R], [B, ...], ...].
         self.captures_images = ImagePack.create_zip_file()  # dicionário de imagens das capturas para exportar em zip.
         self.captures_times = []  # Lista de datetimes que representam o instante em que a captura foi feita
