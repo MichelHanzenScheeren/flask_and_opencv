@@ -23,7 +23,7 @@
     <div class="row">
       <div class="col-md-3 card p-3 bg-white">
         <h5 class="card-title"> Tipo de análise </h5>
-        <p class="card-text"> {{ "Simples (webcam)" if results.analize_method == "simple"
+        <p class="card-text"> {{ "Simples (webcam)" if results.analyze_method == "simple"
           else "Completa (webcam + válvulas)" }} </p>
       </div>
       <div class="col-md-5 card p-3 bg-white">
@@ -39,7 +39,7 @@
         <button id="getXlsxResultsButton" type="button" class="btn btn-block btn-dark">
           Exportar resultados - xlsx
         </button>
-        {% if results.analize_method == "complete" %}
+        {% if results.analyze_method == "complete" %}
         <button id="getProgrammingJsonButton" type="button" class="btn btn-block btn-dark">
           Exportar programação - json
         </button>

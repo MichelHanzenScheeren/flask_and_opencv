@@ -19,7 +19,7 @@
         <tr>
           <td class="text-black"> {{ (index + 1) }} </td>
 
-          {% if results.analize_method == "complete" %}
+          {% if results.analyze_method == "complete" %}
           <td class="text-black">
             {{ ((results.captures_times[index] - results.captures_times[0]).total_seconds()
             + results.interval)|round(2) }}

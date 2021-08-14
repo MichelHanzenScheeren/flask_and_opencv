@@ -7,7 +7,6 @@ from app.domain.packs.image_pack import ImagePack
 
 class Results():
     """ Classe criada para encapsular todos os resultados da análise para que sejam enviados ao front-end.
-
     Também é responsável por recuperar e formatar imagens da análise, bem como criar o arquivo xlsx.
     """
 
@@ -21,16 +20,16 @@ class Results():
         self.captures_images = ImagePack.create_zip_file()  # dicionário de imagens das capturas para exportar em zip.
         self.captures_times = []  # Lista de datetimes que representam o instante em que a captura foi feita
         self.signals = []  # Lista de sinais obtidos na análise. [sinal1, sinal2, ...].
-        self.calibration_values = []  # Lista de coordenadas y do gráfico de calibração da análize.
-        self.encoded_images = None  # Armazena as imagens cnvertidas para envio ao front.
+        self.calibration_values = []  # Lista de coordenadas y do gráfico de calibração da analise.
+        self.encoded_images = None  # Armazena as imagens convertidas para envio ao front.
 
-    def initialize(self, analize_method, total_time, captures_seg, description, select_date, user_date):
+    def initialize(self, analyze_method, total_time, captures_seg, description, select_date, user_date):
         """ Salva os primeiros valores da análise e garante que dados de uma análise anterior sejam limpos. """
         if(select_date == 'user'):
             self.initial_date = datetime.strptime(user_date, STRING_FORMAT).strftime(STRING_FORMAT)
         else:
             self.initial_date = datetime.now().strftime(STRING_FORMAT)
-        self.analize_method = analize_method
+        self.analyze_method = analyze_method
         self.total_time = total_time
         self.captures_seg = captures_seg
         self.interval = (1 / self.captures_seg)
@@ -38,7 +37,6 @@ class Results():
 
     def get_all_images(self):
         """ Recupera as imagens das capturas e as formata para serem retornadas ao front-end.
-
         Se nenhum erro ocorrer, retorna um json com imagens em formato JPG codificadas em bytes na base64.
         """
         if self.encoded_images is None:
@@ -55,23 +53,23 @@ class Results():
                            self.captures_info(), self.calibration_info())
 
     def general_info(self):
-        """ Reúne e retorna uma lista de listas com titulos e informações gerais da análise. """
-        analizeType = 'Completa' if self.analize_method == 'complete' else 'Simples'
+        """ Reúne e retorna uma lista de listas com títulos e informações gerais da análise. """
+        analyzeType = 'Completa' if self.analyze_method == 'complete' else 'Simples'
         title = ['Informações Gerais', '', '', '', '', '']
         headers = ['Data', 'Duração', 'Taxa de capturas', 'Capturas feitas', 'Tipo de análise', 'Descrição']
         content = [self.initial_date, f'{self.total_time} segundos', f'{self.captures_seg} cap./seg.']
-        content.extend([f'{len(self.signals)} cap.', analizeType, f'{self.description or "Não informada"}'])
+        content.extend([f'{len(self.signals)} cap.', analyzeType, f'{self.description or "Não informada"}'])
         return [title, headers, content]
 
     def differentiator_info(self):
-        """ Reúne titulos e os resultados do diferenciador em uma lista de listas. """
+        """ Reúne títulos e os resultados do diferenciador em uma lista de listas. """
         title = ['Diferenciador', '', '']
         headers = ['Vermelho', 'Verde', 'Azul']
         content = [self.differentiator[2], self.differentiator[1], self.differentiator[0]]
         return [title, headers, content]
 
     def captures_info(self):
-        """ Reúne titulos e os resultados das capturas em uma lista de listas. """
+        """ Reúne títulos e os resultados das capturas em uma lista de listas. """
         title = ['Capturas', '', '', '', '', '']
         header = ['Nº Captura', 'Tempo (segundos)', 'Vermelho', 'Verde', 'Azul', 'Sinal']
         information = [title, header]
@@ -81,7 +79,7 @@ class Results():
         return information
 
     def calibration_info(self):
-        """ Reúne titulos e os resultados referentes ao gráfico de calibração. """
+        """ Reúne títulos e os resultados referentes ao gráfico de calibração. """
         if len(self.calibration_values) == 0:
             return []
         information = [['Sinal médio de cada ciclo', ''], ['Ciclo', 'Sinal']]
@@ -90,8 +88,7 @@ class Results():
         return information
 
     def save_new_analyze_date(self, newDate):
-        """ Método relacionado ao salvamento do horário da análize.
-
+        """ Método relacionado ao salvamento do horário da analise.
         Foi necessário adicionar essa funcionalidade pois o horário do rasp. fica atrasado se utilizado
         sem conexão a internet. Assim, a análise utiliza o horário enviado pelo usuário.
         """
