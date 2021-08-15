@@ -2,7 +2,7 @@ class AnalyzeProgress:
     def __init__(self):
         self.initialize()
 
-    def initialize(self, total=0, concluded=0, progress=0):
+    def initialize(self, total=0, concluded=0, progress=1):
         self.total = total
         self.concluded = concluded
         self.progress = progress

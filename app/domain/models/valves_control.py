@@ -15,6 +15,7 @@ class ValvesControl():
     def __init__(self):
         GpioPack.set_board_pinout()  # Define o modo de controle dos pinos do raspberry
         self.valves = []
+        self.interpretation = []
         self._initialize_valves()
 
     def _initialize_valves(self):
@@ -56,46 +57,59 @@ class ValvesControl():
         html_creator = CreateHtmlFromProgramming(dictionary)
         return html_creator.create()
 
-    def start_programming_interpretation(self, cycles_information):
+    def start_programming_interpretation(self, progress):
+        self.interpretation = []
         json = JsonPack.read(JSON_PROGRAMMING_PATH)
         program = Programming().from_dictionary(json)
-        self.interpret_programming(program, cycles_information)
-        self.close_all_valves()
+        self.interpret_programming(program, progress)
 
-    def interpret_programming(self, program, cycles_information):
+    def interpret_programming(self, program, analyze_progress):
+        total = 0
         for group in program.valves_program:
             executed_ids = []
             for index, line in enumerate(group.lines):
                 if line.line_number in executed_ids:
                     continue
                 if program.triplicate and line.cycle_start:
-                    cycle_lines = self._build_cycle_list(index, group.lines)
-                    self._execute_cycle(group.sequence, cycle_lines, executed_ids, cycles_information)
+                    cycle_lines = self._build_cycle_list(index, group.lines, executed_ids)
+                    total += (len(cycle_lines) * 3)
+                    self.interpretation.append(cycle_lines)
                 else:
-                    self._execute_line(line)
+                    self.interpretation.append(line)
+                    total += 1
+        analyze_progress.initialize(total)
 
-    def _build_cycle_list(self, current_index, lines):
+    def _build_cycle_list(self, current_index, lines, executed_ids):
         elements = [lines[current_index]]
         if current_index + 1 < len(lines):
             for line in lines[current_index + 1:]:
                 if line.cycle_start:
                     break
+                executed_ids.append(line.line_number)
                 elements.append(line)
         return elements
 
-    def _execute_cycle(self, group, lines, executed_ids, cycles_information):
-        cycle = ProgrammingCycle(group, lines[0].line_number, lines[-1].line_number)
+    def execute_interpretation(self, cycles_information, analyze_progress):
+        for element in self.interpretation:
+            if isinstance(element, list):
+                self._execute_cycle(element, cycles_information, analyze_progress)
+            else:
+                self._execute_line(element, analyze_progress)
+        self.close_all_valves()
+
+    def _execute_cycle(self, lines, cycles_information, analyze_progress):
+        cycle = ProgrammingCycle()
         for index in range(0, 3):
             start = datetime.now()
             for element in lines:
-                self._execute_line(element)
-                executed_ids.append(element.line_number)
+                self._execute_line(element, analyze_progress)
             cycle.register_information(index, start, datetime.now())
         cycles_information.append(cycle)
 
-    def _execute_line(self, line):
+    def _execute_line(self, line, analyze_progress):
         self.apply_valves_config(line.open_valves)
         sleep(line.sleep_time)
+        analyze_progress.increase_progress()
 
     def close_all_valves(self):
         self.apply_valves_config([])

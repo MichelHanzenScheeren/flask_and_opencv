@@ -40,7 +40,7 @@ class Analyze():
         """ Calcula a média de cores de um frame recebido como parâmetro. Retorna uma lista no padrão [B, G, R]. """
         return image.mean(axis=0).mean(axis=0)
 
-    def start_analyze(self, form, get_cropped_image, programming_interpret):
+    def start_analyze(self, form, get_cropped_image, start_interpretation, execute_interpretation):
         """ Inicia a análise, onde serão salvas as capturas de acordo com os parâmetros recebidos.
         'analyze_method' é uma string que indica o método de análise (simple ou complete)
         'total_time' é um valor inteiro > 0 que corresponde ao tempo total da análise (em segundos).
@@ -53,7 +53,7 @@ class Analyze():
         description, select_date, user_date = form['description'], form['selectDate'], form['userDate']
         self.validate_form(analyze_method, total_time, captures_seg)
         self.results.initialize(analyze_method, int(total_time), int(captures_seg), description, select_date, user_date)
-        self._start(get_cropped_image, programming_interpret)
+        self._start(get_cropped_image, start_interpretation, execute_interpretation)
 
     def validate_form(self, analyze_method, time, captures):
         """ Verifica se os valores recebidos são válidos para a análise. """
@@ -68,14 +68,15 @@ class Analyze():
         if not captures.isdigit() or int(captures) < 1 or int(captures) > 10:
             raise AppError('Analyze.validade', 'O número de capturas informado não é válido')
 
-    def _start(self, get_cropped_image, programming_interpret):
+    def _start(self, get_cropped_image, start_interpretation, execute_interpretation):
         """ Método que encaminha a análise para as respectivas funções de acordo com seu tipo (simple ou complete) """
         if self.results.analyze_method == 'simple':
             self.do_simple_analyze(get_cropped_image)
             self.calculate_signal()
         else:
+            start_interpretation(self.progress)
             cycles_information = []
-            thread = self.start_valves_thread(programming_interpret, cycles_information)
+            thread = self.start_valves_thread(execute_interpretation, cycles_information)
             self.do_complete_analyze(get_cropped_image, thread)
             self.calculate_signal()
             self.calculate_calibrate_points(cycles_information)
@@ -87,7 +88,7 @@ class Analyze():
         O sleep garante que a relação tempo total e intervalo entre capturas seja seguido.
         """
         repetitions = int(self.results.total_time * self.results.captures_seg)
-        self.progress.initialize(repetitions, progress=1)
+        self.progress.initialize(repetitions)
         for _ in range(0, repetitions):
             self.progress.increase_progress()
             image = get_cropped_image()
@@ -123,11 +124,11 @@ class Analyze():
             )
             self.results.signals.append(signal)
 
-    def start_valves_thread(self, programming_interpret, cycles_information):
+    def start_valves_thread(self, execute_interpretation, cycles_information):
         """ Método que inicia a thread que cuida da abertura e fechamento das válvulas na análise completa.
         A thread é retornada para que seu fim seja controlado (ela define o fim das capturas da webcam).
         """
-        thread = Thread(target=programming_interpret, args=(cycles_information,))
+        thread = Thread(target=execute_interpretation, args=(cycles_information, self.progress,))
         thread.start()
         return thread
 
