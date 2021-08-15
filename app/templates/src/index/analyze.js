@@ -50,16 +50,31 @@ function validateToAnalyze() {
   }
 }
 
+let refreshIntervalId;
 function configAnalyze() {
   document.getElementById('getDifferentiatorButton').disabled = true;
   document.getElementById('refreshRectangleButton').disabled = true;
   document.getElementById('clearRectangleButton').disabled = true;
   document.getElementById('div1').style.display = 'none';
-  document.getElementById('div2').style.display = 'block';
+  document.getElementById('divProgress').style.display = 'block';
   let dt = new Date();
   let dateInput = document.getElementById('userDate');
-  dateInput.value =
-    `${dt.getDate()}-${dt.getMonth() + 1}-${dt.getFullYear()} ${dt.getHours()}:${dt.getMinutes()}:${dt.getSeconds()}`;
+  dateInput.value = `${dt.getDate()}-${dt.getMonth() + 1}-${dt.getFullYear()} ${dt.getHours()}:${dt.getMinutes()}:${dt.getSeconds()}`;
+  refreshIntervalId = setInterval(analyzeProgress, 2500);
+}
+
+function analyzeProgress() {
+  axios.get('{{ url_for("analyze_progress") }}').then(function (response) {
+    console.log(response.data);
+    let currentProgress = response.data.progress;
+    let progressMessage = response.data.message;
+    let htmlProgressBar = document.getElementById('myProgressBar');
+    htmlProgressBar.setAttribute('aria-valuenow', currentProgress);
+    htmlProgressBar.setAttribute('style','width:' + Number(currentProgress)+'%');
+    htmlProgressBar.innerHTML = currentProgress.toFixed(0) + '%';
+    document.getElementById("progressBarMessage").innerHTML = progressMessage;
+    if (currentProgress >= 100) clearInterval(refreshIntervalId);
+  }).catch(showErrorMessage);;
 }
 
 function checkIfNeedToChangeAnalyzeButtonOptions() {
@@ -78,3 +93,8 @@ $('#timeInput').mouseover(function () {
 $('#timeInput').mouseout(function () {
   $('#timeDiv').css('display', 'none');
 });
+
+
+
+
+

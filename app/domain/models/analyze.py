@@ -7,6 +7,7 @@ from threading import Thread
 from app.domain.errors.app_error import AppError
 from app.domain.models.results import Results
 from app.domain.packs.image_pack import ImagePack
+from app.domain.models.analyze_progress import AnalyzeProgress
 
 
 class Analyze():
@@ -18,6 +19,7 @@ class Analyze():
 
     def __init__(self):
         self.results = Results()
+        self.progress = AnalyzeProgress()
 
     def calculate_differentiator(self, differentiator_image):
         """ Método que Calcula a média BGR (padrão OpenCV) dos pixels do diferenciador.
@@ -85,7 +87,9 @@ class Analyze():
         O sleep garante que a relação tempo total e intervalo entre capturas seja seguido.
         """
         repetitions = int(self.results.total_time * self.results.captures_seg)
+        self.progress.initialize(repetitions, progress=1)
         for _ in range(0, repetitions):
+            self.progress.increase_progress()
             image = get_cropped_image()
             to_discount = default_timer()
             self.save_image_color_average(image)
@@ -121,7 +125,6 @@ class Analyze():
 
     def start_valves_thread(self, programming_interpret, cycles_information):
         """ Método que inicia a thread que cuida da abertura e fechamento das válvulas na análise completa.
-
         A thread é retornada para que seu fim seja controlado (ela define o fim das capturas da webcam).
         """
         thread = Thread(target=programming_interpret, args=(cycles_information,))

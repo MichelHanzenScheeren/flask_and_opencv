@@ -1,8 +1,5 @@
 from app.domain.use_cases.response_use_case import ResponseUseCase
-from app.domain.models.valves_control import ValvesControl
 from app.domain.errors.app_error import AppError
-from app.domain.models.webcam import Webcam
-from app.domain.models.analyze import Analyze
 
 
 class AnalyzeUseCase():
@@ -29,6 +26,9 @@ class AnalyzeUseCase():
         except Exception as error:
             message = f'Um erro interno impediu que a análise fosse concluída. (ERRO: {str(error)})'
             return ResponseUseCase.redirect_to_error_page(AppError('get_all_images', message))
+
+    def get_analyze_progress(self):
+        return self.analyze.progress.status()
 
     def get_results(self):
         try:
