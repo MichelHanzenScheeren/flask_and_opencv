@@ -56,13 +56,13 @@ class ValvesControl():
         html_creator = CreateHtmlFromProgramming(dictionary)
         return html_creator.create()
 
-    def start_programming_interpretation(self, cycles_informations):
+    def start_programming_interpretation(self, cycles_information):
         json = JsonPack.read(JSON_PROGRAMMING_PATH)
         program = Programming().from_dictionary(json)
-        self.interpret_programming(program, cycles_informations)
+        self.interpret_programming(program, cycles_information)
         self.close_all_valves()
 
-    def interpret_programming(self, program, cycles_informations):
+    def interpret_programming(self, program, cycles_information):
         for group in program.valves_program:
             executed_ids = []
             for index, line in enumerate(group.lines):
@@ -70,7 +70,7 @@ class ValvesControl():
                     continue
                 if program.triplicate and line.cycle_start:
                     cycle_lines = self._build_cycle_list(index, group.lines)
-                    self._execute_cycle(group.sequence, cycle_lines, executed_ids, cycles_informations)
+                    self._execute_cycle(group.sequence, cycle_lines, executed_ids, cycles_information)
                 else:
                     self._execute_line(line)
 
@@ -83,7 +83,7 @@ class ValvesControl():
                 elements.append(line)
         return elements
 
-    def _execute_cycle(self, group, lines, executed_ids, cycles_informations):
+    def _execute_cycle(self, group, lines, executed_ids, cycles_information):
         cycle = ProgrammingCycle(group, lines[0].line_number, lines[-1].line_number)
         for index in range(0, 3):
             start = datetime.now()
@@ -91,7 +91,7 @@ class ValvesControl():
                 self._execute_line(element)
                 executed_ids.append(element.line_number)
             cycle.register_information(index, start, datetime.now())
-        cycles_informations.append(cycle)
+        cycles_information.append(cycle)
 
     def _execute_line(self, line):
         self.apply_valves_config(line.open_valves)
