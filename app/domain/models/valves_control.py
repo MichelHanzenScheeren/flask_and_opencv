@@ -38,11 +38,14 @@ class ValvesControl():
                 raise AppError(key, 'Uma ou mais válvulas são inválidas')
 
     def apply_valves_config(self, valves_config):
+        numbers, situation = [], []
         for valve in self.valves:
+            numbers.append(valve.board_number)
             if valve.valve_number in valves_config:
-                valve.open_valve()
+                situation.append(GpioPack.open_value())
             else:
-                valve.close_valve()
+                situation.append(GpioPack.close_value())
+        GpioPack.multiple_open_close(numbers, situation)
 
     def save_json_programming(self, dictionary):
         self.convert_dictionary_programming(dictionary)  # Vai validar se está tudo ok
