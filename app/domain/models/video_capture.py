@@ -4,15 +4,14 @@ from threading import Lock, Thread
 from app.domain.packs.image_pack import ImagePack
 
 
-PADRONIZED_WIDTH = 640  # largura padrão usada na webcam
-PADRONIZED_HEIGHT = 480  # altura padrão usada na webcam
+STANDARD_WIDTH = 640  # largura padrão usada na webcam
+STANDARD_HEIGHT = 480  # altura padrão usada na webcam
 WIDTH_INDEX = 3
 HEIGHT_INDEX = 4
 
 
 class VideoCapture:
     """ Classe que possui a lógica de obtenção dos frames da webcam da classe VideoCapture pela biblioteca OpenCV.
-
     Uma Thread é usada para gerenciar as capturas e garantir que sejam feitas mesmo durante a análise.
     Um Lock também é usado, para garantir que condições de concorrência não ocorram.
     """
@@ -26,8 +25,7 @@ class VideoCapture:
 
     def start_video(self, port):
         """ Método que valida e inicializa a Thread e a captura dos frames da webcam.
-
-        A verificação incial garante que a Thread e a webcam só serão iniciadas se outras não estejam em execução.
+        A verificação inicial garante que a Thread e a webcam só serão iniciadas se outras não estejam em execução.
         """
         if not self.is_working() or not self.is_valid():
             self.start_video_stream(port)
@@ -47,7 +45,6 @@ class VideoCapture:
 
     def start_video_stream(self, port):
         """ Método que efetivamente cria a instância de VideoCapture da biblioteca OpenCv.
-
         Recebe um inteiro correspondente a porta que será usada pela webcam (inicialmente a porta 0).
         Nenhum retorno.
         """
@@ -56,7 +53,6 @@ class VideoCapture:
 
     def start_thread(self):
         """ Método responsável por iniciar a Thread que fará a captura dos frames da webcam.
-
         'target' é a função que ele executará assim que iniciar.
         'daemon' true significa que a thread será finalizada automaticamente se o programa principal for finalizado.
         """
@@ -64,8 +60,7 @@ class VideoCapture:
         self.thread.start()
 
     def capture_webcam_image(self):
-        """ Executado apenas pela Thread. Captura frames da webcam e os salva na classe correspondenete.
-
+        """ Executado apenas pela Thread. Captura frames da webcam e os salva na classe correspondente.
         'FRAME_RATE' e 'previous' garantem que as capturas terão um intervalo >= 0.04 segundos (+/- 25fps: 1seg/0.04).
         Esse controle foi adicionado para evitar excesso de processamento do raspberry.
         Sem ele, o raspberry não estava dando conta das capturas.
@@ -82,7 +77,6 @@ class VideoCapture:
 
     def capture_frame(self):
         """ Método chamado pela Thread para capturar o frame. Sempre retorna uma imagem no padrão OpenCV (ndarray).
-
         Se _is_working for true e a webcam atual é valida, captura um frame.
         Caso contrário, retorna uma imagem padrão setada para preto.
         """
@@ -99,21 +93,20 @@ class VideoCapture:
 
     def define_resolution(self):
         """ Padroniza a resolução da imagem, independente da webcam utilizada. Padrão é de 480X640 (height X width).
-
         O parâmetro WIDTH_INDEX (3) diz respeito a largura da imagem (width).
         O parâmetro HEIGHT_INDEX (4) diz respeito a altura da imagem (height).
         Está no planejamento permitir o aumento da resolução, mas a webcam do laboratório tinha resolução máxima 480X640.
         """
         with self.lock_video:
-            if(self._not_is_padronized_size()):
-                self.video_capture.set(WIDTH_INDEX, PADRONIZED_WIDTH)
-                self.video_capture.set(HEIGHT_INDEX, PADRONIZED_HEIGHT)
+            if(self._not_is_standard_size()):
+                self.video_capture.set(WIDTH_INDEX, STANDARD_WIDTH)
+                self.video_capture.set(HEIGHT_INDEX, STANDARD_HEIGHT)
             res = '#### RESOLUÇÃO'
             print(f'{res}: {self.video_capture.get(WIDTH_INDEX):.0f}X{self.video_capture.get(HEIGHT_INDEX):.0f} ####')
 
-    def _not_is_padronized_size(self):
-        padronized_width = self.video_capture.get(WIDTH_INDEX) != PADRONIZED_WIDTH
-        return padronized_width or self.video_capture.get(HEIGHT_INDEX) != PADRONIZED_HEIGHT
+    def _not_is_standard_size(self):
+        standard_width = self.video_capture.get(WIDTH_INDEX) != STANDARD_WIDTH
+        return standard_width or self.video_capture.get(HEIGHT_INDEX) != STANDARD_HEIGHT
 
     def set_working_state(self, condition=True):
         with self.lock_video:
@@ -122,7 +115,7 @@ class VideoCapture:
     def video_status(self):
         """ Retorna a resolução da webcam para uso no front-end (tamanho do container que vai exibir as imagens). """
         if not self.is_valid():
-            h, w, success = (PADRONIZED_HEIGHT, PADRONIZED_WIDTH, False)
+            h, w, success = (STANDARD_HEIGHT, STANDARD_WIDTH, False)
             self.set_working_state(False)
         else:
             h, w = self.get_video_dimensions()
@@ -137,7 +130,6 @@ class VideoCapture:
 
     def change(self, new_port):
         """ Método que libera o video atual e inicia uma nova webcam a partir da porta recebida por parâmetro.
-
         O parâmetro recebido deve ser um inteiro maior ou igual a zero.
         Caso o processo seja um sucesso, retorna a resolução da webcam.
         Caso algo falhe, retorna uma string vazia.

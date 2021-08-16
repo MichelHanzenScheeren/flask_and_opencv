@@ -10,12 +10,12 @@ class ImagePack():
 
     Foi criada pensando em reduzir os possíveis impactos de uma mudança de biblioteca.
     Também reúne os usos da biblioteca numpy, relacionada com a biblioteca OpenCV.
-    Conta ainda com criação de zip (PyZip), de bytes (BytesIO) e de coversão a b64 (b64encode)
+    Conta ainda com criação de zip (PyZip), de bytes (BytesIO) e de conversão a b64 (b64encode)
     """
 
     @staticmethod
     def new_stream(port):
-        """ Cria e retorna uma intância da classe VideoCapture, própria da biblioteca OpenCV. """
+        """ Cria e retorna uma instância da classe VideoCapture, própria da biblioteca OpenCV. """
         return cv2.VideoCapture(port)
 
     @staticmethod
@@ -33,7 +33,7 @@ class ImagePack():
 
     @staticmethod
     def draw_rectangle(frame, initial_xy, final_xy):
-        """ Desenha as bordas vermelhas de um reângulo iniciado em  'initial_xy' e finalizado em 'final_xy'.
+        """ Desenha as bordas vermelhas de um retângulo iniciado em  'initial_xy' e finalizado em 'final_xy'.
 
         'initial_xy' e 'final_xy' são tuplas da forma (x, y).
         Nenhum valor é retornado.

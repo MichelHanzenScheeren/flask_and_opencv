@@ -95,8 +95,8 @@ class Webcam():
             return ImagePack.encode_to_jpg(ImagePack.black_image())
 
     def draw_and_convert_frame(self, copy):
-        drawed_image = self.rectangle.draw_rectangle(copy)
-        return ImagePack.encode_to_jpg(drawed_image)
+        drawn_image = self.rectangle.draw_rectangle(copy)
+        return ImagePack.encode_to_jpg(drawn_image)
 
     def get_differentiator_image(self):
         """ Obtém e retorna a imagem que será usada como diferenciador na classe Analyze.
