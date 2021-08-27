@@ -58,7 +58,7 @@ function _registerChart(xValues, yValues, dataLabel, xLabel, yLabel, htmlCompone
           }, 
           ticks: {
             min: 0, 
-            suggestedMax: 250
+            suggestedMax: 50
           } 
         }],
       }

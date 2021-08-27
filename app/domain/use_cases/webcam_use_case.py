@@ -1,3 +1,4 @@
+from app.domain.models.webcam_configuration import WebcamConfiguration
 from app.domain.use_cases.response_use_case import ResponseUseCase
 from app.configuration import NUMBER_OF_VALVES
 from app.domain.errors.app_error import AppError
@@ -11,6 +12,7 @@ class WebcamUseCase():
 
     def initialize_and_get_parameters(self):
         try:
+            WebcamConfiguration(self.webcam.current_port).apply_current_config()
             self.analyze.clear()
             self.webcam.init_webcam()
             index_parameters = self.webcam.video_status_and_port()
@@ -64,3 +66,11 @@ class WebcamUseCase():
         except Exception as error:
             message = f'Não foi possível alterar a webcam atual. (ERRO: {str(error)})'
             return ResponseUseCase.error_response(AppError('change_current_webcam', message))
+
+    def configure_webcam(self):
+        try:
+            WebcamConfiguration(self.webcam.current_port).auto_config()
+            return ResponseUseCase.success_response(message='Webcam atual configurada')
+        except Exception as error:
+            message = f'Não foi possível concluir a cofiguração automática da webcam. (ERRO: {str(error)})'
+            return ResponseUseCase.error_response(AppError('configure_webcam', message))

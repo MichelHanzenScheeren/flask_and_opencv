@@ -65,7 +65,6 @@ function configAnalyze() {
 
 function analyzeProgress() {
   axios.get('{{ url_for("analyze_progress") }}').then(function (response) {
-    console.log(response.data);
     let currentProgress = response.data.progress;
     let progressMessage = response.data.message;
     let htmlProgressBar = document.getElementById('myProgressBar');
