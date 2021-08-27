@@ -109,7 +109,7 @@ class Analyze():
         Foi necessário implementar a compactação e conversão durante a análise para poupar memória RAM.
         Caso contrário, a capacidade de fazer análises grandes seria comprometida (faltava memória de trabalho).
         """
-        converted = ImagePack.compress_and_convert_to_bytes(image)
+        converted = ImagePack.convert_to_bytes(image)
         index = len(self.results.captures_images) + 1
         self.results.captures_images[f'captura_{index}.jpg'] = converted
 

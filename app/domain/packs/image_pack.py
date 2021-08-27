@@ -42,8 +42,8 @@ class ImagePack():
         cv2.rectangle(frame, initial_xy, final_xy, red_color, thickness=1)
 
     @staticmethod
-    def compress_and_convert_to_bytes(image):
-        encode_param = [cv2.IMWRITE_JPEG_QUALITY, 80]
+    def convert_to_bytes(image, compression=95):
+        encode_param = [cv2.IMWRITE_JPEG_QUALITY, compression]
         return (cv2.imencode('.jpg', image, encode_param)[1]).tobytes()
 
     @staticmethod

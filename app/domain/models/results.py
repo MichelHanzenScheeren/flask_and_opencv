@@ -40,7 +40,7 @@ class Results():
         Se nenhum erro ocorrer, retorna um json com imagens em formato JPG codificadas em bytes na base64.
         """
         if self.encoded_images is None:
-            converted_differentiator = ImagePack.compress_and_convert_to_bytes(self.differentiator_image)
+            converted_differentiator = ImagePack.convert_to_bytes(self.differentiator_image, compression=100)
             self.captures_images['diferenciador.jpg'] = converted_differentiator
             self.encoded_images = ImagePack.encode_to_b64(self.captures_images.to_bytes())
             self.captures_images = None
