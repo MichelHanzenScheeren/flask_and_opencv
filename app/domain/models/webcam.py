@@ -1,4 +1,4 @@
-import time
+from time import sleep
 from app.configuration import FRAME_RATE
 from app.domain.packs.image_pack import ImagePack
 from app.domain.models.rectangle import Rectangle
@@ -68,15 +68,13 @@ class Webcam():
         O frame atual pode ser o de um upload ou o obtido da webcam.
         O retorno particionado é graças ao yield (tipo de retorno especial do python3).
         A imagem é retornada em bits e no formato jpeg.
-        Variáveis 'FRAME_RATE' e 'previous' garantem que a resposta terá um intervalo >= 0.04 segundos (+/- 25fps)
+        A resposta tem um intervalo +/- 0.04 segundos para manter em torno de 25fps na câmera.
         """
         try:
-            previous = 0
             while True:
-                if (time.time() - previous) >= FRAME_RATE:
-                    img = self.get_image()
-                    yield(b'--frame\r\nContent-Type:image/jpeg\r\n\r\n' + img + b'\r\n\r\n')
-                    previous = time.time()
+                img = self.get_image()
+                yield(b'--frame\r\nContent-Type:image/jpeg\r\n\r\n' + img + b'\r\n\r\n')
+                sleep(0.038)
         except Exception as exception:
             print(exception)
 
