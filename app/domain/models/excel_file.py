@@ -8,14 +8,14 @@ from app.domain.packs.image_pack import ImagePack
 class ExcelFile():
     """ Classe que encapsula toda a lógica de criação e personalização do arquivo xlsx.
 
-    Tambem encapsula os usos da biblioteca openpyxl.
+    Também encapsula os usos da biblioteca openpyxl.
     O arquivo gerado é convertido em bytes na BASE_64.
     """
 
     def __init__(self, title=''):
-        self.excel_file = Workbook()  # Arquivo excel criado com auxílio da bilioteca openpyxl.
+        self.excel_file = Workbook()  # Arquivo excel criado com auxílio da biblioteca openpyxl.
         self.spreadsheet = self.excel_file.active  # Criação de um spreadsheet (página de um excel).
-        # definição do títlo do spreadsheet (recebido por parâmetro na instanciação da classe).
+        # definição do título do spreadsheet (recebido por parâmetro na instanciação da classe).
         self.spreadsheet.title = title
         self.to_merge_cells = []  # Lista de células que irão compor o spreadsheet.
 
@@ -36,10 +36,10 @@ class ExcelFile():
         return self.encode_excel(self.excel_file)
 
     def generate_table(self, current_info, row_count):
-        """ Método responsável por receber e escrever as informações no spreeedshet.
+        """ Método responsável por receber e escrever as informações no spreadsheet.
 
         Recebe como parâmetro as informações que devem ser escritas e o nº da primeira linha que deve ser usada.
-        Retorna um inteiro com a próxima linha válida para continuar registrando informações.
+        Retorna um inteiro com a próxima linha válida para continuar registando informações.
         """
         if len(current_info) == 0:
             return row_count
@@ -56,7 +56,7 @@ class ExcelFile():
         return row_count + len(current_info) + 2  # 2 linhas em branco
 
     def configure_columns_width_and_align(self):
-        """ Configura o tamanho mínimo das colunas e o alinhamento para que infomações não sejam ocultadas.
+        """ Configura o tamanho mínimo das colunas e o alinhamento para que informações não sejam ocultadas.
 
         Os testes feitos apontaram 25 como um bom tamanho.
         Nenhum valor é retornado.
@@ -68,7 +68,7 @@ class ExcelFile():
                 cell.alignment = cell.alignment.copy(wrapText=True)
 
     def merge_cells(self):
-        """ Mescla as colunas de título do spreedshet. """
+        """ Mescla as colunas de título do spreadsheet. """
         for value in self.to_merge_cells:
             self.spreadsheet.merge_cells(start_row=value[0], start_column=1, end_row=value[0], end_column=value[1])
             self.spreadsheet.cell(row=value[0], column=1).fill = PatternFill(fgColor='D3D3D3', fill_type='solid')
@@ -86,7 +86,7 @@ class ExcelFile():
         my_chart.series.append(series)
         my_chart.width = 23
         my_chart.height = 10
-        self.spreadsheet.add_chart(my_chart, f"I1")
+        self.spreadsheet.add_chart(my_chart, 'I1')
 
     def generate_calibration_graph(self, values, rows):
         """ Gera o gráfico sinal X ciclo. """
@@ -105,7 +105,7 @@ class ExcelFile():
         my_chart.series.append(series)
         my_chart.width = 23
         my_chart.height = 10
-        self.spreadsheet.add_chart(my_chart, f"I22")
+        self.spreadsheet.add_chart(my_chart, 'I22')
 
     def encode_excel(self, excel_file):
         """ Codifica o arquivo xlsx em bytes na base_64. """

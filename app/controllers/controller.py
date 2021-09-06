@@ -1,5 +1,5 @@
 from app.domain.models.analyze import Analyze
-from flask import render_template, jsonify, redirect, url_for
+from flask import render_template, jsonify
 from app.configuration import NUMBER_OF_VALVES
 from app.domain.use_cases.valves_use_case import ValvesUseCase
 from app.domain.models.valves_control import ValvesControl

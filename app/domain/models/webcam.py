@@ -1,5 +1,4 @@
 from time import sleep
-from app.configuration import FRAME_RATE
 from app.domain.packs.image_pack import ImagePack
 from app.domain.models.rectangle import Rectangle
 from app.domain.models.video_capture import VideoCapture
@@ -41,7 +40,7 @@ class Webcam():
     def webcans_list(self):
         """ retorna a lista de webcans disponíveis atualmente.
         O método tenta abrir as portas de webcam diferentes da atual e finaliza quando falha pela primeira vez.
-        Isso se baseia no princípio de que as portas da webcam sempre iniciam no 0 (principal do computador) e vão aumentando de 1 em 1.
+        Baseado no princípio das portas para webcam iniciarem no 0 e aumentarem de 1 em 1.
         """
         list_webcans = []
         for index in range(5):
@@ -68,7 +67,7 @@ class Webcam():
         O frame atual pode ser o de um upload ou o obtido da webcam.
         O retorno particionado é graças ao yield (tipo de retorno especial do python3).
         A imagem é retornada em bits e no formato jpeg.
-        A resposta tem um intervalo +/- 0.04 segundos para manter em torno de 25fps na câmera.
+        A resposta tem um intervalo +/- 0.04 segundos para manter em torno de 25fps na camera.
         """
         try:
             while True:

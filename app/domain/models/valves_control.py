@@ -1,6 +1,5 @@
 from datetime import datetime
 from time import sleep
-from app.configuration import JSON_PROGRAMMING_PATH, NUMBER_OF_VALVES, PARTIAL_JSON_PROGRAMMING_PATH, VALVE_MAPPING, BOARD_NUMBER, VALVE_NUMBER
 from app.domain.packs.gpio_pack import GpioPack
 from app.domain.errors.app_error import AppError
 from app.domain.models.programming import Programming
@@ -9,6 +8,7 @@ from app.domain.models.save_json_programming import SaveJsonProgramming
 from app.domain.models.valve import Valve
 from app.domain.packs.json_pack import JsonPack
 from app.domain.models.programming_cycle import ProgrammingCycle
+import app.configuration as config
 
 
 class ValvesControl():
@@ -19,8 +19,8 @@ class ValvesControl():
         self._initialize_valves()
 
     def _initialize_valves(self):
-        for map in VALVE_MAPPING:
-            valve = Valve(map[BOARD_NUMBER], map[VALVE_NUMBER])
+        for map in config.VALVE_MAPPING:
+            valve = Valve(map[config.BOARD_NUMBER], map[config.VALVE_NUMBER])
             self.valves.append(valve)
 
     def submit_valves_config(self, valves_config):
@@ -31,10 +31,10 @@ class ValvesControl():
         key = 'ValvesControl.submit_valves_config'
         if type(valves_config) is not list:
             raise AppError(key, 'Lista de configuração inválida')
-        if len(valves_config) > NUMBER_OF_VALVES:
+        if len(valves_config) > config.NUMBER_OF_VALVES:
             raise AppError(key, 'Quantidade inválida de válvulas')
         for valve in valves_config:
-            if type(valve) is not int or valve < 0 or valve > NUMBER_OF_VALVES:
+            if type(valve) is not int or valve < 0 or valve > config.NUMBER_OF_VALVES:
                 raise AppError(key, 'Uma ou mais válvulas são inválidas')
 
     def apply_valves_config(self, valves_config):
@@ -62,7 +62,7 @@ class ValvesControl():
 
     def start_programming_interpretation(self, progress):
         self.interpretation = []
-        json = JsonPack.read(JSON_PROGRAMMING_PATH)
+        json = JsonPack.read(config.JSON_PROGRAMMING_PATH)
         program = Programming().from_dictionary(json)
         self.interpret_programming(program, progress)
 
@@ -118,8 +118,8 @@ class ValvesControl():
         self.apply_valves_config([])
 
     def validate_file_and_return_programming_path(self):
-        JsonPack.read(JSON_PROGRAMMING_PATH)  # dispara um erro se não existir
-        return PARTIAL_JSON_PROGRAMMING_PATH
+        JsonPack.read(config.JSON_PROGRAMMING_PATH)  # dispara um erro se não existir
+        return config.PARTIAL_JSON_PROGRAMMING_PATH
 
     def __del__(self):
         GpioPack.cleanup()  # Libera os pinos do raspberry

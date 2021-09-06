@@ -43,7 +43,7 @@ class Rectangle():
     def is_valid_points(self, x1, y1, x2, y2):
         """ Retorna 'true' se os pontos pertencerem a um retângulo válido. Caso contrário, retorna 'false'.
 
-        Para ser considerado válido, todos os potos do retênagulo precisam ser >= 0.
+        Para ser considerado válido, todos os pontos do retângulo precisam ser >= 0.
         Os pontos também devem garantir que o retângulo tenha área diferente de zero.
         """
         greater_than_zero = (x1 >= 0) and (y1 >= 0) and (x2 >= 0) and (y2 >= 0)
@@ -76,7 +76,7 @@ class Rectangle():
             return (self.x_final, self.y_final)
 
     def crop_image(self, image):
-        """ Verifica se há um retângulo válido e recorta o frame recebido por parâmetro dentro desse retâgulo.
+        """ Verifica se há um retângulo válido e recorta o frame recebido por parâmetro dentro desse retângulo.
 
         Sempre retorna uma imagem no padrão OpenCV (ndarray).
         Caso exista um retângulo válido salvo, recorta a imagem dentro dele e a retorna.

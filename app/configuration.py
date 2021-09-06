@@ -8,7 +8,7 @@ PARTIAL_JSON_PROGRAMMING_PATH = 'static/files/programming.json'
 # Número de válvulas utilizadas na aplicação
 NUMBER_OF_VALVES = 16
 
-# Propriedades da configuação de Válvulas
+# Propriedades da configuração de Válvulas
 BOARD_NUMBER = 'board_number'
 VALVE_NUMBER = 'valve_number'
 
@@ -55,5 +55,5 @@ JSON_VIDEO_PARAMETERS_PATH = 'app/static/files/video_parameters.json'
 VIDEO_CONFIG_INIT = 'v4l2-ctl -d /dev/video'
 VIDEO_CONFIG_ARG = '--set-ctrl='
 SEE_VIDEO_CONFIG = '--list-ctrls'
-VIDEO_AUTO_CONFIGURATION = ['focus_auto=1', 'white_balance_temperature_auto=1', 'exposure_auto_priority=1', 'exposure_auto=3']
-VIDEO_DISABLE_CONFIGURATION = ['focus_auto=0', 'white_balance_temperature_auto=0', 'exposure_auto_priority=0', 'exposure_auto=1']
+VIDEO_ON_CONFIG = ['focus_auto=1', 'white_balance_temperature_auto=1', 'exposure_auto_priority=1', 'exposure_auto=3']
+VIDEO_OFF_CONFIG = ['focus_auto=0', 'white_balance_temperature_auto=0', 'exposure_auto_priority=0', 'exposure_auto=1']

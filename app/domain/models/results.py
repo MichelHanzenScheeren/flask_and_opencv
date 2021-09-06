@@ -2,7 +2,6 @@ from datetime import datetime
 from app.configuration import STRING_FORMAT
 from app.domain.packs.image_pack import ImagePack
 from app.domain.models.excel_file import ExcelFile
-from app.domain.packs.image_pack import ImagePack
 
 
 class Results():

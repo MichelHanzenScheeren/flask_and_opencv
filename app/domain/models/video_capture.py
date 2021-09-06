@@ -95,7 +95,7 @@ class VideoCapture:
         """ Padroniza a resolução da imagem, independente da webcam utilizada. Padrão é de 480X640 (height X width).
         O parâmetro WIDTH_INDEX (3) diz respeito a largura da imagem (width).
         O parâmetro HEIGHT_INDEX (4) diz respeito a altura da imagem (height).
-        Está no planejamento permitir o aumento da resolução, mas a webcam do laboratório tinha resolução máxima 480X640.
+        Está no planejamento permitir o aumento da resolução, mas a webcam do laboratório era só 480X640.
         """
         with self.lock_video:
             if(self._not_is_standard_size()):

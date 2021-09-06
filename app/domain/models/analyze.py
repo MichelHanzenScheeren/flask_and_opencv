@@ -24,7 +24,7 @@ class Analyze():
     def calculate_differentiator(self, differentiator_image):
         """ Método que Calcula a média BGR (padrão OpenCV) dos pixels do diferenciador.
         'differentiator_image' é uma imagem padrão OpenCV (ndarray)
-        A imagem do diferenciador pode tanto ser fruto de um upload do usuário quanto o frame atual capturado no diferenciador.
+        A imagem do diferenciador pode vir de um upload do usuário ou do frame atual capturado no diferenciador.
         Os resultados são salvos como uma lista BGR ([B, G, R]) e retornados como uma lista [R, G, B].
         """
         self.results.differentiator_image = differentiator_image
