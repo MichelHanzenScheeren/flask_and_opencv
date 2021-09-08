@@ -1,4 +1,5 @@
 from datetime import datetime
+from timeit import default_timer
 from time import sleep
 from app.domain.packs.gpio_pack import GpioPack
 from app.domain.errors.app_error import AppError
@@ -111,7 +112,12 @@ class ValvesControl():
 
     def _execute_line(self, line, analyze_progress):
         self.apply_valves_config(line.open_valves)
-        sleep(line.sleep_time)
+        sleep_time = line.sleep_time - 0.5
+        init_time = default_timer()
+        sleep(sleep_time)
+        while True:
+            if default_timer() - init_time >= line.sleep_time:
+                break
         analyze_progress.increase_progress()
 
     def close_all_valves(self):
