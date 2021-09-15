@@ -3,7 +3,6 @@
 
 class GpioPack():
     """ Classe de métodos estáticos que encapsula todas as chamadas diretas a biblioteca RPI.GPIO.
-
     A biblioteca RPI.GPIO cuida do INPUT e OUTPUT dos pinos do raspberry pi.
     """
 
@@ -21,8 +20,20 @@ class GpioPack():
         gpio.output(board_number, gpio.HIGH)
 
     @staticmethod
+    def close_value():
+        return gpio.HIGH
+
+    @staticmethod
     def open_valve(board_number):
         gpio.output(board_number, gpio.LOW)
+
+    @staticmethod
+    def open_value():
+        return gpio.LOW
+
+    @staticmethod
+    def multiple_open_close(board_numbers, situations):
+        gpio.output(board_numbers, situations)
 
     @staticmethod
     def cleanup():

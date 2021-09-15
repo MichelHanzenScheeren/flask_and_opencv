@@ -2,17 +2,24 @@
   document.getElementById('getDifferentiatorButton').setAttribute('onclick', 'getDifferentiator()');
   document.getElementById('startAnalyzeButton').setAttribute('onclick', 'validateToAnalyze()');
   document.getElementById('analyzeMethodSelect').setAttribute('onchange', 'checkIfNeedToChangeAnalyzeButtonOptions()');
+  showDifferentiatorInfo(JSON.parse('{{ parameters["differentiator"] }}'));
 })() // Função auto-executada
 
 function getDifferentiator() {
   axios.post('{{ url_for("get_differentiator") }}').then(function (response) {
     let data = response.data['data'];
-    document.getElementById('red').innerHTML = 'Red: ' + data[0];
-    document.getElementById('green').innerHTML = 'Green: ' + data[1];
-    document.getElementById('blue').innerHTML = 'Blue: ' + data[2];
+    showDifferentiatorInfo(data);
     savedDifferentiator = true;
     checkIfNeedToChangeAnalyzeButtonOptions();
   }).catch(showErrorMessage);
+}
+
+function showDifferentiatorInfo(data) {
+  if (data['R'] == -1) return;
+  document.getElementById('red').innerHTML = 'Red: ' + (data['R'].toFixed(3));
+  document.getElementById('green').innerHTML = 'Green: ' + data['G'].toFixed(3);
+  document.getElementById('blue').innerHTML = 'Blue: ' + data['B'].toFixed(3);
+  savedDifferentiator = true;
 }
 
 function validateToAnalyze() {
@@ -43,16 +50,30 @@ function validateToAnalyze() {
   }
 }
 
+let refreshIntervalId;
 function configAnalyze() {
   document.getElementById('getDifferentiatorButton').disabled = true;
   document.getElementById('refreshRectangleButton').disabled = true;
   document.getElementById('clearRectangleButton').disabled = true;
   document.getElementById('div1').style.display = 'none';
-  document.getElementById('div2').style.display = 'block';
+  document.getElementById('divProgress').style.display = 'block';
   let dt = new Date();
   let dateInput = document.getElementById('userDate');
-  dateInput.value =
-    `${dt.getDate()}-${dt.getMonth() + 1}-${dt.getFullYear()} ${dt.getHours()}:${dt.getMinutes()}:${dt.getSeconds()}`;
+  dateInput.value = `${dt.getDate()}-${dt.getMonth() + 1}-${dt.getFullYear()} ${dt.getHours()}:${dt.getMinutes()}:${dt.getSeconds()}`;
+  refreshIntervalId = setInterval(analyzeProgress, 2000);
+}
+
+function analyzeProgress() {
+  axios.get('{{ url_for("analyze_progress") }}').then(function (response) {
+    let currentProgress = response.data.progress;
+    let progressMessage = response.data.message;
+    let htmlProgressBar = document.getElementById('myProgressBar');
+    htmlProgressBar.setAttribute('aria-valuenow', currentProgress);
+    htmlProgressBar.setAttribute('style','width:' + Number(currentProgress)+'%');
+    htmlProgressBar.innerHTML = currentProgress.toFixed(0) + '%';
+    document.getElementById("progressBarMessage").innerHTML = progressMessage;
+    if (currentProgress >= 100) clearInterval(refreshIntervalId);
+  }).catch(showErrorMessage);
 }
 
 function checkIfNeedToChangeAnalyzeButtonOptions() {
@@ -71,3 +92,8 @@ $('#timeInput').mouseover(function () {
 $('#timeInput').mouseout(function () {
   $('#timeDiv').css('display', 'none');
 });
+
+
+
+
+

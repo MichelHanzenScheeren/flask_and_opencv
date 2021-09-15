@@ -1,5 +1,6 @@
 from app.configuration import NUMBER_OF_VALVES
 from flask import Response, render_template, redirect, url_for, request
+import json
 
 
 def configure_routes(app, analyzeUseCase):
@@ -22,6 +23,10 @@ def configure_routes(app, analyzeUseCase):
         parameters = {'valves_number': NUMBER_OF_VALVES}
         results = analyzeUseCase.get_results()
         return render_template('results.html', page='results', results=results, parameters=parameters)
+
+    @app.route('/analyze_progress', methods=['GET'])
+    def analyze_progress():
+        return json.dumps(analyzeUseCase.get_analyze_progress())
 
     @app.route('/get_all_images', methods=['POST'])
     def get_all_images():

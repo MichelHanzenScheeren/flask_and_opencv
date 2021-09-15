@@ -11,7 +11,7 @@ class SaveJsonProgramming():
 
     def _validate_dictionary(self):
         if type(self._dictionary) is not dict:
-            message = 'Dados inváldos para criação do arquivo json'
+            message = 'Dados inválidos para criação do arquivo json'
             raise AppError('CreateJsonProgramming.dictionary', message)
 
     def create(self):

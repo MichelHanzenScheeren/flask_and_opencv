@@ -1,4 +1,5 @@
-from flask import render_template, jsonify, redirect, url_for
+from app.domain.models.analyze import Analyze
+from flask import render_template, jsonify
 from app.configuration import NUMBER_OF_VALVES
 from app.domain.use_cases.valves_use_case import ValvesUseCase
 from app.domain.models.valves_control import ValvesControl
@@ -26,10 +27,11 @@ def configure_routes(app):
 
     webcam = Webcam()
     valvesControl = ValvesControl()
+    analyze = Analyze()
 
-    webcamUseCase = WebcamUseCase(webcam)
+    webcamUseCase = WebcamUseCase(webcam, analyze)
     valvesUseCase = ValvesUseCase(valvesControl)
-    analyzeUseCase = AnalyzeUseCase(webcam, valvesControl)
+    analyzeUseCase = AnalyzeUseCase(webcam, valvesControl, analyze)
 
     home_controller.configure_routes(app, webcamUseCase)
     valves_controller.configure_routes(app, valvesUseCase)

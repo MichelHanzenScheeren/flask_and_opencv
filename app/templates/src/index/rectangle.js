@@ -15,7 +15,16 @@ let drag = false;
   desenho.addEventListener('mouseleave', mouseLeave, false);
   document.getElementById('refreshRectangleButton').onclick = refreshRectangle;
   document.getElementById('clearRectangleButton').onclick = clearRectangle;
+  initRectanglePoints();
 })();
+
+function initRectanglePoints() {
+  let receivedPoints = JSON.parse('{{ parameters["rectangle"] }}');
+  htmlXY.x1.value = receivedPoints['X1'];
+  htmlXY.y1.value = receivedPoints['Y1'];
+  htmlXY.x2.value = receivedPoints['X2'];
+  htmlXY.y2.value = receivedPoints['Y2'];
+}
 
 function mouseDown(e) {
   drag = true;

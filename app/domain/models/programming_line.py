@@ -26,7 +26,7 @@ class ProgrammingLine():
     def _validate(self):
         message = ''
         if type(self.line_number) is not int or self.line_number == -1:
-            message = f'Valor inválido para parâmetro "id_grupo"'
+            message = 'Valor inválido para parâmetro "id_grupo"'
         elif type(self.cycle_start) is not bool:
             message = f'Valor inválido para parâmetro "{CYCLE_START}"'
         elif type(self.sleep_time) is not int or int(self.sleep_time) <= 0:

@@ -1,8 +1,5 @@
 class ProgrammingCycle():
-    def __init__(self, group_sequence, start_sequence, end_sequence):
-        self.group_sequence = group_sequence
-        self.start_sequence = start_sequence
-        self.end_sequence = end_sequence
+    def __init__(self):
         self.information = []
 
     def register_information(self, cycle_sequence, start, end):

@@ -45,8 +45,22 @@ function _registerChart(xValues, yValues, dataLabel, xLabel, yLabel, htmlCompone
     options: {
       responsive: true,
       scales: {
-        xAxes: [{ scaleLabel: { ...options, labelString: xLabel } }],
-        yAxes: [{ scaleLabel: { ...options, labelString: yLabel } }],
+        xAxes: [{ 
+          scaleLabel: { 
+            ...options, 
+            labelString: xLabel 
+          } 
+        }],
+        yAxes: [{ 
+          scaleLabel: { 
+            ...options, 
+            labelString: yLabel 
+          }, 
+          ticks: {
+            min: 0, 
+            suggestedMax: 50
+          } 
+        }],
       }
     }
   };

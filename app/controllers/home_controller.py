@@ -3,7 +3,6 @@ from flask import Response, render_template, request
 
 def configure_routes(app, webcamUseCase):
     """ Arquivo que cria e define as rotas relacionadas a HomePage.
-
     O decorator @app.route define a rota http, e o método que segue define a resposta.
     """
 
@@ -11,8 +10,8 @@ def configure_routes(app, webcamUseCase):
     @app.route('/index')
     @app.route('/home')
     def index():
-        webcamUseCase.clear_rectangle_and_uploaded_image()
-        parameters = webcamUseCase.init_webcam_and_get_parameters()
+        webcamUseCase.clear_uploaded_image()
+        parameters = webcamUseCase.initialize_and_get_parameters()
         return render_template('index.html', page='index', parameters=parameters)
 
     @app.route('/play_webcam')
@@ -30,9 +29,14 @@ def configure_routes(app, webcamUseCase):
 
     @app.route('/clear_rectangle', methods=['POST'])
     def clear_rectangle():
-        return webcamUseCase.clear_rectangle_and_uploaded_image()
+        webcamUseCase.clear_uploaded_image()
+        return webcamUseCase.clear_rectangle()
 
     @app.route('/change_current_webcam', methods=['POST'])
     @app.route('/change_current_webcam/<int:index_webcam>', methods=['POST'])
     def change_current_webcam(index_webcam=None):
         return webcamUseCase.change_current_webcam(index_webcam)
+
+    @app.route('/recalibrateWebcam', methods=['POST'])
+    def recalibrateWebcam():
+        return webcamUseCase.configure_webcam()

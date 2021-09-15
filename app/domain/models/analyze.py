@@ -7,11 +7,11 @@ from threading import Thread
 from app.domain.errors.app_error import AppError
 from app.domain.models.results import Results
 from app.domain.packs.image_pack import ImagePack
+from app.domain.models.analyze_progress import AnalyzeProgress
 
 
 class Analyze():
     """ Classe que encapsula todos os processos de análise das capturas.
-
     Aqui que são obtidas as médias das cores do diferenciador e capturas.
     Também é feito o calculo dos sinais a partir dos resultados anteriores.
     Os resultados em si são salvos na classe Results.
@@ -19,71 +19,78 @@ class Analyze():
 
     def __init__(self):
         self.results = Results()
+        self.progress = AnalyzeProgress()
 
     def calculate_differentiator(self, differentiator_image):
         """ Método que Calcula a média BGR (padrão OpenCV) dos pixels do diferenciador.
-
         'differentiator_image' é uma imagem padrão OpenCV (ndarray)
-        A imagem do diferenciador pode tanto ser fruto de um upload do usuário quanto o frame atual capturado no diferenciador.
+        A imagem do diferenciador pode vir de um upload do usuário ou do frame atual capturado no diferenciador.
         Os resultados são salvos como uma lista BGR ([B, G, R]) e retornados como uma lista [R, G, B].
         """
         self.results.differentiator_image = differentiator_image
         result = self.calculate_average(differentiator_image)
         self.results.differentiator = result
-        return [f'{result[2]:.3f}', f'{result[1]:.3f}', f'{result[0]:.3f}']
+        return self.differentiator_values()
+
+    def differentiator_values(self):
+        differentiator = self.results.differentiator
+        return {"R": differentiator[2], "G": differentiator[1], "B": differentiator[0]}
 
     def calculate_average(self, image):
         """ Calcula a média de cores de um frame recebido como parâmetro. Retorna uma lista no padrão [B, G, R]. """
         return image.mean(axis=0).mean(axis=0)
 
-    def start_analyze(self, form, get_cropped_image, programming_interpret):
+    def start_analyze(self, form, get_cropped_image, start_interpretation, execute_interpretation):
         """ Inicia a análise, onde serão salvas as capturas de acordo com os parâmetros recebidos.
-
-        'analize_method' é uma string que indica o método de análise (simple ou complete)
+        'analyze_method' é uma string que indica o método de análise (simple ou complete)
         'total_time' é um valor inteiro > 0 que corresponde ao tempo total da análise (em segundos).
         'captures_seg' é um inteiro 0 < X < 10 que indica quantas capturas serão feitas a cada segundo de análise.
         'description' é uma string opcional para descrever a análise, exibida nos resultados e salva no xlsx gerado.
         'get_cropped_image' é um método da Webcam que retorna o frame atual recortado e em formato ndarray.
         'programming_interpret' é um método que cuida da interpretação do arquivo de programação das válvulas.
         """
-        analize_method, total_time, captures_seg = form['analizeMethod'], form['time'], form['qtd']
+        analyze_method, total_time, captures_seg = form['analyzeMethod'], form['time'], form['qtd']
         description, select_date, user_date = form['description'], form['selectDate'], form['userDate']
-        self.validate_form(analize_method, total_time, captures_seg)
-        self.results.initialize(analize_method, int(total_time), int(captures_seg), description, select_date, user_date)
-        self._start(get_cropped_image, programming_interpret)
+        self.validate_form(analyze_method, total_time, captures_seg)
+        self.results.initialize(analyze_method, int(total_time), int(captures_seg), description, select_date, user_date)
+        self._start(get_cropped_image, start_interpretation, execute_interpretation)
 
-    def validate_form(self, analize_method, time, captures):
+    def validate_form(self, analyze_method, time, captures):
         """ Verifica se os valores recebidos são válidos para a análise. """
-        if len(self.results.captures) != 0 or len(self.results.differentiator) == 0:
-            raise AppError('Analyze.validade', 'É preciso capturar o difenenciador antes de dar início a análise')
-        if not (analize_method == 'simple' or analize_method == 'complete'):
+        if len(self.results.differentiator) == 0 or self.results.differentiator[0] == -1:
+            raise AppError('Analyze.validade', 'É preciso capturar o diferenciador antes de dar início a análise')
+        if len(self.results.captures) != 0:
+            raise AppError('Analyze.validade', 'Ainda existem dados pendentes de analises anteriores')
+        if not (analyze_method == 'simple' or analyze_method == 'complete'):
             raise AppError('Analyze.validade', 'O método de análise informado não é válido')
-        if not time.isdigit() or (analize_method == 'simple' and int(time) < 1):
+        if not time.isdigit() or (analyze_method == 'simple' and int(time) < 1):
             raise AppError('Analyze.validade', 'O tempo de análise informado não é válido')
         if not captures.isdigit() or int(captures) < 1 or int(captures) > 10:
             raise AppError('Analyze.validade', 'O número de capturas informado não é válido')
 
-    def _start(self, get_cropped_image, programming_interpret):
+    def _start(self, get_cropped_image, start_interpretation, execute_interpretation):
         """ Método que encaminha a análise para as respectivas funções de acordo com seu tipo (simple ou complete) """
-        if self.results.analize_method == 'simple':
+        if self.results.analyze_method == 'simple':
             self.do_simple_analyze(get_cropped_image)
             self.calculate_signal()
         else:
-            cycles_informations = []
-            thread = self.start_valves_thread(programming_interpret, cycles_informations)
+            start_interpretation(self.progress)
+            cycles_information = []
+            thread = self.start_valves_thread(execute_interpretation, cycles_information)
             self.do_complete_analyze(get_cropped_image, thread)
             self.calculate_signal()
-            self.calculate_calibrate_points(cycles_informations)
+            self.calculate_calibrate_points(cycles_information)
 
     def do_simple_analyze(self, get_cropped_image):
         """" Método que salva os frames e calcula a média de cores correspondentes a captura na análise simples.
-
         "to_discount" e a lógica envolvida garantem que as conversões e cálculos não vão interferir significativamente
         no interalo de capturas, descontando esse tempo do sleep.
         O sleep garante que a relação tempo total e intervalo entre capturas seja seguido.
         """
         repetitions = int(self.results.total_time * self.results.captures_seg)
+        self.progress.initialize(repetitions)
         for _ in range(0, repetitions):
+            self.progress.increase_progress()
             image = get_cropped_image()
             to_discount = default_timer()
             self.save_image_color_average(image)
@@ -99,11 +106,10 @@ class Analyze():
 
     def save_converted_image(self, image):
         """" Comprime e converte a imagem para mantê-la em memória.
-
         Foi necessário implementar a compactação e conversão durante a análise para poupar memória RAM.
         Caso contrário, a capacidade de fazer análises grandes seria comprometida (faltava memória de trabalho).
         """
-        converted = ImagePack.compress_and_convert_to_bytes(image)
+        converted = ImagePack.convert_to_bytes(image)
         index = len(self.results.captures_images) + 1
         self.results.captures_images[f'captura_{index}.jpg'] = converted
 
@@ -118,18 +124,16 @@ class Analyze():
             )
             self.results.signals.append(signal)
 
-    def start_valves_thread(self, programming_interpret, cycles_informations):
+    def start_valves_thread(self, execute_interpretation, cycles_information):
         """ Método que inicia a thread que cuida da abertura e fechamento das válvulas na análise completa.
-
         A thread é retornada para que seu fim seja controlado (ela define o fim das capturas da webcam).
         """
-        thread = Thread(target=programming_interpret, args=(cycles_informations,))
+        thread = Thread(target=execute_interpretation, args=(cycles_information, self.progress,))
         thread.start()
         return thread
 
     def do_complete_analyze(self, get_cropped_image, thread):
         """" Método que salva os frames e calcula a média de cores das captura na análise completa.
-
         "to_discount" e a lógica envolvida garantem que as conversões e cálculos não vão interferir significativamente
         no interalo de capturas, descontando esse tempo do sleep.
         O sleep garante que a relação tempo total e intervalo entre capturas seja seguido.
@@ -147,9 +151,8 @@ class Analyze():
                 sleep(discounted_interval)
         self.results.total_time = (datetime.now() - start).seconds
 
-    def calculate_calibrate_points(self, cycles_informations):
+    def calculate_calibrate_points(self, cycles_information):
         """" Método que gera os pontos para o gráfico de calibração.
-
         "cycles_information" é uma lista com informações de início e fim dos ciclo de abertura das válvulas.
         Essas informações são usadas para filtrar quais capturas pertencem a cada ciclo.
         Cada ciclo possui uma lista interna com mais 3 dados (ciclos de 3 iterações - análise em triplicata).
@@ -157,7 +160,7 @@ class Analyze():
         A média do maior sinal de cada repetição gera uma nova coordenada do gráfico (coordenada x).
         """
         times = self.results.captures_times
-        for group in cycles_informations:
+        for group in cycles_information:
             biggers_signals = []
             for cycle in group.information:
                 signals_index = [i for i, x in enumerate(times) if x > cycle.start and x <= cycle.end]
@@ -168,10 +171,10 @@ class Analyze():
 
     def clear(self):
         """ Liberação da memória de análise anterior.
-
         O "del" e o "collect" são usados para garantir explicitamente que os recursos serão liberados,
         já qe o rasp não os possui em abundância.
         """
-        del self.results
+        del self.results.captures_images
+        del self.results.encoded_images
         collect()  # forçar explicitamente a coleta de memória pelo garbage collector do python
-        self.results = Results()
+        self.results.refresh_data()
