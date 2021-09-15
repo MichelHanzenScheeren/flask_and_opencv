@@ -1,4 +1,4 @@
-from app.configuration import GROUP_NUMBER, KEY_SEPARATOR, LINE_NUMBER
+from app.configuration import KEY_SEPARATOR
 from app.domain.errors.app_error import AppError
 from app.domain.models.programming_line import ProgrammingLine
 
@@ -27,8 +27,8 @@ class ProgrammingGroup():
     def _validate(self):
         message = ''
         if type(self.sequence) is not int or self.sequence < 0:
-            message = f'Valor inválido para parâmetro "id_grupo"'
+            message = 'Valor inválido para parâmetro "id_grupo"'
         elif type(self.lines) is not list or len(self.lines) == 0:
-            message = f'Valor inválido para parâmetro "linha"'
+            message = 'Valor inválido para parâmetro "linha"'
         if message != '':
             raise AppError('ProgrammingGroup', message)

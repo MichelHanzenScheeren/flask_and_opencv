@@ -36,3 +36,7 @@ def configure_routes(app, webcamUseCase):
     @app.route('/change_current_webcam/<int:index_webcam>', methods=['POST'])
     def change_current_webcam(index_webcam=None):
         return webcamUseCase.change_current_webcam(index_webcam)
+
+    @app.route('/recalibrateWebcam', methods=['POST'])
+    def recalibrateWebcam():
+        return webcamUseCase.configure_webcam()

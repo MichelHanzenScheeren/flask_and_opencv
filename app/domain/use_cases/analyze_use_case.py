@@ -20,9 +20,9 @@ class AnalyzeUseCase():
     def start_analyze(self, form):
         try:
             get_image = self.webcam.get_cropped_image
-            programming_interpret = self.valves_control.start_programming_interpretation
-            self.analyze.start_analyze(form, get_image, programming_interpret)
-            self.webcam.clear()
+            start_interpretation = self.valves_control.start_programming_interpretation
+            execute_interpretation = self.valves_control.execute_interpretation
+            self.analyze.start_analyze(form, get_image, start_interpretation, execute_interpretation)
         except Exception as error:
             message = f'Um erro interno impediu que a análise fosse concluída. (ERRO: {str(error)})'
             return ResponseUseCase.redirect_to_error_page(AppError('get_all_images', message))

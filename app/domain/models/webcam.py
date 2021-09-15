@@ -1,5 +1,4 @@
-import time
-from app.configuration import FRAME_RATE
+from time import sleep
 from app.domain.packs.image_pack import ImagePack
 from app.domain.models.rectangle import Rectangle
 from app.domain.models.video_capture import VideoCapture
@@ -41,7 +40,7 @@ class Webcam():
     def webcans_list(self):
         """ retorna a lista de webcans disponíveis atualmente.
         O método tenta abrir as portas de webcam diferentes da atual e finaliza quando falha pela primeira vez.
-        Isso se baseia no princípio de que as portas da webcam sempre iniciam no 0 (principal do computador) e vão aumentando de 1 em 1.
+        Baseado no princípio das portas para webcam iniciarem no 0 e aumentarem de 1 em 1.
         """
         list_webcans = []
         for index in range(5):
@@ -68,15 +67,13 @@ class Webcam():
         O frame atual pode ser o de um upload ou o obtido da webcam.
         O retorno particionado é graças ao yield (tipo de retorno especial do python3).
         A imagem é retornada em bits e no formato jpeg.
-        Variáveis 'FRAME_RATE' e 'previous' garantem que a resposta terá um intervalo >= 0.04 segundos (+/- 25fps)
+        A resposta tem um intervalo +/- 0.04 segundos para manter em torno de 25fps na camera.
         """
         try:
-            previous = 0
             while True:
-                if (time.time() - previous) >= FRAME_RATE:
-                    img = self.get_image()
-                    yield(b'--frame\r\nContent-Type:image/jpeg\r\n\r\n' + bytearray(img) + b'\r\n\r\n')
-                    previous = time.time()
+                img = self.get_image()
+                yield(b'--frame\r\nContent-Type:image/jpeg\r\n\r\n' + img + b'\r\n\r\n')
+                sleep(0.038)
         except Exception as exception:
             print(exception)
 
@@ -92,11 +89,11 @@ class Webcam():
                 copy = self.captured_frame.get_copy()
             return self.draw_and_convert_frame(copy)
         except Exception:
-            return ImagePack.encode_to_jpg(ImagePack.black_image())
+            return ImagePack.convert_to_bytes(ImagePack.black_image())
 
     def draw_and_convert_frame(self, copy):
-        drawed_image = self.rectangle.draw_rectangle(copy)
-        return ImagePack.encode_to_jpg(drawed_image)
+        drawn_image = self.rectangle.draw_rectangle(copy)
+        return ImagePack.convert_to_bytes(drawn_image)
 
     def get_differentiator_image(self):
         """ Obtém e retorna a imagem que será usada como diferenciador na classe Analyze.

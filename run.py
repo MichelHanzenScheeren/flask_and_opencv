@@ -6,7 +6,7 @@ if __name__ == '__main__':
     """ Este é o arquivo inicial do programa, responsável por toda a inicialização do Flask.
 
     Pare executá-lo, abra o terminal do seu computador na pasta raiz do projeto e execute o comando
-    'python run.py --host=0.0.0.0'. Você deve ter instalado as dependências do projeto (descritas em 'requirements.txt').
+    'python run.py --host=0.0.0.0'. Você deve ter instalado as dependências do projeto ('requirements.txt').
     """
     my_args = argparse.ArgumentParser()
     my_args.add_argument('--host', type=str, default='127.0.0.1', help='ip address. 0.0.0.0 to network local access')

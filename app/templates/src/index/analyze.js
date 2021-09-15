@@ -60,12 +60,11 @@ function configAnalyze() {
   let dt = new Date();
   let dateInput = document.getElementById('userDate');
   dateInput.value = `${dt.getDate()}-${dt.getMonth() + 1}-${dt.getFullYear()} ${dt.getHours()}:${dt.getMinutes()}:${dt.getSeconds()}`;
-  refreshIntervalId = setInterval(analyzeProgress, 2500);
+  refreshIntervalId = setInterval(analyzeProgress, 2000);
 }
 
 function analyzeProgress() {
   axios.get('{{ url_for("analyze_progress") }}').then(function (response) {
-    console.log(response.data);
     let currentProgress = response.data.progress;
     let progressMessage = response.data.message;
     let htmlProgressBar = document.getElementById('myProgressBar');
@@ -74,7 +73,7 @@ function analyzeProgress() {
     htmlProgressBar.innerHTML = currentProgress.toFixed(0) + '%';
     document.getElementById("progressBarMessage").innerHTML = progressMessage;
     if (currentProgress >= 100) clearInterval(refreshIntervalId);
-  }).catch(showErrorMessage);;
+  }).catch(showErrorMessage);
 }
 
 function checkIfNeedToChangeAnalyzeButtonOptions() {

@@ -1,4 +1,3 @@
-from datetime import datetime
 from app.configuration import VALVES_QUANTITY, WORKING_IN_TRIPLICATE, SUBTITLE, PROGRAMMING
 from app.domain.errors.app_error import AppError
 from app.domain.models.programming_group import ProgrammingGroup

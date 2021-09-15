@@ -11,7 +11,7 @@ window.addEventListener('pageshow', function (_) {
 (() => {
   defineImageStyle('{{ parameters["style"] }}');
   validateWebcam();
-  addEventToChangeWebcam();
+  addEventToWebcam();
 })() // Função auto-executada
 
 function defineImageStyle(style) {
@@ -36,8 +36,9 @@ function messageInvalidWebcam() {
   showMessage(title, body, complement);
 }
 
-function addEventToChangeWebcam() {
+function addEventToWebcam() {
   document.getElementById('selectCurrentWebcam').setAttribute('onchange', 'changeCurrentWebcam()');
+  document.getElementById('recalibrateWebcamButton').setAttribute('onclick', 'recalibrateWebcam()');
 }
 
 function changeCurrentWebcam() {
@@ -47,3 +48,37 @@ function changeCurrentWebcam() {
     $('#my-toast').remove();
   }).catch(showErrorMessage);
 }
+
+// RECALIBRATION PROCESS
+let recalibrateWebcamCondition = false;
+let recalibrationInterval;
+let turnOnInterval;
+
+function recalibrateWebcam() {
+  if(!recalibrateWebcamCondition) {
+    $('#recalibrateWebcamButton').text('Tem certeza?');
+    recalibrateWebcamCondition = true;
+    recalibrateInterval();
+  } else {
+    axios.post(`{{url_for("recalibrateWebcam")}}`).catch(showErrorMessage);
+    redefineCalibration();
+    $('#recalibrateWebcamButton').prop("disabled", true);
+    turnOnInterval = setInterval(() => turnOnCalibrationButton(), 15000);
+  }
+}
+
+function redefineCalibration() {
+  clearInterval(recalibrationInterval);
+  recalibrateWebcamCondition = false;
+  $('#recalibrateWebcamButton').text('Recalibrar webcam');
+}
+
+function recalibrateInterval() {
+  recalibrationInterval = setInterval(() => recalibrateWebcamCondition ? redefineCalibration() : false, 5000);
+}
+
+function turnOnCalibrationButton() {
+  clearInterval(turnOnInterval);
+  $('#recalibrateWebcamButton').prop("disabled", false);
+}
+

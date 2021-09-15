@@ -18,7 +18,7 @@ class JsonPack():
     def write(path, data):
         try:
             with open(path, 'w+') as json_file:
-                json.dump(data, json_file, indent=4, sort_keys=True)
+                json.dump(data, json_file, indent=4, sort_keys=False)
         except Exception:
             message = 'Não foi possível escrever no caminho informado'
             assert AppError('JsonPack.read', message)
