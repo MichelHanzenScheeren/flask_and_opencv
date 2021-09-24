@@ -19,13 +19,14 @@ class ExcelFile():
         self.spreadsheet.title = title
         self.to_merge_cells = []  # Lista de células que irão compor o spreadsheet.
 
-    def create(self, general_info, differentiator_info, captures_info, calibration_info):
+    def create(self, general_info, average_info, differentiator_info, captures_info, calibration_info):
         """ Método responsável por conduzir a personalização do arquivo de acordo com as informações recebidas.
 
         Os parâmetros são listas de listas contendo títulos e dados.
         Retorna um arquivo xlsx codificado em bytes na base_64.
         """
         row_count = self.generate_table(general_info, 1)
+        row_count = self.generate_table(average_info, row_count)
         row_count = self.generate_table(differentiator_info, row_count)
         row_count = self.generate_table(captures_info, row_count)
         calibration_count = self.generate_table(calibration_info, row_count)

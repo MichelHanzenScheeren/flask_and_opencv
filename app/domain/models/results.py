@@ -48,7 +48,7 @@ class Results():
     def get_xlsx_results(self):
         """ Cria e retorna um arquivo xlsx com os resultados da análise. """
         file = ExcelFile(title='Resultados')
-        return file.create(self.general_info(), self.differentiator_info(),
+        return file.create(self.general_info(), self.average_info(), self.differentiator_info(),
                            self.captures_info(), self.calibration_info())
 
     def general_info(self):
@@ -58,6 +58,13 @@ class Results():
         headers = ['Data', 'Duração', 'Taxa de capturas', 'Capturas feitas', 'Tipo de análise', 'Descrição']
         content = [self.initial_date, f'{self.total_time} segundos', f'{self.captures_seg} cap./seg.']
         content.extend([f'{len(self.signals)} cap.', analyzeType, f'{self.description or "Não informada"}'])
+        return [title, headers, content]
+
+    def average_info(self):
+        """ Reúne títulos e os resultados do diferenciador em uma lista de listas. """
+        title = ['Valores Médios', '', '', '']
+        headers = ['Vermelho', 'Verde', 'Azul', 'Sinal']
+        content = [self.colors_average[2], self.colors_average[1], self.colors_average[0], self.signal_average]
         return [title, headers, content]
 
     def differentiator_info(self):
