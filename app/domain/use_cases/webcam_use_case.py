@@ -20,6 +20,8 @@ class WebcamUseCase():
             index_parameters['valves_number'] = NUMBER_OF_VALVES
             index_parameters['differentiator'] = json.dumps(self.analyze.differentiator_values())
             index_parameters['rectangle'] = json.dumps(self.webcam.rectangle.rectangle_values())
+            index_parameters['total_time'] = self.analyze.results.total_time
+            index_parameters['qtd'] = self.analyze.results.captures_seg
             return index_parameters
         except Exception as error:
             message = f'Um erro ocorreu quando tentávamos configurar sua webcam. (ERRO: {str(error)})'
@@ -72,5 +74,5 @@ class WebcamUseCase():
             WebcamConfiguration(self.webcam.current_port).auto_config()
             return ResponseUseCase.success_response(message='Webcam atual configurada')
         except Exception as error:
-            message = f'Não foi possível concluir a cofiguração automática da webcam. (ERRO: {str(error)})'
+            message = f'Não foi possível concluir a configuração automática da webcam. (ERRO: {str(error)})'
             return ResponseUseCase.error_response(AppError('configure_webcam', message))

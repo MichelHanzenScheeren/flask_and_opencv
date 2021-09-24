@@ -12,6 +12,8 @@ class Results():
     def __init__(self):
         self.differentiator = [-1, -1, -1]  # Lista BGR [Blue, Green, Red] da média de cores da imagem do diferenciador.
         self.differentiator_image = None  # imagem do diferenciador.
+        self.total_time = 10
+        self.captures_seg = 1
         self.refresh_data()
 
     def refresh_data(self):

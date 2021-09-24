@@ -3,6 +3,7 @@
   document.getElementById('startAnalyzeButton').setAttribute('onclick', 'validateToAnalyze()');
   document.getElementById('analyzeMethodSelect').setAttribute('onchange', 'checkIfNeedToChangeAnalyzeButtonOptions()');
   showDifferentiatorInfo(JSON.parse('{{ parameters["differentiator"] }}'));
+  show_captures_info('{{ parameters["total_time"] }}', '{{ parameters["qtd"] }}')
 })() // Função auto-executada
 
 function getDifferentiator() {
@@ -20,6 +21,11 @@ function showDifferentiatorInfo(data) {
   document.getElementById('green').innerHTML = 'Green: ' + data['G'].toFixed(3);
   document.getElementById('blue').innerHTML = 'Blue: ' + data['B'].toFixed(3);
   savedDifferentiator = true;
+}
+
+function show_captures_info(total_time, qtd) {
+  document.getElementById('timeInput').value = total_time;
+  document.getElementById('qtdInput').value = qtd;
 }
 
 function validateToAnalyze() {
