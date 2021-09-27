@@ -116,12 +116,16 @@ class Analyze():
     def calculate_signal(self):
         """ 'Sinal' é a distância vetorial da média de cores de uma captura e a média de cores do diferenciador. """
         differentiator = self.results.differentiator
-        colors_average = [0.0, 0.0, 0.0]
+        colors_sum = [0.0, 0.0, 0.0]
         for capture in self.results.captures:
             signal = sqrt(sum([pow(capture[i] - differentiator[i], 2) for i in range(3)]))
             self.results.signals.append(signal)
-            colors_average = [colors_average[i] + capture[i] for i in range(3)]
-        self.results.colors_average = [colors_average[i] / len(self.results.captures) for i in range(3)]
+            colors_sum = [colors_sum[i] + capture[i] for i in range(3)]
+        self.calculate_averages(colors_sum)
+
+    def calculate_averages(self, colors_sum):
+        captures, differentiator = self.results.captures, self.results.differentiator
+        self.results.colors_average = [abs((colors_sum[i] / len(captures)) - differentiator[i]) for i in range(3)]
         self.results.signal_average = sum(self.results.signals) / len(self.results.signals)
 
     def start_valves_thread(self, execute_interpretation, cycles_information):
